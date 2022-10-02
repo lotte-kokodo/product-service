@@ -6,13 +6,14 @@ spring:
     username: root
 
   jpa:
+    show-sql: true
     properties:
-      hibernamte:
+      hibernate:
         format_sql: true
     hibernate:
-      ddl-auto: create
-    defer-datasource-initialization: true
+      ddl-auto: update
+#    defer-datasource-initialization: true
 
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
