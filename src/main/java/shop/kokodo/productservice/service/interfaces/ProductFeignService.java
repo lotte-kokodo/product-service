@@ -1,9 +1,11 @@
 package shop.kokodo.productservice.service.interfaces;
 
-import shop.kokodo.productservice.dto.feign.ProductPriceResponse;
+import java.util.List;
+import shop.kokodo.productservice.dto.feign.FeignResponse;
 
 public interface ProductFeignService {
 
-    ProductPriceResponse getProductUnitPrice(Long productId);
+    FeignResponse.Price getProductPrice(Long productId);
+    List<FeignResponse.Price> getProductPrices(List<Long> productId);
 
 }
