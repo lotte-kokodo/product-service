@@ -13,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import shop.kokodo.productservice.exception.ExceptionMessage;
 
 @Entity
 @Getter
@@ -45,4 +46,15 @@ public class Product extends BaseEntity {
     @OneToOne(mappedBy = "product")
     private ProductDetail productDetail;
 
+
+    /*
+    * 주문 시 상품 재고 수정
+    * */
+    public void setStock(Integer qty) {
+        if (stock - qty < 0) {
+            throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_STOCK);
+        }
+
+        stock -= qty;
+    }
 }
