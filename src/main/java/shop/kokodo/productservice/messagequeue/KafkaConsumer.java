@@ -26,14 +26,14 @@ public class KafkaConsumer {
     }
 
 
-    @KafkaListener(topics = "kokodo.product.de-cstock")
+    @KafkaListener(topics = "kokodo.product.de-stock")
     public void decreaseStock(String message) {
         log.info("[KafkaConsumer] consume message: {}", message);
 
         increaseStockHandler.handle(readMessageValue(message));
     }
 
-    @KafkaListener(topics = "kokodo.product.in-cstock")
+    @KafkaListener(topics = "kokodo.product.in-stock")
     public void increaseStock(String message) {
         log.info("[KafkaConsumer] consume message: {}", message);
 
