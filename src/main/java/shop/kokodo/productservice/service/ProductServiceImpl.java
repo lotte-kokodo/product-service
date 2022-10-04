@@ -107,13 +107,21 @@ public class ProductServiceImpl implements ProductService{
 
         for(Product p : productList){
             ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
-                                                    p.getName(),p.getPrice(),p.getDisplayName(),
-                                                    p.getStock(),p.getDeadline(),p.getThumbnail(),
-                                                    p.getSellerId(),p.getDeliveryFee());
+                    p.getName(),p.getPrice(),p.getDisplayName(),
+                    p.getStock(),p.getDeadline(),p.getThumbnail(),
+                    p.getSellerId(),p.getDeliveryFee());
 
             productDtoList.add(productDto);
         }
 
         return productDtoList;
+    }
+
+    // TODO: detail 이미지 template 부분 추가
+    public Product findProductDetail(long productId){
+        Product product = productRepository.findById(productId).get();
+//                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
+
+        return product;
     }
 }

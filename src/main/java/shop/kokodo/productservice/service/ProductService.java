@@ -16,4 +16,5 @@ public interface ProductService {
     public List<ProductDto> findProductByTotalSearch(String productDisplayName);
     public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName);
 
+    public Product findProductDetail(long productId);
 }

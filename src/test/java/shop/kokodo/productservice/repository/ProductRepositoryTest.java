@@ -8,10 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.entity.ProductDetail;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @SpringBootTest
 @Transactional
@@ -28,6 +30,10 @@ public class ProductRepositoryTest {
     Product product1;
     Product product2;
     Product product3;
+
+    ProductDetail productDetail1;
+    ProductDetail productDetail2;
+    ProductDetail productDetail3;
     final LocalDateTime localDateTime = LocalDateTime.of(2022,10,25,0,0);
 
     @BeforeEach
@@ -74,6 +80,22 @@ public class ProductRepositoryTest {
                 .thumbnail("맛프로틴")
                 .sellerId(1)
                 .deliveryFee(1000)
+                .build();
+
+        productDetail1 = ProductDetail.builder()
+                .product(product1)
+                .image("image1")
+                .orders(1)
+                .build();
+        productDetail2 = ProductDetail.builder()
+                .product(product1)
+                .image("image2")
+                .orders(1)
+                .build();
+        productDetail3 = ProductDetail.builder()
+                .product(product1)
+                .image("image3")
+                .orders(1)
                 .build();
     }
 
@@ -135,5 +157,22 @@ public class ProductRepositoryTest {
         //then
         Assertions.assertEquals(productList.size(), 2);
         Assertions.assertEquals(productList.get(0).getName(), "맛닭");
+    }
+
+    @Test
+    @DisplayName("product detail 조회")
+    public void findByProductId(){
+        product1.addProductDetail(productDetail1);
+        product1.addProductDetail(productDetail2);
+        product1.addProductDetail(productDetail3);
+
+        categoryRepository.save(category);
+
+        productRepository.save(product1);
+
+        Optional<Product> findProduct = productRepository.findById(product1.getId());
+
+        Assertions.assertEquals(findProduct.isPresent(),true);
+        Assertions.assertEquals(findProduct.get().getId(), product1.getId());
     }
 }

@@ -86,9 +86,9 @@ public class ProductController {
         return Response.success(productService.findProductByCategorySearch(categoryId, displayName));
     }
 
-
-
-
-
+    @GetMapping("/detail/{productId}")
+    public Response productDetail(@PathVariable long productId){
+        return Response.success(productService.findProductDetail(productId));
+    }
 
 }
