@@ -24,10 +24,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+    defer-datasource-initialization: true
+
     properties:
       hibernate:
         show-sql: true
         format_sql: true
+  sql:
+    init:
+      mode: always
 
 logging:
   level:
