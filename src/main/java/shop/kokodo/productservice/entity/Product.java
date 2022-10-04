@@ -50,11 +50,13 @@ public class Product extends BaseEntity {
     /*
     * 주문 시 상품 재고 수정
     * */
-    public void setStock(Integer qty) {
+    public void decreaseStock(Integer qty) {
         if (stock - qty < 0) {
             throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_STOCK);
         }
+    }
 
+    public void increaseStock(Integer qty) {
         stock -= qty;
     }
 }
