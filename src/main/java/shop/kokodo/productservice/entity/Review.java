@@ -1,9 +1,7 @@
 package shop.kokodo.productservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -11,7 +9,7 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
-@AllArgsConstructor
+@ToString
 @NoArgsConstructor
 public class Review extends BaseEntity{
 
@@ -22,10 +20,23 @@ public class Review extends BaseEntity{
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
     @Column( nullable = false )
     private String content;
     @Column( nullable = false )
-    private int rating;
+    private double rating;
+
+    @Column
+    private long memberId;
+
+    @Builder
+    public Review(long id, Product product, String content, double rating, long memberId) {
+        this.id = id;
+        this.product = product;
+        this.content = content;
+        this.rating = rating;
+        this.memberId = memberId;
+    }
 }
