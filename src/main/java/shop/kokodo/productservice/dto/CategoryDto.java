@@ -3,6 +3,7 @@ package shop.kokodo.productservice.dto;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
 public class CategoryDto {
 
     long id;
