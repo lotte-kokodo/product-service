@@ -32,17 +32,17 @@ public class Product extends BaseEntity {
     @JsonIgnore
     private Category category;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<ProductDetail> productDetailList=new ArrayList<>();
 
-//    @OneToOne(mappedBy = "product", fetch = LAZY)
-//    private TemplateRec templateRec;
+    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.REMOVE )
+    private TemplateRec templateRec;
 
-//    @OneToMany(mappedBy = "product")
-//    private List<Review> reviewList = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Review> reviewList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "product")
-//    private List<ProductInquire> productInquireList = new ArrayList<>();
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<ProductInquire> productInquireList = new ArrayList<>();
 
     private String name;
     private int price;
@@ -59,7 +59,7 @@ public class Product extends BaseEntity {
         category.getProductList().add(this);
     }
 
-    public void addProductDetail(ProductDetail productDetail){
+    public void addProductDetail(ProductDetail productDetail) {
         productDetailList.add(productDetail);
     }
 

@@ -19,7 +19,7 @@ public class TemplateRec extends BaseEntity{
     @Column(name = "template_rec_id")
     private long id;
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
 

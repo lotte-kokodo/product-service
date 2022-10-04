@@ -20,7 +20,7 @@ public class Review extends BaseEntity{
     @Column(name = "review_id")
     private long id;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     private Product product;
 

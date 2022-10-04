@@ -24,6 +24,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
+    /* 테스트 완료 후 삭제 예정 */
     @PostMapping("/save")
     public Response save(@RequestBody CategoryDto categoryDto) {
         categoryService.save(categoryDto);
@@ -36,11 +37,12 @@ public class CategoryController {
         return Response.success(categoryList);
     }
 
-    @GetMapping("categoryName/{name}")
+    @GetMapping("/categoryName/{name}")
     public Response findByName(@PathVariable("name") String name){
         System.out.println(name);
         List<CategoryDto> categoryList = categoryService.findByName(name);
         return Response.success(categoryList);
+
     }
 
 
