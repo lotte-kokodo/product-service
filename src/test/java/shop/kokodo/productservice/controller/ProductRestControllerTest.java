@@ -1,7 +1,6 @@
 package shop.kokodo.productservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +33,7 @@ import java.time.LocalDateTime;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
-public class ProductRestController {
+public class ProductRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;
