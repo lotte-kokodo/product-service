@@ -1,5 +1,6 @@
 package shop.kokodo.productservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import net.bytebuddy.implementation.bind.annotation.BindingPriority;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
@@ -17,6 +19,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Product extends BaseEntity {
 
     @Id
@@ -26,19 +29,20 @@ public class Product extends BaseEntity {
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
     @OneToMany(mappedBy = "product")
-    private List<ProductDetail> productDetailList;
+    private List<ProductDetail> productDetailList=new ArrayList<>();
 
-    @OneToOne(mappedBy = "product", fetch = LAZY)
-    private TemplateRec templateRec;
+//    @OneToOne(mappedBy = "product", fetch = LAZY)
+//    private TemplateRec templateRec;
 
-    @OneToMany(mappedBy = "product")
-    private List<Review> reviewList = new ArrayList<>();
+//    @OneToMany(mappedBy = "product")
+//    private List<Review> reviewList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "product")
-    private List<ProductInquire> productInquireList = new ArrayList<>();
+//    @OneToMany(mappedBy = "product")
+//    private List<ProductInquire> productInquireList = new ArrayList<>();
 
     private String name;
     private int price;
@@ -53,6 +57,10 @@ public class Product extends BaseEntity {
     public void setCategory(Category category) {
         this.category = category;
         category.getProductList().add(this);
+    }
+
+    public void addProductDetail(ProductDetail productDetail){
+        productDetailList.add(productDetail);
     }
 
     @Builder
