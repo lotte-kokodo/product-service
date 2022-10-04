@@ -6,31 +6,40 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import shop.kokodo.productservice.messagequeue.strategy.KafkaMessageHandlerAdapter;
-import shop.kokodo.productservice.messagequeue.strategy.KafkaMessageType;
+import shop.kokodo.productservice.messagequeue.strategy.DecreaseStockHandler;
+import shop.kokodo.productservice.messagequeue.strategy.IncreaseStockHandler;
 
 @Service
 @Slf4j
 public class KafkaConsumer {
 
-    private final KafkaMessageHandlerAdapter handlerAdapter;
+    private final DecreaseStockHandler decreaseStockHandler;
+    private final IncreaseStockHandler increaseStockHandler;
 
-    @Autowired
     public KafkaConsumer(
-        KafkaMessageHandlerAdapter handlerAdapter) {
-        this.handlerAdapter = handlerAdapter;
+        DecreaseStockHandler decreaseStockHandler,
+        IncreaseStockHandler increaseStockHandler) {
+        this.decreaseStockHandler = decreaseStockHandler;
+        this.increaseStockHandler = increaseStockHandler;
     }
 
-    @KafkaListener(topics = "kokodo.product", groupId = "product")
-    public void listen(String message) {
-        log.info("[KafkaConsumer] message: {}", message);
 
-        Map<Object, Object> map = readMessageValue(message);
-        handlerAdapter.handleKafkaMessage((KafkaMessageType) map.get("messageType"), map);
+    @KafkaListener(topics = "kokodo.product.de-cstock")
+    public void decreaseStock(String message) {
+        log.info("[KafkaConsumer] consume message: {}", message);
+
+        increaseStockHandler.handle(readMessageValue(message));
     }
+
+    @KafkaListener(topics = "kokodo.product.in-cstock")
+    public void increaseStock(String message) {
+        log.info("[KafkaConsumer] consume message: {}", message);
+
+        decreaseStockHandler.handle(readMessageValue(message));
+    }
+
 
     private Map<Object, Object> readMessageValue(String message) {
         Map<Object, Object> map = new HashMap<>();
@@ -43,6 +52,4 @@ public class KafkaConsumer {
 
         return map;
     }
-
-
 }
