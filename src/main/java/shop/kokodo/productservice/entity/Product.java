@@ -24,7 +24,7 @@ public class Product extends BaseEntity {
     @Column(name = "product_id")
     private long id;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     private Category category;
 

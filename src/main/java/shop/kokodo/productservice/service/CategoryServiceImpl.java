@@ -22,8 +22,6 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
     CategoryRepository categoryRepository;
 
-    List<CategoryDto> categoryDtoList = new ArrayList<>();
-
     @Autowired
     public CategoryServiceImpl(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
@@ -37,10 +35,10 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
     }
 
-
     @Override
     public List<CategoryDto> findAll() {
         List<Category> categoryList = categoryRepository.findAll();
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
 
         for(Category c : categoryList){
             CategoryDto categoryDto = CategoryDto.builder().id(c.getId()).name(c.getName()).build();
@@ -53,6 +51,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> findByName(String name) {
         List<Category> categoryList = categoryRepository.findByName(name);
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
 
         for(Category c : categoryList){
             CategoryDto categoryDto = CategoryDto.builder().id(c.getId()).name(c.getName()).build();

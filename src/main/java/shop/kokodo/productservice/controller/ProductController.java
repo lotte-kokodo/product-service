@@ -43,11 +43,25 @@ public class ProductController {
 
     @GetMapping("/productId/{productId}")
     public Response findById(@PathVariable("productId") long id) {
+        System.out.println("test : " + id);
         Product product = productService.findById(id);
-        ModelMapper mapper = new ModelMapper();
-        mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
 
-        ProductDto productDto = mapper.map(product,ProductDto.class);
+        if(product == null){
+            return Response.failure(0,"해당 상품이 존재하지 않습니다.");
+        }
+
+        ProductDto productDto = ProductDto.builder().id(product.getId())
+                .categoryId(product.getCategory().getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .displayName(product.getDisplayName())
+                .stock(product.getStock())
+                .deadline(product.getDeadline())
+                .thumbnail(product.getThumbnail())
+                .sellerId(product.getSellerId())
+                .deliveryFee(product.getDeliveryFee())
+                .build();
+
         return Response.success(productDto);
     }
 

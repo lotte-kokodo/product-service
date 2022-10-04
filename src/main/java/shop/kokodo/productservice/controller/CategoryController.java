@@ -38,6 +38,7 @@ public class CategoryController {
 
     @GetMapping("categoryName/{name}")
     public Response findByName(@PathVariable("name") String name){
+        System.out.println(name);
         List<CategoryDto> categoryList = categoryService.findByName(name);
         return Response.success(categoryList);
     }

@@ -73,6 +73,7 @@ public class ProductServiceImpl implements ProductService{
 
         category.getProductList().remove(product);
         categoryRepository.save(category);
+        productRepository.deleteById(product.getId());
     }
 
     @Override
