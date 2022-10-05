@@ -6,11 +6,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import shop.kokodo.productservice.dto.CategoryDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.repository.CategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -35,13 +38,26 @@ class CategoryServiceImplTest {
 
     @Test
     void findAll() {
+        //given
         doReturn(categoryList).when(categoryRepository).findAll();
-        categoryServiceImpl.findAll();
+
+        //when
+        final List<CategoryDto> test = categoryServiceImpl.findAll();
+
+        //then
+        assertThat(test.size()).isEqualTo(categoryList.size());
+
     }
 
     @Test
     void findByName() {
+        //given
         doReturn(categoryList).when(categoryRepository).findByName("o");
-        categoryServiceImpl.findByName("o");
+
+        //when
+        final List<CategoryDto> test = categoryServiceImpl.findByName("o");
+
+        //then
+        assertThat(test.size()).isEqualTo(categoryList.size());
     }
 }
