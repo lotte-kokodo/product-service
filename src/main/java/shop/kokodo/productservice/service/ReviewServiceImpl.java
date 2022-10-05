@@ -47,6 +47,12 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewRepository.save(review);
     }
 
+    @Override
+    public List<Review> findByMemberId(long memberId) {
+
+        return reviewRepository.findByMemberId(memberId);
+    }
+
     private ReviewResponseDto convertToReviewResponse(Review review){
 //        String memberName = userServiceClient.findMemberName(review.getMemberId());
         String memberName = " memberName";

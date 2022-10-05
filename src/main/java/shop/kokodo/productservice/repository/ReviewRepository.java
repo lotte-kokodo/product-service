@@ -13,4 +13,6 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
 
     @Query("select r from Review r where r.product.id = :productId")
     public List<Review> findByProductId(long productId);
+
+    public List<Review> findByMemberId(long memberId);
 }

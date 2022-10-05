@@ -36,5 +36,10 @@ public class ReviewController {
                 .build();
     }
 
+    @GetMapping("/member")
+    public Response findByMemberId(@RequestHeader long memberId){
+        return Response.success(reviewService.findByMemberId(memberId));
+    }
+
 
 }

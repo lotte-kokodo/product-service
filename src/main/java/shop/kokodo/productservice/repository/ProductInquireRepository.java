@@ -24,4 +24,6 @@ public interface ProductInquireRepository extends JpaRepository<ProductInquire,L
             "and i.answer is not null ")
     public List<ProductInquire> findAnswerInquireBySellerId(long sellerId);
 
+    public List<ProductInquire> findByMemberId(long memberId);
+
 }

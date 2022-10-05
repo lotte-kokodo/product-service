@@ -35,14 +35,14 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<ProductDetail> productDetailList=new ArrayList<>();
 
-    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.REMOVE )
-    private TemplateRec templateRec;
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<Review> reviewList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<ProductInquire> productInquireList = new ArrayList<>();
+//    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.REMOVE )
+//    private TemplateRec templateRec;
+//
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+//    private List<Review> reviewList = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+//    private List<ProductInquire> productInquireList = new ArrayList<>();
 
     private String name;
     private int price;

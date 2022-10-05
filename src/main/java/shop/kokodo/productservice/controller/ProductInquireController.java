@@ -46,4 +46,10 @@ public class ProductInquireController {
     public Response findAnswer(@PathVariable long sellerId){
         return Response.success(productInquireService.findAnswerInquire(sellerId));
     }
+
+    @GetMapping("/member")
+    public Response findByMemberId(@RequestHeader long memberId){
+
+        return Response.success();
+    }
 }

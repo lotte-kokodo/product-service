@@ -74,6 +74,11 @@ public class ProductInquireServiceImpl implements ProductInquireService{
         return dtoList;
     }
 
+    @Override
+    public List<ProductInquire> findByMemberId(long memberId) {
+        return productInquireRepository.findByMemberId(memberId);
+    }
+
     private ProductInquire convertToProductInquire(ProductInquireRequestDto dto){
         Product product=productRepository.findById(dto.getProductId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품"));

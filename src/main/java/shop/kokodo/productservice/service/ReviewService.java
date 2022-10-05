@@ -11,4 +11,6 @@ public interface ReviewService {
     public List<ReviewResponseDto> findByProductId(long productId);
 
     public Review save(ReviewRequestDto reviewDto);
+
+    public List<Review> findByMemberId(long memberId);
 }

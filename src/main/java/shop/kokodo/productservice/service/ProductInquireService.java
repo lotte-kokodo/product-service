@@ -2,6 +2,7 @@ package shop.kokodo.productservice.service;
 
 import shop.kokodo.productservice.dto.ProductInquireRequestDto;
 import shop.kokodo.productservice.dto.ProductInquireResponseDto;
+import shop.kokodo.productservice.entity.ProductInquire;
 
 import javax.transaction.Transactional;
 import java.util.List;
@@ -14,4 +15,6 @@ public interface ProductInquireService {
 
     public List<ProductInquireResponseDto> findNotAnswerInquire(long sellerId);
     public List<ProductInquireResponseDto> findAnswerInquire(long sellerId);
+
+    public List<ProductInquire> findByMemberId(long memberId);
 }
