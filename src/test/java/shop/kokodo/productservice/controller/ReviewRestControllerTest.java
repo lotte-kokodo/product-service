@@ -75,12 +75,14 @@ public class ReviewRestControllerTest {
                 .content("리뷰1")
                 .rating(5.0)
                 .product(product)
+                .memberId(memberId)
                 .build();
 
         review2 = Review.builder()
                 .content("리뷰2")
                 .rating(4.5)
                 .product(product)
+                .memberId(memberId)
                 .build();
 
         productRepository.save(product);

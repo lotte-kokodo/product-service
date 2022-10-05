@@ -140,15 +140,15 @@ class ProductServiceImplTest {
         Assertions.assertEquals(saveProduct1.getPrice(),saveProduct2.getPrice());
     }
 
-    @Test
-    @DisplayName("상품 ID로 삭제 성공")
-    void deleteProduct() {
-        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-        doNothing().when(productRepository).delete(any(Product.class));
-        productServiceImpl.deleteProduct(product.getId());
-
-        verify(productRepository, times(1)).delete(any(Product.class));
-    }
+//    @Test
+//    @DisplayName("상품 ID로 삭제 성공")
+//    void deleteProduct() {
+//        when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
+//        doNothing().when(productRepository).delete(any(Product.class));
+//        productServiceImpl.deleteProduct(product.getId());
+//
+//        verify(productRepository, times(1)).delete(any(Product.class));
+//    }
 
     @Test
     @DisplayName("전체 상품 조회 성공")
