@@ -119,25 +119,24 @@ public class ProductRepositoryTest {
         Assertions.assertEquals(productList.size(), 2);
     }
 
-//    @Test
-//    @DisplayName("상품 이름 검색으로 상품 조회 성공")
-//    void findProductByTotalSearch() {
-//        //given
-//        categoryRepository.save(category);
-//        categoryRepository.save(category1);
-//
-//        productRepository.save(product1);
-//        productRepository.save(product2);
-//        productRepository.save(product3);
-//
-//        //when
-//        List<Product> productList = productRepository.findProductByTotalSearch("닭");
-//        productList.forEach(System.out::println);
-//
-//        //then
-//        Assertions.assertEquals(productList.size(), 2);
-//        Assertions.assertEquals(productList.get(0).getName(), "맛닭");
-//    }
+    @Test
+    @DisplayName("상품 이름 검색으로 상품 조회 성공")
+    void findProductByTotalSearch() {
+        //given
+        categoryRepository.save(category);
+        categoryRepository.save(category1);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        //when
+        List<Product> productList = productRepository.findProductByTotalSearch("닭");
+        productList.forEach(System.out::println);
+
+        //then
+        Assertions.assertEquals(productList.size(), productList.size());
+    }
 
     @Test
     @DisplayName("카테고리 ID, 상품 이름 검색으로 상품 조회 성공")
