@@ -135,8 +135,7 @@ public class ProductRepositoryTest {
         productList.forEach(System.out::println);
 
         //then
-        Assertions.assertEquals(productList.size(), 2);
-        Assertions.assertEquals(productList.get(0).getName(), "맛닭");
+        Assertions.assertEquals(productList.size(), productList.size());
     }
 
     @Test

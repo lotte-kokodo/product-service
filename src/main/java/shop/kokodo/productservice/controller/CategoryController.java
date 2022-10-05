@@ -24,7 +24,7 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    /* 테스트 완료 후 삭제 예정 */
+    // TODO: 테스트 완료 후 삭제 예정
     @PostMapping("/save")
     public Response save(@RequestBody CategoryDto categoryDto) {
         categoryService.save(categoryDto);
