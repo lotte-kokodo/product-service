@@ -35,15 +35,14 @@ public class ProductController {
         return Response.success();
     }
 
-    @DeleteMapping("/delete")
-    public Response delete(@RequestBody ProductDto productDto){
-        productService.deleteProduct(productDto.getId());
+    @DeleteMapping("/delete/{productId}")
+    public Response productDelete(@PathVariable("productId") long id){
+        productService.deleteProduct(id);
         return Response.success();
     }
 
     @GetMapping("/productId/{productId}")
     public Response findById(@PathVariable("productId") long id) {
-        System.out.println("test : " + id);
         Product product = productService.findById(id);
 
         if(product == null){

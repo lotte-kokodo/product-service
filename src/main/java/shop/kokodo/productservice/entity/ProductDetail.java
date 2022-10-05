@@ -18,7 +18,7 @@ public class ProductDetail extends BaseEntity{
     @Column(name = "product_detail_id")
     private long id;
 
-    @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
     @JsonIgnore
     private Product product;

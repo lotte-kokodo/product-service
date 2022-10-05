@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Data
+@NoArgsConstructor
 public class ProductDto {
 
     long id;
