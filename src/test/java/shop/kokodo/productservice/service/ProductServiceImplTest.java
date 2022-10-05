@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -51,12 +52,10 @@ class ProductServiceImplTest {
     @BeforeEach
     public void setUp() {
         category = Category.builder()
-                .id(1L)
                 .name("healthy")
                 .build();
 
         category1 = Category.builder()
-                .id(2L)
                 .name("power")
                 .build();
 
@@ -143,11 +142,18 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("상품 ID로 삭제 성공")
     void deleteProduct() {
+        //given
+        categoryRepository.save(category);
+        productRepository.save(product);
+
+        when(categoryRepository.findById(category.getId())).thenReturn(Optional.of(category));
         when(productRepository.findById(product.getId())).thenReturn(Optional.of(product));
-        doNothing().when(productRepository).delete(any(Product.class));
+
+        //when
         productServiceImpl.deleteProduct(product.getId());
 
-        verify(productRepository, times(1)).delete(any(Product.class));
+        //then
+        Mockito.verify(productRepository).deleteById(product.getId());
     }
 
     @Test
