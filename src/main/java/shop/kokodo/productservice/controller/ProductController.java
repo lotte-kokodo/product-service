@@ -1,5 +1,6 @@
 package shop.kokodo.productservice.controller;
 
+import feign.Param;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
@@ -10,6 +11,12 @@ import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.util.List;
 
 @RestController
 @RequestMapping("/product")
@@ -88,6 +95,17 @@ public class ProductController {
     @GetMapping("/detail/{productId}")
     public Response productDetail(@PathVariable long productId){
         return Response.success(productService.findProductDetail(productId));
+    }
+
+    @GetMapping
+    public Response findBy(@Param String productName, @Param Integer status
+            , @Param String startDate, @Param String endDate){
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+
+        List<Product> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
+
+        return Response.success(list);
     }
 
 }

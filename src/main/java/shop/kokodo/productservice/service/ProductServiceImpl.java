@@ -11,8 +11,10 @@ import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.repository.CategoryRepository;
+import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,6 +27,7 @@ public class ProductServiceImpl implements ProductService{
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductCustomRepository productCustomRepository;
 
     @Transactional
     @Override
@@ -123,5 +126,11 @@ public class ProductServiceImpl implements ProductService{
 //                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
 
         return product;
+    }
+
+    @Override
+    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+
     }
 }
