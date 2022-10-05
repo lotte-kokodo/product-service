@@ -1,9 +1,7 @@
 package shop.kokodo.productservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,7 +11,6 @@ import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class ProductInquire extends BaseEntity{
     @Id
@@ -23,9 +20,24 @@ public class ProductInquire extends BaseEntity{
 
     @ManyToOne(fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
-    private LocalDateTime createdAt;
+    private String question;
+
     private String answer;
-    private int userLoginId;
+    private long memberId;
+
+    @Builder
+    public ProductInquire(Long id, Product product,String question, String answer, long memberId) {
+        this.id = id;
+        this.product = product;
+        this.question=question;
+        this.answer = answer;
+        this.memberId = memberId;
+    }
+
+    public void answerQuestion(String answer){
+        this.answer=answer;
+    }
 }
