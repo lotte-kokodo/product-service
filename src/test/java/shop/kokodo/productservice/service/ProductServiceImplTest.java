@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -159,28 +160,52 @@ class ProductServiceImplTest {
     @Test
     @DisplayName("전체 상품 조회 성공")
     void findAll() {
+        // given
         doReturn(productList).when(productRepository).findAll();
-        productServiceImpl.findAll();
+
+        // when
+        final List<ProductDto> productDtos = productServiceImpl.findAll();
+
+        // then
+        assertThat(productDtos.size()).isEqualTo(productList.size());
     }
 
     @Test
     @DisplayName("카테고리ID로 상품 조회 성공")
     void findProductByCategory() {
+        // given
         doReturn(productList).when(productRepository).findProductByCategory(category.getId());
-        productServiceImpl.findProductByCategory(category.getId());
+
+        // when
+        final List<ProductDto> productDtos = productServiceImpl.findProductByCategory(category.getId());
+
+        // then
+        assertThat(productDtos.size()).isEqualTo(productList.size());
     }
 
     @Test
     @DisplayName("전체 상품에서 상품 이름으로 검색 성공")
     void findProductByTotalSearch() {
+        // given
         doReturn(productList).when(productRepository).findProductByTotalSearch("닭");
-        productServiceImpl.findProductByTotalSearch("닭");
+
+        // when
+        final List<ProductDto> productDtos = productServiceImpl.findProductByTotalSearch("닭");
+
+        // then
+        assertThat(productDtos.size()).isEqualTo(productList.size());
     }
 
     @Test
     @DisplayName("카테고리 내 상품에서 상품 이름으로 검색 성공")
     void findProductByCategorySearch() {
+        //given
         doReturn(productList).when(productRepository).findProductByCategorySearch(category.getId(), "닭");
-        productServiceImpl.findProductByCategorySearch(category.getId(), "닭");
+
+        // when
+        final List<ProductDto> productDtos = productServiceImpl.findProductByCategorySearch(category.getId(), "닭");
+
+        // then
+        assertThat(productDtos.size()).isEqualTo(productList.size());
     }
 }
