@@ -84,7 +84,7 @@ public class ProductInquireRepositoryTest {
         productInquireRepository.save(productInquire1);
         productInquireRepository.save(productInquire2);
 
-        List<ProductInquire> list = productInquireRepository.findBySellerId(1);
+        List<ProductInquire> list = productInquireRepository.findNotAnswerInquireBySellerId(1);
 
         Assertions.assertEquals(list.size(),1);
     }
