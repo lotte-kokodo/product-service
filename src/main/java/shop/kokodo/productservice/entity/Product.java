@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import shop.kokodo.productservice.exception.ExceptionMessage;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
@@ -76,5 +77,20 @@ public class Product extends BaseEntity {
         this.thumbnail = thumbnail;
         this.sellerId = sellerId;
         this.deliveryFee = deliveryFee;
+    }
+
+
+    /*
+     * 주문 시 상품 재고 수정
+     * */
+    public void decreaseStock(Integer qty) {
+        if (stock - qty < 0) {
+            throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_STOCK);
+        }
+        stock -= qty;
+    }
+
+    public void increaseStock(Integer qty) {
+        stock += qty;
     }
 }

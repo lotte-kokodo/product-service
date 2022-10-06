@@ -20,4 +20,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p join fetch p.category c where c.id = :categoryId " +
             "and p.displayName like concat('%',:productDisplayName,'%')" )
     List<Product> findProductByCategorySearch(@Param("categoryId") long categoryId,@Param("productDisplayName") String productDisplayName);
+
+    List<Product> findByIdIn(List<Long> productIds);
 }

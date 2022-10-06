@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.messagequeue.strategy.DecreaseStockHandler;
 import shop.kokodo.productservice.messagequeue.strategy.IncreaseStockHandler;
 
-@Service
+//@Service
 @Slf4j
 public class KafkaConsumer {
 

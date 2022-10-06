@@ -15,13 +15,13 @@ import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import shop.kokodo.productservice.service.interfaces.ProductService;
 
 @Service
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
@@ -124,4 +124,15 @@ public class ProductServiceImpl implements ProductService{
 
         return product;
     }
+
+    public List<Product> getOrderProducts(List<Long> productIds) {
+        List<Product> products = productRepository.findByIdIn(productIds);
+
+        if (products.size() == 0) {
+            throw new IllegalArgumentException("Product not founded.");
+        }
+
+        return products;
+    }
+
 }

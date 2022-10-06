@@ -2,8 +2,6 @@ package shop.kokodo.productservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,7 +11,7 @@ import shop.kokodo.productservice.repository.CategoryRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import shop.kokodo.productservice.service.interfaces.CategoryService;
 
 @Service
 @Slf4j

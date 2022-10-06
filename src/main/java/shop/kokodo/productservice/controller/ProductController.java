@@ -1,15 +1,16 @@
 package shop.kokodo.productservice.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductResponse;
+import shop.kokodo.productservice.dto.ProductResponse.GetOrderProduct;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.service.CategoryService;
-import shop.kokodo.productservice.service.ProductService;
+import shop.kokodo.productservice.service.interfaces.CategoryService;
+import shop.kokodo.productservice.service.interfaces.ProductService;
 
 @RestController
 @RequestMapping("/product")
@@ -90,4 +91,21 @@ public class ProductController {
         return Response.success(productService.findProductDetail(productId));
     }
 
+    // 주문서 상품 정보 요청 API
+    @GetMapping("/orderProducts")
+    public Response getOrderProducts(@RequestParam List<Long> productIds) {
+        List<Product> products = productService.getOrderProducts(productIds);
+
+        List<ProductResponse.GetOrderProduct> orderProducts = products.stream()
+            .map(product ->
+                GetOrderProduct.builder()
+                    .id(product.getId())
+                    .thumbnail(product.getThumbnail())
+                    .name(product.getName())
+                    .price(product.getPrice())
+                    .build())
+            .collect(Collectors.toList());
+
+        return Response.success(orderProducts);
+    }
 }
