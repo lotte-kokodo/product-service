@@ -1,29 +1,27 @@
 package shop.kokodo.productservice.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
-@Builder
+@Entity
 @NoArgsConstructor
-@AllArgsConstructor
 public class Category extends BaseEntity {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private Long id;
-
+    private long id;
     private String name;
 
-    @OneToOne(mappedBy = "category")
-    private Product product;
+    @OneToMany(mappedBy = "category", orphanRemoval = true)
+    private List<Product> productList = new ArrayList<>();
+
+    @Builder
+    public Category(long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

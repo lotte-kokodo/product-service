@@ -1,34 +1,36 @@
 package shop.kokodo.productservice.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.*;
 
+import javax.persistence.*;
 
-@Entity
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
-@Builder
+@Entity
 @NoArgsConstructor
-@AllArgsConstructor
-public class ProductDetail extends BaseEntity {
-
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ProductDetail extends BaseEntity{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_detail_id")
-    private Long id;
+    private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
-    private Integer orders;
     private String image;
+    private int orders;
+
+    @Builder
+    public ProductDetail(long id, Product product, String image, int orders) {
+        this.id = id;
+        this.product = product;
+        this.image = image;
+        this.orders = orders;
+    }
 }

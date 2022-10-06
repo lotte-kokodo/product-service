@@ -1,62 +1,80 @@
 package shop.kokodo.productservice.entity;
 
-import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import shop.kokodo.productservice.exception.ExceptionMessage;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
+import net.bytebuddy.implementation.bind.annotation.BindingPriority;
+import org.springframework.stereotype.Service;
 
-@Entity
+import javax.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.EAGER;
+import static javax.persistence.FetchType.LAZY;
+
 @Getter
-@Builder
+@Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Product extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long id;
+    private long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
+    @JsonIgnore
     private Category category;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<ProductDetail> productDetailList = new ArrayList<>();
+
+    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.REMOVE)
+    private TemplateRec templateRec;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Review> reviewList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<ProductInquire> productInquireList = new ArrayList<>();
+
     private String name;
+    private int price;
     private String displayName;
-
-    private Integer price;
-    private Integer stock;
-
+    private int stock;
     private LocalDateTime deadline;
     private String thumbnail;
+    private long sellerId;
+    private int deliveryFee;
 
-    private Long sellerId;
-
-    private Integer deliveryFee;
-
-    @OneToOne(mappedBy = "product")
-    private ProductDetail productDetail;
-
-
-    /*
-    * 주문 시 상품 재고 수정
-    * */
-    public void decreaseStock(Integer qty) {
-        if (stock - qty < 0) {
-            throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_STOCK);
-        }
+    //== 연관관계 메서드 ==//
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getProductList().add(this);
     }
 
-    public void increaseStock(Integer qty) {
-        stock -= qty;
+    public void addProductDetail(ProductDetail productDetail) {
+        productDetailList.add(productDetail);
+    }
+
+    @Builder
+    public Product(long id, Category category, String name, int price, String displayName,
+        int stock, LocalDateTime deadline, String thumbnail, long sellerId, int deliveryFee) {
+        this.id = id;
+        setCategory(category);
+        this.name = name;
+        this.price = price;
+        this.displayName = displayName;
+        this.stock = stock;
+        this.deadline = deadline;
+        this.thumbnail = thumbnail;
+        this.sellerId = sellerId;
+        this.deliveryFee = deliveryFee;
     }
 }
