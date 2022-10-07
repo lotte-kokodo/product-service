@@ -13,4 +13,8 @@ public interface ReviewService {
     public Review save(ReviewRequestDto reviewDto);
 
     public List<Review> findByMemberId(long memberId);
+
+    public String calcTotalRate(long productId);
+
+    public long countReview(long productId);
 }

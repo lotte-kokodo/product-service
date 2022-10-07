@@ -3,6 +3,7 @@ package shop.kokodo.productservice.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
+import shop.kokodo.productservice.dto.ReviewTotalDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Review;
 import shop.kokodo.productservice.service.ReviewService;
@@ -39,6 +40,20 @@ public class ReviewController {
     @GetMapping("/member")
     public Response findByMemberId(@RequestHeader long memberId){
         return Response.success(reviewService.findByMemberId(memberId));
+    }
+
+    @GetMapping("/total/{productId}")
+    public Response getTotalRate(@PathVariable long productId){
+        System.out.println("ReviewController.getTotalRate");
+        String totalRate = reviewService.calcTotalRate(productId);
+        long reviewCnt = reviewService.countReview(productId);
+
+        ReviewTotalDto reviewTotalDto = ReviewTotalDto.builder()
+                .totalRate(totalRate)
+                .reviewCnt(reviewCnt)
+                .build();
+
+        return Response.success(reviewTotalDto);
     }
 
 

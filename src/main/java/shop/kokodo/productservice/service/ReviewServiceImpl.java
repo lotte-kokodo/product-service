@@ -53,6 +53,24 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewRepository.findByMemberId(memberId);
     }
 
+    @Override
+    public String calcTotalRate(long productId) {
+        List<Review> reviewList = reviewRepository.findByProductId(productId);
+        double sum=0;
+
+        for (Review review : reviewList) {
+            sum+=review.getRating();
+        }
+
+        double rate=sum/reviewList.size();
+        return String.format("%.1f",rate);
+    }
+
+    @Override
+    public long countReview(long productId) {
+        return reviewRepository.countByProductId(productId);
+    }
+
     private ReviewResponseDto convertToReviewResponse(Review review){
 //        String memberName = userServiceClient.findMemberName(review.getMemberId());
         String memberName = " memberName";
@@ -74,4 +92,6 @@ public class ReviewServiceImpl implements ReviewService{
                 .memberId(reviewDto.getMemberId())
                 .build();
     }
+
+
 }
