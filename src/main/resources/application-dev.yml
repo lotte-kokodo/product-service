@@ -1,8 +1,5 @@
 spring:
 
-  application:
-    name: product-service
-
   h2:
     console:
       enabled: true
@@ -11,8 +8,9 @@ spring:
       path: /h2-console
 
   datasource:
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:mem:testdb
+    url: jdbc:mysql://localhost:3306/kokodo
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
 
   jpa:
     properties:
@@ -25,3 +23,8 @@ spring:
 #  sql:
 #    init:
 #      mode: always
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
