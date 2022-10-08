@@ -1,4 +1,4 @@
-package shop.kokodo.productservice.repository;
+package shop.kokodo.productservice.feign.repository;
 
 import java.util.List;
 import org.springframework.data.repository.CrudRepository;

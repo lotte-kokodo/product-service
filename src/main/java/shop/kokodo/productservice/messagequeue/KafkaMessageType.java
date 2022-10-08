@@ -11,6 +11,8 @@ public enum KafkaMessageType {
         this.key = key;
     }
 
+    public String getName() { return name(); }
+
     public String getKey() {
         return this.key;
     }
