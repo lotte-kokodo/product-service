@@ -33,7 +33,7 @@ import java.time.LocalDateTime;
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
-public class ProductRestController {
+public class ProductRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;

@@ -3,6 +3,7 @@ package shop.kokodo.productservice.service;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Product;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ProductService {
@@ -17,4 +18,5 @@ public interface ProductService {
     public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName);
 
     public Product findProductDetail(long productId);
+    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 }
