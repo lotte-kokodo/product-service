@@ -1,9 +1,7 @@
 package shop.kokodo.productservice.controller;
 
 import feign.Param;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ProductDto;
