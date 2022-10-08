@@ -46,40 +46,9 @@ public class DecreaseStockHandler implements KafkaMessageHandler {
 
     @Override
     public void handle(String message) {
-        Map<Object, Object> map = parser.readMessageValue(message, new TypeReference<Map<Object, Object>>() {});
+        Map<Long, Integer> productIdQtyMap = parser.readMessageValue(message,
+            new TypeReference<Map<Long, Integer>>() {});
 
-        KafkaMessageType kafkaMessageType = KafkaMessageType.valueOf((String) map.get("type"));
-
-        switch (kafkaMessageType) {
-            case ORDER_SINGLE_PRODUCT:
-                ProductUpdateStock updateStock = parser.readMessageValue(
-                    message, new TypeReference<KafkaMessage<ProductUpdateStock>>() {}).getData();
-
-                orderSingleProduct(updateStock.getProductId(), updateStock.getQty());
-                break;
-            case ORDER_CART_PRODUCT:
-                Map<Long, Integer> updateStockMap = parser.readMessageValue(
-                    message, new TypeReference<KafkaMessage<ProductUpdateStockMap>>() {}).getData().getMap();
-                orderCartProduct(updateStockMap);
-                break;
-        }
-
-    }
-
-    private void orderSingleProduct(Long productId, Integer qty) {
-        Optional<Product> findProduct = productRepository.findById(productId);
-        if (findProduct.isEmpty()) {
-            log.error("[IncreaseStockHandler] Product(id = '{}') not founded.", productId);
-            throw new IllegalArgumentException(ExceptionMessage.PRODUCT_NOT_FOUND);
-        }
-
-        Product product = findProduct.get();
-        product.decreaseStock(qty);
-
-        productRepository.save(product);
-    }
-
-    private void orderCartProduct(Map<Long, Integer> productIdQtyMap) {
         List<Long> productIds = new ArrayList<>(productIdQtyMap.keySet());
         List<Product> products = productRepository.findByIdIn(productIds);
 
@@ -88,6 +57,7 @@ public class DecreaseStockHandler implements KafkaMessageHandler {
         });
 
         productRepository.saveAll(products);
+
     }
 
 

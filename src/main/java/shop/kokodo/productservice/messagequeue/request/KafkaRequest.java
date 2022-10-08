@@ -22,8 +22,8 @@ public class KafkaRequest {
     @NoArgsConstructor
     @Getter
     @ToString
-    public static class ProductUpdateStockMap {
-        private Map<Long, Integer> map;
+    public static class ProductUpdateStockMap<K, V> {
+        private Map<K, V> map;
     }
 
     @AllArgsConstructor

@@ -85,7 +85,7 @@ public class Product extends BaseEntity {
      * */
     public void decreaseStock(Integer qty) {
         if (stock - qty < 0) {
-            throw new IllegalStateException(ExceptionMessage.NOT_ENOUGH_STOCK);
+            throw new IllegalStateException(ExceptionMessage.createProductNotEnoughStockMsg(id));
         }
         stock -= qty;
     }
