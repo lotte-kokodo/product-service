@@ -10,6 +10,6 @@ public class FeignResponse {
     public interface ProductOfCart {
         Long getId();
         String getThumbnail();
-        Long getName();
+        String getName();
     }
 }

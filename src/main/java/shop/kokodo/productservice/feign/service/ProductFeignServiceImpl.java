@@ -34,6 +34,7 @@ public class ProductFeignServiceImpl implements ProductFeignService{
 
     @Override
     public List<ProductOfCart> getCartProducts(List<Long> productIds) {
-        return productFeignRepository.findByIdIn(productIds, ProductOfCart.class);
+        List<ProductOfCart> list = productFeignRepository.findByIdIn(productIds, ProductOfCart.class);
+        return list;
     }
 }

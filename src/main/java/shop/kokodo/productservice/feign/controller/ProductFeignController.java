@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import javax.ws.rs.QueryParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -40,12 +41,14 @@ public class ProductFeignController {
     }
 
     @GetMapping("/cart")
-    Map<Long, ProductOfCart> getCartProducts(@ModelAttribute List<Long> productIds) {
+    Map<Long, ProductOfCart> getCartProducts(@RequestParam List<Long> productIds) {
 
         List<ProductOfCart> productOfCarts = productFeignService.getCartProducts(productIds);
 
-        return productOfCarts.stream()
+        Map<Long, ProductOfCart> map = productOfCarts.stream()
             .collect(Collectors.toMap(ProductOfCart::getId, Function.identity()));
+
+        return map;
     }
 
 }
