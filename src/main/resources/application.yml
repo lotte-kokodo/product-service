@@ -19,7 +19,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/kokodo?characterEncoding=utf8&serverTimezone=Asia/Seoul
     username: root
-    password: BITBIT123 #1234
+    password: 1234 #BITBIT123
 
   jpa:
     hibernate:
@@ -30,6 +30,8 @@ spring:
       hibernate:
         show-sql: true
         format_sql: true
+#        hbm2ddl:
+#          auto: update
   sql:
     init:
       mode: always

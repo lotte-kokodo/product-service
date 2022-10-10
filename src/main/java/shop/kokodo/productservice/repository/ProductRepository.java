@@ -6,7 +6,6 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.kokodo.productservice.entity.Product;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -22,4 +21,37 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "and p.displayName like concat('%',:productDisplayName,'%')" )
     List<Product> findProductByCategorySearch(@Param("categoryId") long categoryId,@Param("productDisplayName") String productDisplayName);
 
+    /*
+    new 상품 [당월에 발매된 상품]
+     */
+    @Query(value = "select * from product p " +
+            "where substring(p.created_date,6,2) = date_format(now(), '%m') " +
+            "order by p.created_date desc", nativeQuery = true)
+    List<Product> findProductByNew();
+
+    /*
+    sale 상품 [다음달 or 유통기한이 안 지난 이번달 상품
+     */
+    @Query(value = "select * from product p  " +
+            "where substring(p.deadline,6,2) = date_format(date_add(now(), interval + 1 MONTH), '%m') or " +
+            "( substring(p.deadline,6,2) = date_format(now(), '%m') AND substring(p.deadline,8,2) < date_format(now(), '%d')) " +
+            "ORDER BY p.deadline DESC", nativeQuery = true )
+    List<Product> findProductBySale();
+
+    /*
+    각 MD별 상품
+     */
+    @Query("select p from Product p group by p.sellerId")
+    List<Product> findProductBySeller();
+
+    /*
+    리뷰 많은 순으로 정렬
+    TODO: 리뷰 전체 안 되서 보류
+     */
+    @Query(value = "select p.* from product p inner join " +
+            "( select r.product_id, count(r.product_id) as cnt from review r " +
+            "group by product_id order by cnt desc ) " +
+            "r on p.product_id = r.product_id where p.category_id = :categoryId " +
+            "union select * from product p1 where p1.category_id = :categoryId ", nativeQuery = true)
+    List<Product> findProductByCategorySortingReview(@Param("categoryId") long categoryId);
 }
