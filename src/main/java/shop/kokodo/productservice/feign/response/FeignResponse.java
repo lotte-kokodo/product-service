@@ -12,4 +12,9 @@ public class FeignResponse {
         String getThumbnail();
         String getName();
     }
+
+    public interface Stock {
+        Long getId();
+        Integer getStock();
+    }
 }

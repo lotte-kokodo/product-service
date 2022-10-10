@@ -1,6 +1,7 @@
 package shop.kokodo.productservice.feign.service.interfaces;
 
 import java.util.List;
+import org.springframework.web.bind.annotation.PathVariable;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 
 public interface ProductFeignService {
@@ -9,4 +10,6 @@ public interface ProductFeignService {
     List<FeignResponse.Price> getProductPrices(List<Long> productId);
 
     List<FeignResponse.ProductOfCart> getCartProducts(List<Long> productIds);
+
+    FeignResponse.Stock getProductStock(Long productId);
 }

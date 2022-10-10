@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfCart;
+import shop.kokodo.productservice.feign.response.FeignResponse.Stock;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
 @RestController
@@ -41,14 +42,18 @@ public class ProductFeignController {
     }
 
     @GetMapping("/cart")
-    Map<Long, ProductOfCart> getCartProducts(@RequestParam List<Long> productIds) {
+    public Map<Long, ProductOfCart> getCartProducts(@RequestParam List<Long> productIds) {
 
         List<ProductOfCart> productOfCarts = productFeignService.getCartProducts(productIds);
 
-        Map<Long, ProductOfCart> map = productOfCarts.stream()
+        return productOfCarts.stream()
             .collect(Collectors.toMap(ProductOfCart::getId, Function.identity()));
-
-        return map;
     }
+
+    @GetMapping("/stock/{productId}")
+    public FeignResponse.Stock getProductStock(@PathVariable Long productId) {
+        return productFeignService.getProductStock(productId);
+    }
+
 
 }
