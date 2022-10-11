@@ -7,6 +7,7 @@ import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.Price;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfCart;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrderSheet;
 import shop.kokodo.productservice.feign.response.FeignResponse.Stock;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
@@ -42,4 +43,11 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     public FeignResponse.Stock getProductStock(Long productId) {
         return productFeignRepository.findById(productId, Stock.class);
     }
+
+    @Override
+    public List<ProductOfOrderSheet> getOrderSheetProducts(List<Long> productIds) {
+        return productFeignRepository.findByIdIn(productIds, ProductOfOrderSheet.class);
+    }
+
+
 }

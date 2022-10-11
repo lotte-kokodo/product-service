@@ -17,4 +17,11 @@ public class FeignResponse {
         Long getId();
         Integer getStock();
     }
+
+    public interface ProductOfOrderSheet {
+        Long getId();
+        String getThumbnail();
+        String getName();
+        Integer getPrice();
+    }
 }

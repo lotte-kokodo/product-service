@@ -90,22 +90,4 @@ public class ProductController {
     public Response productDetail(@PathVariable long productId){
         return Response.success(productService.findProductDetail(productId));
     }
-
-    // 주문서 상품 정보 요청 API
-    @GetMapping("/orderProducts")
-    public Response getOrderProducts(@RequestParam List<Long> productIds) {
-        List<Product> products = productService.getOrderProducts(productIds);
-
-        List<ProductResponse.GetOrderProduct> orderProducts = products.stream()
-            .map(product ->
-                GetOrderProduct.builder()
-                    .id(product.getId())
-                    .thumbnail(product.getThumbnail())
-                    .name(product.getName())
-                    .price(product.getPrice())
-                    .build())
-            .collect(Collectors.toList());
-
-        return Response.success(orderProducts);
-    }
 }
