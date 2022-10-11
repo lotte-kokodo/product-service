@@ -15,9 +15,7 @@ import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -95,6 +93,18 @@ public class ProductServiceImpl implements ProductService{
         return returnProductDtoList(productRepository.findProductByCategory(categoryId));
     }
 
+    public List<ProductDto> findProductByCategorySortingNew(long categoryId) {
+        List<Product> productList = productRepository.findProductByCategory(categoryId);
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductByCategorySortingReview(long categoryId) {
+        return returnProductDtoList(productRepository.findProductByCategorySortingReview(categoryId));
+    }
+
     @Override
     public List<ProductDto> findProductByTotalSearch(String productDisplayName) {
         return returnProductDtoList(productRepository.findProductByTotalSearch(productDisplayName));
@@ -103,6 +113,33 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName) {
         return returnProductDtoList(productRepository.findProductByCategorySearch(categoryId, productDisplayName));
+    }
+
+    @Override
+    public List<ProductDto> findProductByNew() {
+        return returnProductDtoList(productRepository.findProductByNew());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySale() {
+        return returnProductDtoList(productRepository.findProductBySale());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySeller() { return returnProductDtoList(productRepository.findProductBySeller());  }
+
+    // TODO: detail 이미지 template 부분 추가
+    public Product findProductDetail(long productId){
+        Product product = productRepository.findById(productId).get();
+//                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
+
+        return product;
+    }
+
+    @Override
+    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
@@ -118,19 +155,5 @@ public class ProductServiceImpl implements ProductService{
         }
 
         return productDtoList;
-    }
-
-    // TODO: detail 이미지 template 부분 추가
-    public Product findProductDetail(long productId){
-        Product product = productRepository.findById(productId).get();
-//                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
-
-        return product;
-    }
-
-    @Override
-    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
-
     }
 }
