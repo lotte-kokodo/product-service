@@ -49,12 +49,14 @@ public class ReviewRepositoryTest {
                 .content("리뷰1")
                 .rating(5.0)
                 .product(product)
+                .memberId(1)
                 .build();
 
         review2 = Review.builder()
                 .content("리뷰2")
                 .rating(4.5)
                 .product(product)
+                .memberId(1)
                 .build();
 
         productRepository.save(product);
@@ -69,5 +71,21 @@ public class ReviewRepositoryTest {
         List<Review> reviews = reviewRepository.findByProductId(product.getId());
 
         Assertions.assertEquals(reviews.size(),2);
+    }
+
+    @Test
+    @DisplayName("member id로 찾기")
+    public void findByMemberId(){
+        reviewRepository.save(review1);
+        reviewRepository.save(review2);
+
+        List<Review> reviews = reviewRepository.findByMemberId(1);
+
+        Assertions.assertEquals(reviews.size(),2);
+
+        for (Review review : reviews) {
+            System.out.println(review.toString());
+        }
+
     }
 }

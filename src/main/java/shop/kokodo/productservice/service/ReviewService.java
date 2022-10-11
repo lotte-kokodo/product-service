@@ -14,7 +14,7 @@ public interface ReviewService {
 
     public List<Review> findByMemberId(long memberId);
 
-    public String calcTotalRate(long productId);
+    public Double calcTotalRate(long productId);
 
     public long countReview(long productId);
 }

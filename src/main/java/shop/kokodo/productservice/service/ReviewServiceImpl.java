@@ -54,7 +54,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public String calcTotalRate(long productId) {
+    public Double calcTotalRate(long productId) {
         List<Review> reviewList = reviewRepository.findByProductId(productId);
         double sum=0;
 
@@ -63,12 +63,12 @@ public class ReviewServiceImpl implements ReviewService{
         }
 
         double rate=sum/reviewList.size();
-        return String.format("%.1f",rate);
+        return rate;
     }
 
     @Override
     public long countReview(long productId) {
-        return reviewRepository.countByProductId(productId);
+        return reviewRepository.findByProductId(productId).size();
     }
 
     private ReviewResponseDto convertToReviewResponse(Review review){
