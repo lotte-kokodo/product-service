@@ -44,9 +44,10 @@ public class ReviewController {
 
     @GetMapping("/total/{productId}")
     public Response getTotalRate(@PathVariable long productId){
-        System.out.println("ReviewController.getTotalRate");
-        String totalRate = reviewService.calcTotalRate(productId);
+        Double totalRate = reviewService.calcTotalRate(productId);
         long reviewCnt = reviewService.countReview(productId);
+
+        System.out.println(totalRate+" "+reviewCnt);
 
         ReviewTotalDto reviewTotalDto = ReviewTotalDto.builder()
                 .totalRate(totalRate)

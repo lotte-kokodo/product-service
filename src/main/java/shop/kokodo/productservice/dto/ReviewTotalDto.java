@@ -7,11 +7,11 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 public class ReviewTotalDto {
-    String totalRate;
+    Double totalRate;
     long reviewCnt;
 
     @Builder
-    public ReviewTotalDto(String totalRate, long reviewCnt) {
+    public ReviewTotalDto(Double totalRate, long reviewCnt) {
         this.totalRate = totalRate;
         this.reviewCnt = reviewCnt;
     }
