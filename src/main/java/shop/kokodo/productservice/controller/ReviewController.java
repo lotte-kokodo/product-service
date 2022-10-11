@@ -50,9 +50,11 @@ public class ReviewController {
         System.out.println(totalRate+" "+reviewCnt);
 
         ReviewTotalDto reviewTotalDto = ReviewTotalDto.builder()
-                .totalRate(totalRate)
+                .totalRate(Math.round(totalRate * 10) / 10.0)
                 .reviewCnt(reviewCnt)
                 .build();
+
+        System.out.println(reviewTotalDto.getTotalRate());
 
         return Response.success(reviewTotalDto);
     }
