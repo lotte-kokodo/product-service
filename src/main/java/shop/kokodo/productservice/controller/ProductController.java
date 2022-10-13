@@ -32,7 +32,10 @@ public class ProductController {
 
     @PostMapping("/save")
     public Response save(@RequestBody ProductDto productDto) {
-        productService.saveProduct(productDto);
+        Product product = productService.saveProduct(productDto);
+        if(product==null){
+            return Response.failure(400,"저장에 실패했습니다.");
+        }
         return Response.success();
     }
 
