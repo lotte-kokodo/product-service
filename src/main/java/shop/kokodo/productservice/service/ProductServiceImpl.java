@@ -101,8 +101,34 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductDto> findProductBySaleSortingNew() {
+        List<Product> productList = productRepository.findProductBySale();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingNew() {
+        List<Product> productList = productRepository.findProductBySeller();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
     public List<ProductDto> findProductByCategorySortingReview(long categoryId) {
         return returnProductDtoList(productRepository.findProductByCategorySortingReview(categoryId));
+    }
+
+    @Override
+    public List<ProductDto> findProductBySaleSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySaleSortingReview());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySellerSortingReview());
     }
 
     @Override
