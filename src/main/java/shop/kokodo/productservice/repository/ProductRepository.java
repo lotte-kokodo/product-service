@@ -54,4 +54,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "r on p.product_id = r.product_id where p.category_id = :categoryId " +
             "union select * from product p1 where p1.category_id = :categoryId ", nativeQuery = true)
     List<Product> findProductByCategorySortingReview(@Param("categoryId") long categoryId);
+
+    @Query("select p.sellerId from Product p where p.id = :pId")
+    Long findSellerIdByProductId(Long pId);
 }

@@ -2,9 +2,6 @@ package shop.kokodo.productservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.math.raw.Mod;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -15,7 +12,10 @@ import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -140,6 +140,15 @@ public class ProductServiceImpl implements ProductService{
     public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
             return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
 
+    }
+
+    @Override
+    public List<Long> getProductSellerId(List<Long> productId) {
+        List<Long> sellerIdList = new ArrayList<>();
+        for (Long pId : productId) {
+            sellerIdList.add(productRepository.findSellerIdByProductId(pId));
+        }
+        return sellerIdList;
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
