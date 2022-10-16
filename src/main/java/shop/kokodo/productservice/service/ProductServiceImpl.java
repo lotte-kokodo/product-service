@@ -1,10 +1,9 @@
 package shop.kokodo.productservice.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.math.raw.Mod;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -12,9 +11,6 @@ import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
-
-import java.util.ArrayList;
-import java.util.List;
 import shop.kokodo.productservice.service.interfaces.ProductService;
 
 @Service

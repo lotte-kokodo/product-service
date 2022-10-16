@@ -7,21 +7,16 @@ public class FeignResponse {
         Integer getPrice();
     }
 
-    public interface ProductOfCart {
+    public interface ProductOfOrder {
         Long getId();
         String getThumbnail();
         String getName();
+        Integer getPrice();
+        Long getSellerId();
     }
 
     public interface Stock {
         Long getId();
         Integer getStock();
-    }
-
-    public interface ProductOfOrderSheet {
-        Long getId();
-        String getThumbnail();
-        String getName();
-        Integer getPrice();
     }
 }
