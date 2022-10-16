@@ -2,23 +2,14 @@ package shop.kokodo.productservice.messagequeue.handler;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.awt.TrayIcon.MessageType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.exception.ExceptionMessage;
-import shop.kokodo.productservice.feign.request.FeignRequest.UpdateStock;
 import shop.kokodo.productservice.messagequeue.KafkaMessageParser;
-import shop.kokodo.productservice.messagequeue.KafkaMessageType;
-import shop.kokodo.productservice.messagequeue.request.KafkaRequest;
-import shop.kokodo.productservice.messagequeue.request.KafkaRequest.KafkaMessage;
-import shop.kokodo.productservice.messagequeue.request.KafkaRequest.ProductUpdateStock;
-import shop.kokodo.productservice.messagequeue.request.KafkaRequest.ProductUpdateStockMap;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 /**

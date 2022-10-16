@@ -10,8 +10,12 @@ import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.repository.CategoryRepository;
+import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 import shop.kokodo.productservice.service.interfaces.ProductService;
+
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -21,6 +25,7 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductCustomRepository productCustomRepository;
 
     @Transactional
     @Override
@@ -88,6 +93,44 @@ public class ProductServiceImpl implements ProductService {
         return returnProductDtoList(productRepository.findProductByCategory(categoryId));
     }
 
+    public List<ProductDto> findProductByCategorySortingNew(long categoryId) {
+        List<Product> productList = productRepository.findProductByCategory(categoryId);
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductBySaleSortingNew() {
+        List<Product> productList = productRepository.findProductBySale();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingNew() {
+        List<Product> productList = productRepository.findProductBySeller();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductByCategorySortingReview(long categoryId) {
+        return returnProductDtoList(productRepository.findProductByCategorySortingReview(categoryId));
+    }
+
+    @Override
+    public List<ProductDto> findProductBySaleSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySaleSortingReview());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySellerSortingReview());
+    }
+
     @Override
     public List<ProductDto> findProductByTotalSearch(String productDisplayName) {
         return returnProductDtoList(productRepository.findProductByTotalSearch(productDisplayName));
@@ -96,6 +139,33 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName) {
         return returnProductDtoList(productRepository.findProductByCategorySearch(categoryId, productDisplayName));
+    }
+
+    @Override
+    public List<ProductDto> findProductByNew() {
+        return returnProductDtoList(productRepository.findProductByNew());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySale() {
+        return returnProductDtoList(productRepository.findProductBySale());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySeller() { return returnProductDtoList(productRepository.findProductBySeller());  }
+
+    // TODO: detail 이미지 template 부분 추가
+    public Product findProductDetail(long productId){
+        Product product = productRepository.findById(productId).get();
+//                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
+
+        return product;
+    }
+
+    @Override
+    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
@@ -112,23 +182,4 @@ public class ProductServiceImpl implements ProductService {
 
         return productDtoList;
     }
-
-    // TODO: detail 이미지 template 부분 추가
-    public Product findProductDetail(long productId){
-        Product product = productRepository.findById(productId).get();
-//                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
-
-        return product;
-    }
-
-    public List<Product> getOrderProducts(List<Long> productIds) {
-        List<Product> products = productRepository.findByIdIn(productIds);
-
-        if (products.size() == 0) {
-            throw new IllegalArgumentException("Product not founded.");
-        }
-
-        return products;
-    }
-
 }
