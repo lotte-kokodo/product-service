@@ -3,6 +3,8 @@ package shop.kokodo.productservice.controller;
 import feign.Param;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
@@ -233,6 +235,14 @@ public class ProductController {
         List<Product> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
 
         return Response.success(list);
+    }
+
+    @GetMapping("/productSellerId")
+    public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
+        System.out.println("productId = " + productId);
+        List<Long> productSellerId = productService.getProductSellerId(productId);
+//        return Response.success(productSellerId);
+        return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
     }
 
 }
