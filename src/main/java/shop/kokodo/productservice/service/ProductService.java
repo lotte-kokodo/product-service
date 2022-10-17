@@ -26,4 +26,6 @@ public interface ProductService {
 
     public Product findProductDetail(long productId);
     public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    public List<ProductDto> findProductListById(List<Long> productList);
 }
