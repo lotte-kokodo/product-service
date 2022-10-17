@@ -1,21 +1,19 @@
 package shop.kokodo.productservice.service;
 
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
 import shop.kokodo.productservice.dto.UserDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.Review;
-import shop.kokodo.productservice.feign.UserServiceClient;
 import shop.kokodo.productservice.repository.ProductRepository;
 import shop.kokodo.productservice.repository.ReviewRepository;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -49,8 +47,7 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<Review> findByMemberId(long memberId) {
-
+    public List<MypageReviewDto> findByMemberId(long memberId) {
         return reviewRepository.findByMemberId(memberId);
     }
 

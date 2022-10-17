@@ -1,5 +1,6 @@
 package shop.kokodo.productservice.service;
 
+import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
 import shop.kokodo.productservice.entity.Review;
@@ -12,7 +13,7 @@ public interface ReviewService {
 
     public Review save(ReviewRequestDto reviewDto);
 
-    public List<Review> findByMemberId(long memberId);
+    public List<MypageReviewDto> findByMemberId(long memberId);
 
     public Double calcTotalRate(long productId);
 

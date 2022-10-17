@@ -15,7 +15,11 @@ public interface ProductService {
     public List<ProductDto> findAll();
     public List<ProductDto> findProductByCategory(long categoryId);
     public List<ProductDto> findProductByCategorySortingNew(long categoryId);
+    public List<ProductDto> findProductBySaleSortingNew();
+    public List<ProductDto> findProductBySellerSortingNew();
     public List<ProductDto> findProductByCategorySortingReview(long categoryId);
+    public List<ProductDto> findProductBySaleSortingReview();
+    public List<ProductDto> findProductBySellerSortingReview();
     public List<ProductDto> findProductByTotalSearch(String productDisplayName);
     public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName);
 
@@ -28,4 +32,5 @@ public interface ProductService {
     public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     public List<ProductDto> findProductListById(List<Long> productList);
+    public List<Long> getProductSellerId(List<Long> productId);
 }

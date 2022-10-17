@@ -3,6 +3,8 @@ package shop.kokodo.productservice.controller;
 import feign.Param;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
@@ -32,7 +34,10 @@ public class ProductController {
 
     @PostMapping("/save")
     public Response save(@RequestBody ProductDto productDto) {
-        productService.saveProduct(productDto);
+        Product product = productService.saveProduct(productDto);
+        if(product==null){
+            return Response.failure(400,"저장에 실패했습니다.");
+        }
         return Response.success();
     }
 
@@ -82,7 +87,30 @@ public class ProductController {
         return Response.success(productDtoList);
     }
 
-    // main seller 상품
+    //sale 상품 정렬 및 상품 전체
+    @GetMapping("/main/sale/all/{sortingId}")
+    public Response productBySaleSorting(@PathVariable("sortingId") long sortingId){
+        List<ProductDto> productDtoList = productService.findProductBySale();
+
+        if(sortingId == 1){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getDeadline)).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 2){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice).reversed()).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 3){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice)).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 4){
+            productDtoList = productService.findProductBySaleSortingNew();
+        }else if(sortingId == 5){
+
+        }
+
+        return Response.success(productDtoList);
+    }
+
+    // main MD추천 상품
     @GetMapping("/main/seller")
     public Response findBySeller() {
         List<ProductDto> productDtoList = productService.findProductBySeller();
@@ -92,6 +120,29 @@ public class ProductController {
             }
         }else if(productDtoList.size() == 0) {
             return Response.failure(0,"상품이 존재하지 않습니다.");
+        }
+
+        return Response.success(productDtoList);
+    }
+
+    // MD추천 상품 정렬 및 상품전체
+    @GetMapping("/main/seller/all/{sortingId}")
+    public Response productBySellerSorting(@PathVariable("sortingId") long sortingId){
+        List<ProductDto> productDtoList = productService.findProductBySeller();
+
+        if(sortingId == 1){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getDeadline)).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 2){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice).reversed()).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 3){
+            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice)).toArray(ProductDto[]::new);
+            productDtoList = Arrays.asList(pr);
+        }else if(sortingId == 4){
+            productDtoList = productService.findProductBySellerSortingNew();
+        }else if(sortingId == 5){
+
         }
 
         return Response.success(productDtoList);
@@ -135,7 +186,7 @@ public class ProductController {
 
     // 카테고리별 상품 정렬
     @GetMapping("/categoryId/{categoryId}/{sortingId}")
-    public Response productByCategory(@PathVariable("categoryId") long categoryId,
+    public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
                                       @PathVariable("sortingId") long sortingId){
         List<ProductDto> productDtoList = productService.findProductByCategory(categoryId);
 
@@ -155,7 +206,6 @@ public class ProductController {
         }
 
         return Response.success(productDtoList);
-
     }
 
     // 전체검색
@@ -164,7 +214,7 @@ public class ProductController {
         return Response.success(productService.findProductByTotalSearch(totalSearch));
     }
 
-    //TODO: 카테고리별 검색 정렬로 변경
+    //TODO: 카테고리별 검색 -> 정렬로 변경
     @GetMapping("/categorySearch/{categoryId}/{displayName}")
     public Response productByCategorySearch(@PathVariable("categoryId") long categoryId,
                                             @PathVariable("displayName") String displayName) {
@@ -188,11 +238,18 @@ public class ProductController {
     }
 
     @GetMapping("/list")
-    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList){
+    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
 
         List<ProductDto> productList = productService.findProductListById(productIdList);
 
         return productList;
+    }
+    @GetMapping("/productSellerId")
+    public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
+        System.out.println("productId = " + productId);
+        List<Long> productSellerId = productService.getProductSellerId(productId);
+//        return Response.success(productSellerId);
+        return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
     }
 
 }

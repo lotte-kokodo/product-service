@@ -45,8 +45,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findProductBySeller();
 
     /*
-    리뷰 많은 순으로 정렬
-    TODO: 리뷰 전체 안 되서 보류
+    카테고리 별 리뷰 많은 순으로 정렬
      */
     @Query(value = "select p.* from product p inner join " +
             "( select r.product_id, count(r.product_id) as cnt from review r " +
@@ -58,4 +57,34 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query(value="select p from Product p " +
             "where p.id in :productIdList ")
     List<Product> findProductListById(List<Long> productIdList);
+    /*
+    세일 상품 리뷰 많은 순으로 정렬
+     */
+    @Query(value = "( select p.* from " +
+            "(select * from product p " +
+            "where substring(p.deadline,6,2) = date_format(date_add(now(), interval + 1 MONTH), '%m') or " +
+            "( substring(p.deadline,6,2) = date_format(now(), '%m') AND substring(p.deadline,8,2) < date_format(now(), '%d')) ) p " +
+            "inner join " +
+            "( select r.product_id, count(r.product_id) as cnt from review r " +
+            "group by product_id order by cnt desc ) " +
+            "r on p.product_id = r.product_id ) " +
+            "union " +
+            "( select * from product p " +
+            "where substring(p.deadline,6,2) = date_format(date_add(now(), interval + 1 MONTH), '%m') or " +
+            "( substring(p.deadline,6,2) = date_format(now(), '%m') AND substring(p.deadline,8,2) < date_format(now(), '%d')) " +
+            "ORDER BY p.deadline DESC ) ", nativeQuery = true)
+    List<Product> findProductBySaleSortingReview();
+
+    /*
+    MD 추천 상품 리뷰 많은 순으로 정렬
+     */
+    @Query(value="select p.* from (select * from product group by seller_id) p inner join " +
+            "( select r.product_id, count(r.product_id) as cnt from review r " +
+            "group by product_id order by cnt desc ) " +
+            "r on p.product_id = r.product_id " +
+            "union select * from product group by seller_id ", nativeQuery = true)
+    List<Product> findProductBySellerSortingReview();
+
+    @Query("select p.sellerId from Product p where p.id = :pId")
+    Long findSellerIdByProductId(Long pId);
 }

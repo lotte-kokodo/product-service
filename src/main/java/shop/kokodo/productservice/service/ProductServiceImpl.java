@@ -2,9 +2,6 @@ package shop.kokodo.productservice.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.bouncycastle.math.raw.Mod;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -15,7 +12,10 @@ import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -101,8 +101,34 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
+    public List<ProductDto> findProductBySaleSortingNew() {
+        List<Product> productList = productRepository.findProductBySale();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingNew() {
+        List<Product> productList = productRepository.findProductBySeller();
+        Product[] pr = productList.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new);
+        productList = Arrays.asList(pr);
+        return returnProductDtoList(productList);
+    }
+
+    @Override
     public List<ProductDto> findProductByCategorySortingReview(long categoryId) {
         return returnProductDtoList(productRepository.findProductByCategorySortingReview(categoryId));
+    }
+
+    @Override
+    public List<ProductDto> findProductBySaleSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySaleSortingReview());
+    }
+
+    @Override
+    public List<ProductDto> findProductBySellerSortingReview() {
+        return returnProductDtoList(productRepository.findProductBySellerSortingReview());
     }
 
     @Override
@@ -148,6 +174,15 @@ public class ProductServiceImpl implements ProductService{
 
         List<ProductDto> productDtoList = returnProductDtoList(productList);
         return productDtoList;
+    }
+
+    @Override
+    public List<Long> getProductSellerId(List<Long> productId) {
+        List<Long> sellerIdList = new ArrayList<>();
+        for (Long pId : productId) {
+            sellerIdList.add(productRepository.findSellerIdByProductId(pId));
+        }
+        return sellerIdList;
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
