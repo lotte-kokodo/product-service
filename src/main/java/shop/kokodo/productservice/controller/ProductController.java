@@ -232,7 +232,7 @@ public class ProductController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        List<Product> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
+        List<ProductDto> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
 
         return Response.success(list);
     }

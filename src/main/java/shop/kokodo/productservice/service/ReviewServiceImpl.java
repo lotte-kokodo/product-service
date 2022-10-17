@@ -8,6 +8,7 @@ import shop.kokodo.productservice.dto.ReviewResponseDto;
 import shop.kokodo.productservice.dto.UserDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.Review;
+import shop.kokodo.productservice.feign.UserServiceClient;
 import shop.kokodo.productservice.repository.ProductRepository;
 import shop.kokodo.productservice.repository.ReviewRepository;
 

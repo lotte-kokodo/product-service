@@ -1,13 +1,16 @@
 package shop.kokodo.productservice.repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
+import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.QProduct;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -23,12 +26,29 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository{
 
 
     @Override
-    public List<Product> findProduct(String name, Integer status, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<ProductDto> findProduct(String name, Integer status, LocalDateTime startDate, LocalDateTime endDate) {
 
         product = QProduct.product;
-        return jpaQueryFactory.selectFrom(product)
+        List<Tuple> results = jpaQueryFactory.select(product.id,product.category.name,product.price,
+                        product.displayName, product.thumbnail,product.stock)
+                .from(product)
                 .where(eqName(name), eqStatus(status),eqDate(startDate, endDate))
                 .fetchAll().fetch();
+
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        results.stream().forEach(tuple -> productDtoList.add(
+                ProductDto.builder()
+                .id(tuple.get(0,Long.class))
+                .categoryName(tuple.get(1,String.class))
+                .price(tuple.get(2,Integer.class))
+                .displayName(tuple.get(3,String.class))
+                .thumbnail(tuple.get(4,String.class))
+                .stock(tuple.get(5,Integer.class))
+                        .build())
+                );
+
+        return productDtoList;
 
     }
 

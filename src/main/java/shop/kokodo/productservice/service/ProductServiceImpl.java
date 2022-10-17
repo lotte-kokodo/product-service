@@ -163,7 +163,7 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
             return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
     }
 
