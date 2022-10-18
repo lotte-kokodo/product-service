@@ -165,7 +165,15 @@ public class ProductServiceImpl implements ProductService{
     @Override
     public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
             return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+    }
 
+    @Override
+    public List<ProductDto> findProductListById(List<Long> productIdList) {
+
+        List<Product> productList = productRepository.findProductListById(productIdList);
+
+        List<ProductDto> productDtoList = returnProductDtoList(productList);
+        return productDtoList;
     }
 
     @Override

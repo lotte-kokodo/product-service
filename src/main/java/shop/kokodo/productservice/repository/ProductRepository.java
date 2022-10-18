@@ -54,6 +54,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "union select * from product p1 where p1.category_id = :categoryId ", nativeQuery = true)
     List<Product> findProductByCategorySortingReview(@Param("categoryId") long categoryId);
 
+    @Query(value="select p from Product p " +
+            "where p.id in :productIdList ")
+    List<Product> findProductListById(List<Long> productIdList);
     /*
     세일 상품 리뷰 많은 순으로 정렬
      */

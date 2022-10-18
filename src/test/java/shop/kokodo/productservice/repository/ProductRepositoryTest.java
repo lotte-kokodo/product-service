@@ -12,6 +12,7 @@ import shop.kokodo.productservice.entity.ProductDetail;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -174,4 +175,18 @@ public class ProductRepositoryTest {
         Assertions.assertEquals(findProduct.isPresent(),true);
         Assertions.assertEquals(findProduct.get().getId(), product1.getId());
     }
+
+    @Test
+    @DisplayName("productId 리스트로 Product 객체 조회 성공")
+    public void findProductListById(){
+        List<Long> productIdList = new ArrayList<>();
+
+         productIdList.add(productRepository.save(product1).getId());
+         productIdList.add(productRepository.save(product2).getId());
+         productRepository.save(product3).getId();
+
+        List<Product> productList = productRepository.findProductListById(productIdList);
+        Assertions.assertEquals(productList.size(),2);
+    }
+
 }

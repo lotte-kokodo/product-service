@@ -227,7 +227,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public Response findBy(@Param String productName, @Param Integer status
+    public Response findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
             , @Param String startDate, @Param String endDate){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -237,6 +237,13 @@ public class ProductController {
         return Response.success(list);
     }
 
+    @GetMapping("/list")
+    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
+
+        List<ProductDto> productList = productService.findProductListById(productIdList);
+
+        return productList;
+    }
     @GetMapping("/productSellerId")
     public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
         System.out.println("productId = " + productId);
