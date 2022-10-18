@@ -76,11 +76,15 @@ public class ProductCustomRepositoryTest {
     @DisplayName("상품 조건 검색(name, status, regdate)")
     public void findByNameAndStock(){
 
-        List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime);
+        List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L);
 
-        Assertions.assertEquals(products.size(),1);
-        Assertions.assertEquals(products.get(0).getName().contains("맛"),true);
-        Assertions.assertEquals(products.get(0).getStock()>0,true);
+
+        for (ProductDto product : products) {
+            Assertions.assertEquals(product.getName().contains("맛"),true);
+            Assertions.assertEquals(product.getStock()>0,true);
+            Assertions.assertEquals(product.getSellerId(),1);
+        }
+
 //        Assertions.assertEquals(products.get(0).getCreatedDate().isAfter(startDateTime)&&products.get(0).getCreatedDate().isBefore(endDateTime),true);
 //
     }

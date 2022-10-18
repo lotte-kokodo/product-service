@@ -228,11 +228,12 @@ public class ProductController {
 
     @GetMapping
     public Response findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate){
+            , @Param String startDate, @Param String endDate, @Param Long sellerId){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        List<ProductDto> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
+        List<ProductDto> list = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
+                ,LocalDateTime.parse(endDate, formatter),sellerId);
 
         return Response.success(list);
     }
@@ -250,6 +251,14 @@ public class ProductController {
         List<Long> productSellerId = productService.getProductSellerId(productId);
 //        return Response.success(productSellerId);
         return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
+    }
+
+    @GetMapping("/seller/{sellerId}")
+    public Response findBySellerId(@PathVariable long sellerId){
+
+        List<ProductDto> productList = productService.findBySellerId(sellerId);
+
+        return  Response.success(productList);
     }
 
 }

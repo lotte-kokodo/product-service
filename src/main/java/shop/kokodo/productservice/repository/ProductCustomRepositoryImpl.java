@@ -26,13 +26,14 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository{
 
 
     @Override
-    public List<ProductDto> findProduct(String name, Integer status, LocalDateTime startDate, LocalDateTime endDate) {
+    public List<ProductDto> findProduct(String name, Integer status, LocalDateTime startDate
+            , LocalDateTime endDate, Long sellerId) {
 
         product = QProduct.product;
         List<Tuple> results = jpaQueryFactory.select(product.id,product.category.name,product.price,
                         product.displayName, product.thumbnail,product.stock)
                 .from(product)
-                .where(eqName(name), eqStatus(status),eqDate(startDate, endDate))
+                .where(eqName(name), eqStatus(status),eqDate(startDate, endDate),eqSellerId(sellerId))
                 .fetchAll().fetch();
 
         List<ProductDto> productDtoList = new ArrayList<>();
@@ -76,5 +77,9 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository{
         else if(startDate!=null && endDate==null) return product.lastModifiedDate.goe(startDate);
         else if(startDate==null && endDate!=null) return product.lastModifiedDate.loe(endDate);
         else return product.lastModifiedDate.goe(startDate).and( product.lastModifiedDate.loe(endDate));
+    }
+
+    private BooleanExpression eqSellerId(Long sellerId){
+        return product.sellerId.eq(sellerId);
     }
 }

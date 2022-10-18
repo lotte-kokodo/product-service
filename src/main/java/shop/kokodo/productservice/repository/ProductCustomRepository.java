@@ -9,5 +9,5 @@ import java.util.List;
 public interface ProductCustomRepository {
 
     List<ProductDto> findProduct(String productName, Integer status, LocalDateTime startDate,
-                                 LocalDateTime endDate);
+                                 LocalDateTime endDate, Long sellerId);
 }

@@ -163,8 +163,9 @@ public class ProductServiceImpl implements ProductService{
     }
 
     @Override
-    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   Long sellerId) {
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId);
     }
 
     @Override
@@ -183,6 +184,11 @@ public class ProductServiceImpl implements ProductService{
             sellerIdList.add(productRepository.findSellerIdByProductId(pId));
         }
         return sellerIdList;
+    }
+
+    @Override
+    public List<ProductDto> findBySellerId(Long sellerId) {
+        return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
