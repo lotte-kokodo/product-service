@@ -9,5 +9,5 @@ import shop.kokodo.productservice.dto.UserDto;
 public interface UserServiceClient {
 
     @GetMapping("/member/productDetail/{memberId}")
-    UserDto findMemberName(@PathVariable long memberId);
+    UserDto findMemberName(@PathVariable("memberId") long memberId);
 }
