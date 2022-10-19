@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 
 @SpringBootTest
 @Transactional
@@ -22,6 +23,9 @@ public class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    ProductFeignRepository productFeignRepository;
 
     @Autowired
     CategoryRepository categoryRepository;
@@ -185,7 +189,7 @@ public class ProductRepositoryTest {
          productIdList.add(productRepository.save(product2).getId());
          productRepository.save(product3).getId();
 
-        List<Product> productList = productRepository.findProductListById(productIdList);
+        List<Product> productList = productFeignRepository.findProductListById(productIdList);
         Assertions.assertEquals(productList.size(),2);
     }
 

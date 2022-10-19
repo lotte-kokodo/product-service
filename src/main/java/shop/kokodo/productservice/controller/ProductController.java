@@ -243,13 +243,6 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
-    @GetMapping("/list")
-    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
-
-        List<ProductDto> productList = productService.findProductListById(productIdList);
-
-        return productList;
-    }
     @GetMapping("/productSellerId")
     public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
         System.out.println("productId = " + productId);

@@ -172,15 +172,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findProductListById(List<Long> productIdList) {
-
-        List<Product> productList = productRepository.findProductListById(productIdList);
-
-        List<ProductDto> productDtoList = returnProductDtoList(productList);
-        return productDtoList;
-    }
-
-    @Override
     public List<Long> getProductSellerId(List<Long> productId) {
         List<Long> sellerIdList = new ArrayList<>();
         for (Long pId : productId) {
