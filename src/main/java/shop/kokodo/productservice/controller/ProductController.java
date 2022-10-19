@@ -12,10 +12,8 @@ import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.ResolverStyle;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -104,7 +102,7 @@ public class ProductController {
         }else if(sortingId == 4){
             productDtoList = productService.findProductBySaleSortingNew();
         }else if(sortingId == 5){
-
+            productDtoList = productService.findProductBySaleSortingReview();
         }
 
         return Response.success(productDtoList);
@@ -142,7 +140,7 @@ public class ProductController {
         }else if(sortingId == 4){
             productDtoList = productService.findProductBySellerSortingNew();
         }else if(sortingId == 5){
-
+            productDtoList = productService.findProductBySellerSortingReview();
         }
 
         return Response.success(productDtoList);
@@ -260,5 +258,4 @@ public class ProductController {
 
         return  Response.success(productList);
     }
-
 }
