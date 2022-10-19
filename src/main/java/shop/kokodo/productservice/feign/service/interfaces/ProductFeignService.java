@@ -1,6 +1,7 @@
 package shop.kokodo.productservice.feign.service.interfaces;
 
 import java.util.List;
+import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 
@@ -12,4 +13,7 @@ public interface ProductFeignService {
     List<ProductOfOrder> getOrderProducts(List<Long> productIds);
 
     FeignResponse.Stock getProductStock(Long productId);
+
+    List<ProductDto> findProductListById(List<Long> productList);
+
 }

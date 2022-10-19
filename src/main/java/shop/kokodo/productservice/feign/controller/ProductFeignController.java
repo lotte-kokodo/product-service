@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
@@ -56,5 +57,12 @@ public class ProductFeignController {
         return productFeignService.getProductStock(productId);
     }
 
+    @GetMapping("/list")
+    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
+
+        List<ProductDto> productList = productFeignService.findProductListById(productIdList);
+
+        return productList;
+    }
 
 }

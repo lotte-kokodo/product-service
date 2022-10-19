@@ -1,8 +1,11 @@
 package shop.kokodo.productservice.feign.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.Price;
@@ -43,4 +46,28 @@ public class ProductFeignServiceImpl implements ProductFeignService{
         return productFeignRepository.findById(productId, Stock.class);
     }
 
+
+    @Override
+    public List<ProductDto> findProductListById(List<Long> productIdList) {
+
+        List<Product> productList = productFeignRepository.findProductListById(productIdList);
+
+        List<ProductDto> productDtoList = returnProductDtoList(productList);
+        return productDtoList;
+    }
+
+    public List<ProductDto> returnProductDtoList (List<Product> productList) {
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for(Product p : productList){
+            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
+                p.getName(),p.getPrice(),p.getDisplayName(),
+                p.getStock(),p.getDeadline(),p.getThumbnail(),
+                p.getSellerId(),p.getDeliveryFee());
+
+            productDtoList.add(productDto);
+        }
+
+        return productDtoList;
+    }
 }
