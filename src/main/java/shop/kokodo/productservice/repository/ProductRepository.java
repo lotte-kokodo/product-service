@@ -1,15 +1,17 @@
 package shop.kokodo.productservice.repository;
 
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import shop.kokodo.productservice.entity.Product;
 
-import java.util.List;
-
 @Repository
 public interface ProductRepository extends JpaRepository<Product,Long> {
+
+    // 상품 리스트 조회
+    List<Product> findByIdIn(List<Long> productIds);
 
     @Query("select p from Product p join fetch p.category c where c.id = :categoryId" )
     List<Product> findProductByCategory(@Param("categoryId") long categoryId);

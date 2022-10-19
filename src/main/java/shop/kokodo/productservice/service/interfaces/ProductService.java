@@ -1,10 +1,9 @@
-package shop.kokodo.productservice.service;
-
-import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.entity.Product;
+package shop.kokodo.productservice.service.interfaces;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.entity.Product;
 
 public interface ProductService {
 

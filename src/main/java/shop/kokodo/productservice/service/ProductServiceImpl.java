@@ -1,5 +1,7 @@
 package shop.kokodo.productservice.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -10,6 +12,7 @@ import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
+import shop.kokodo.productservice.service.interfaces.ProductService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ import java.util.List;
 @Slf4j
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProductService{
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;

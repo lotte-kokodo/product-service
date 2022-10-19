@@ -1,4 +1,4 @@
-package shop.kokodo.productservice.service;
+package shop.kokodo.productservice.service.interfaces;
 
 import shop.kokodo.productservice.dto.CategoryDto;
 import shop.kokodo.productservice.entity.Category;
