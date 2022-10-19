@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.isNull;
+
 @Repository
 public class ProductCustomRepositoryImpl implements ProductCustomRepository{
 
@@ -60,7 +62,7 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository{
     }
 
     private BooleanExpression eqStatus(Integer status){
-        if(status==null || status==0) return null; // status가 오지 않거나 0이면 전체 조회 -> 조건 걸지 않는다
+        if(isNull(status) || status==0) return null; // status가 오지 않거나 0이면 전체 조회 -> 조건 걸지 않는다
         else if(status==1) return product.stock.gt(1);
         else if(status==2) return product.stock.eq(0);
         else return null;
