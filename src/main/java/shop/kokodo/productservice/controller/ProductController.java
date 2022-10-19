@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
@@ -229,14 +232,38 @@ public class ProductController {
     }
 
     @GetMapping
-    public Response findBy(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate){
+    public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
+            , @Param String startDate, @Param String endDate, @Param Long sellerId){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        List<Product> list =productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter),LocalDateTime.parse(endDate, formatter));
+        List<ProductDto> list = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
+                ,LocalDateTime.parse(endDate, formatter),sellerId);
 
-        return Response.success(list);
+        return ResponseEntity.status(HttpStatus.OK).body(list);
+    }
+
+    @GetMapping("/list")
+    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
+
+        List<ProductDto> productList = productService.findProductListById(productIdList);
+
+        return productList;
+    }
+    @GetMapping("/productSellerId")
+    public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
+        System.out.println("productId = " + productId);
+        List<Long> productSellerId = productService.getProductSellerId(productId);
+
+        return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
+    }
+
+    @GetMapping("/seller/{sellerId}")
+    public Response findBySellerId(@PathVariable long sellerId){
+
+        List<ProductDto> productList = productService.findBySellerId(sellerId);
+
+        return  Response.success(productList);
     }
 
 }

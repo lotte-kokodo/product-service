@@ -15,7 +15,10 @@ import shop.kokodo.productservice.repository.ProductRepository;
 import shop.kokodo.productservice.service.interfaces.ProductService;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -163,9 +166,32 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<Product> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime) {
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime);
+    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   Long sellerId) {
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId);
+    }
 
+    @Override
+    public List<ProductDto> findProductListById(List<Long> productIdList) {
+
+        List<Product> productList = productRepository.findProductListById(productIdList);
+
+        List<ProductDto> productDtoList = returnProductDtoList(productList);
+        return productDtoList;
+    }
+
+    @Override
+    public List<Long> getProductSellerId(List<Long> productId) {
+        List<Long> sellerIdList = new ArrayList<>();
+        for (Long pId : productId) {
+            sellerIdList.add(productRepository.findSellerIdByProductId(pId));
+        }
+        return sellerIdList;
+    }
+
+    @Override
+    public List<ProductDto> findBySellerId(Long sellerId) {
+        return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {

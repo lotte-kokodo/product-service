@@ -41,7 +41,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     List<Product> findProductBySale();
 
     /*
-    각 MD별 상품 (SELLER ID 그룹으로 묶어서 랜덤 1개씩 출력)
+    각 MD별 상품
      */
     @Query("select p from Product p group by p.sellerId")
     List<Product> findProductBySeller();
@@ -56,6 +56,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "union select * from product p1 where p1.category_id = :categoryId ", nativeQuery = true)
     List<Product> findProductByCategorySortingReview(@Param("categoryId") long categoryId);
 
+    @Query(value="select p from Product p " +
+            "where p.id in :productIdList ")
+    List<Product> findProductListById(List<Long> productIdList);
     /*
     세일 상품 리뷰 많은 순으로 정렬
      */
@@ -83,4 +86,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
             "r on p.product_id = r.product_id " +
             "union select * from product group by seller_id ", nativeQuery = true)
     List<Product> findProductBySellerSortingReview();
+
+    @Query("select p.sellerId from Product p where p.id = :pId")
+    Long findSellerIdByProductId(Long pId);
+
+    List<Product> findBySellerId(Long sellerId);
 }

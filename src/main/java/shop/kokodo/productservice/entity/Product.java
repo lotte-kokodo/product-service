@@ -3,6 +3,7 @@ package shop.kokodo.productservice.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import net.bytebuddy.implementation.bind.annotation.BindingPriority;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
@@ -36,22 +37,28 @@ public class Product extends BaseEntity {
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
     private List<ProductDetail> productDetailList = new ArrayList<>();
 
-//    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.REMOVE )
-//    private TemplateRec templateRec;
-//
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-//    private List<Review> reviewList = new ArrayList<>();
-//
-//    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-//    private List<ProductInquire> productInquireList = new ArrayList<>();
-
+    @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
     private int price;
+
+    @Column(nullable = false)
     private String displayName;
+
+    @Column(nullable = false)
     private int stock;
+
+    @Column(nullable = false)
     private LocalDateTime deadline;
+
+    @Column(nullable = false)
     private String thumbnail;
+
+    @Column(nullable = false)
     private long sellerId;
+
+    @ColumnDefault(value = "3000")
     private int deliveryFee;
 
     //== 연관관계 메서드 ==//

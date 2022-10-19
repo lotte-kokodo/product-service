@@ -5,8 +5,10 @@ import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
+import shop.kokodo.productservice.dto.UserDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.Review;
+import shop.kokodo.productservice.feign.UserServiceClient;
 import shop.kokodo.productservice.repository.ProductRepository;
 import shop.kokodo.productservice.repository.ReviewRepository;
 
@@ -21,7 +23,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
-//    private final UserServiceClient userServiceClient;
+    private final UserServiceClient userServiceClient;
 
     @Override
     public List<ReviewResponseDto> findByProductId(long productId) {
@@ -69,11 +71,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     private ReviewResponseDto convertToReviewResponse(Review review){
-//        String memberName = userServiceClient.findMemberName(review.getMemberId());
-        String memberName = " memberName";
+        UserDto userDto = userServiceClient.findMemberName(review.getMemberId());
+        System.out.println(userDto.toString());
         return ReviewResponseDto.builder()
                 .content(review.getContent())
-                .memberName(memberName)
+                .memberName(userDto.getLoginId())
                 .rating(review.getRating())
                 .build();
     }
