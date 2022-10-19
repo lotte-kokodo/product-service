@@ -109,7 +109,7 @@ public class ProductController {
         }else if(sortingId == 4){
             productDtoList = productService.findProductBySaleSortingNew();
         }else if(sortingId == 5){
-
+            productDtoList = productService.findProductBySaleSortingReview();
         }
 
         return Response.success(productDtoList);
@@ -147,7 +147,7 @@ public class ProductController {
         }else if(sortingId == 4){
             productDtoList = productService.findProductBySellerSortingNew();
         }else if(sortingId == 5){
-
+            productDtoList = productService.findProductBySellerSortingReview();
         }
 
         return Response.success(productDtoList);
@@ -265,5 +265,4 @@ public class ProductController {
 
         return  Response.success(productList);
     }
-
 }
