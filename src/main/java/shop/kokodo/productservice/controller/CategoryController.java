@@ -1,15 +1,10 @@
 package shop.kokodo.productservice.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.CategoryDto;
 import shop.kokodo.productservice.dto.response.Response;
-import shop.kokodo.productservice.entity.Category;
-import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.service.CategoryService;
-import shop.kokodo.productservice.service.ProductService;
+import shop.kokodo.productservice.service.interfaces.CategoryService;
 
 import java.util.List;
 

@@ -11,6 +11,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import shop.kokodo.productservice.exception.ExceptionMessage;
 
 import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
@@ -34,7 +35,7 @@ public class Product extends BaseEntity {
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
-    private List<ProductDetail> productDetailList=new ArrayList<>();
+    private List<ProductDetail> productDetailList = new ArrayList<>();
 
     @Column(nullable = false)
     private String name;
@@ -71,7 +72,8 @@ public class Product extends BaseEntity {
     }
 
     @Builder
-    public Product(long id, Category category, String name, int price, String displayName, int stock, LocalDateTime deadline, String thumbnail, long sellerId, int deliveryFee) {
+    public Product(long id, Category category, String name, int price, String displayName,
+        int stock, LocalDateTime deadline, String thumbnail, long sellerId, int deliveryFee) {
         this.id = id;
         setCategory(category);
         this.name = name;
@@ -82,5 +84,20 @@ public class Product extends BaseEntity {
         this.thumbnail = thumbnail;
         this.sellerId = sellerId;
         this.deliveryFee = deliveryFee;
+    }
+
+
+    /*
+     * 주문 시 상품 재고 수정
+     * */
+    public void decreaseStock(Integer qty) {
+        if (stock - qty < 0) {
+            throw new IllegalStateException(ExceptionMessage.createProductNotEnoughStockMsg(id));
+        }
+        stock -= qty;
+    }
+
+    public void increaseStock(Integer qty) {
+        stock += qty;
     }
 }
