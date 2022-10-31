@@ -1,7 +1,7 @@
 package shop.kokodo.productservice.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.exception.NoSellerServiceException;
+import shop.kokodo.productservice.feign.SellerServiceClient;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
@@ -16,8 +18,6 @@ import shop.kokodo.productservice.service.interfaces.ProductService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -29,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
+    private final SellerServiceClient sellerServiceClient;
 
     @Transactional
     @Override
@@ -182,7 +183,13 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
+        if(!sellerServiceClient.getSeller(sellerId)) throw new NoSellerServiceException();
         return returnProductDtoList(productRepository.findBySellerId(sellerId));
+    }
+
+    @Override
+    public Optional<Product> findProductOpById(Long productId) {
+        return productRepository.findById(productId);
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
