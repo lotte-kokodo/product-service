@@ -13,17 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.service.interfaces.CategoryService;
-import shop.kokodo.productservice.service.interfaces.ProductService;
+import shop.kokodo.productservice.service.CategoryService;
+import shop.kokodo.productservice.service.ProductService;
 
 @RestController
 @RequestMapping("/product")
@@ -35,22 +32,6 @@ public class ProductController {
     public ProductController(ProductService productService, CategoryService categoryService) {
         this.productService = productService;
         this.categoryService = categoryService;
-    }
-
-    //TODO: 카프카로 변경 후 삭제 예정 (SAVE 및 업데이트)
-    @PostMapping("/save")
-    public Response save(@RequestBody ProductDto productDto) {
-        Product product = productService.saveProduct(productDto);
-        if(product==null){
-            return Response.failure(400,"저장에 실패했습니다.");
-        }
-        return Response.success();
-    }
-
-    @PutMapping("/update")
-    public Response update(@RequestBody ProductDto productDto){
-        productService.updateProduct(productDto);
-        return Response.success();
     }
 
     @DeleteMapping("/delete/{productId}")
@@ -218,13 +199,6 @@ public class ProductController {
     @GetMapping("/totalSearch/{totalSearch}")
     public Response productByTotalSearch(@PathVariable("totalSearch") String totalSearch){
         return Response.success(productService.findProductByTotalSearch(totalSearch));
-    }
-
-    //TODO: 카테고리별 검색 -> 정렬로 변경
-    @GetMapping("/categorySearch/{categoryId}/{displayName}")
-    public Response productByCategorySearch(@PathVariable("categoryId") long categoryId,
-                                            @PathVariable("displayName") String displayName) {
-        return Response.success(productService.findProductByCategorySearch(categoryId, displayName));
     }
 
     @GetMapping("/detail/{productId}")

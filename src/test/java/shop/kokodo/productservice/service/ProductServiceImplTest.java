@@ -117,30 +117,6 @@ class ProductServiceImplTest {
     }
 
     @Test
-    @DisplayName("상품 생성 성공")
-    void saveProduct() {
-        doReturn(Optional.of(new Category())).when(categoryRepository).findById(1L);
-        doReturn(product).when(productRepository).save(any());
-
-        Product saveProduct = productServiceImpl.saveProduct(productDto);
-
-        Assertions.assertEquals(saveProduct.getName(),product.getName());
-        Assertions.assertEquals(saveProduct.getPrice(),product.getPrice());
-    }
-
-    @Test
-    @DisplayName("상품 업데이트 성공")
-    void updateProduct() {
-        doReturn(product1).when(productRepository).save(any());
-
-        Product saveProduct1 = productServiceImpl.saveProduct(productDto);
-        Product saveProduct2 = productServiceImpl.updateProduct(productDto1);
-
-        Assertions.assertEquals(saveProduct1.getName(),saveProduct2.getName());
-        Assertions.assertEquals(saveProduct1.getPrice(),saveProduct2.getPrice());
-    }
-
-    @Test
     @DisplayName("상품 ID로 삭제 성공")
     void deleteProduct() {
         //given
@@ -191,19 +167,6 @@ class ProductServiceImplTest {
 
         // when
         final List<ProductDto> productDtos = productServiceImpl.findProductByTotalSearch("닭");
-
-        // then
-        assertThat(productDtos.size()).isEqualTo(productList.size());
-    }
-
-    @Test
-    @DisplayName("카테고리 내 상품에서 상품 이름으로 검색 성공")
-    void findProductByCategorySearch() {
-        //given
-        doReturn(productList).when(productRepository).findProductByCategorySearch(category.getId(), "닭");
-
-        // when
-        final List<ProductDto> productDtos = productServiceImpl.findProductByCategorySearch(category.getId(), "닭");
 
         // then
         assertThat(productDtos.size()).isEqualTo(productList.size());

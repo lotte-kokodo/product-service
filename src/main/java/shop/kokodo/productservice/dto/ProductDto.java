@@ -1,6 +1,9 @@
 package shop.kokodo.productservice.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -8,7 +11,7 @@ import shop.kokodo.productservice.exception.ExceptionMessage;
 
 @Data
 @NoArgsConstructor
-@ToString
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProductDto {
 
     long id;
@@ -18,6 +21,7 @@ public class ProductDto {
     private int price;
     private String displayName;
     private int stock;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime deadline;
     private String thumbnail;
     private long sellerId;
