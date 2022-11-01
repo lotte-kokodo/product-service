@@ -1,7 +1,11 @@
 package shop.kokodo.productservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
@@ -10,15 +14,15 @@ import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.Review;
 import shop.kokodo.productservice.feign.UserServiceClient;
 import shop.kokodo.productservice.repository.ProductRepository;
+import shop.kokodo.productservice.repository.ReviewCustomRepository;
 import shop.kokodo.productservice.repository.ReviewRepository;
 
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly=true)
 public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
@@ -26,13 +30,15 @@ public class ReviewServiceImpl implements ReviewService{
     private final UserServiceClient userServiceClient;
 
     @Override
-    public List<ReviewResponseDto> findByProductId(long productId) {
+    public List<ReviewResponseDto> findByProductId(long productId, int page) {
 
         productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품"));
 
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
-        List<Review> reviewList=reviewRepository.findByProductId(productId);
+
+        Pageable pageable = PageRequest.of(page,5);
+        Page<Review> reviewList=reviewRepository.findByProductIdPaging(productId,pageable);
         for (Review review : reviewList) {
             reviewResponseDtoList.add(convertToReviewResponse(review));
         }
@@ -40,6 +46,7 @@ public class ReviewServiceImpl implements ReviewService{
         return reviewResponseDtoList;
     }
 
+    @Transactional
     @Override
     public Review save(ReviewRequestDto reviewDto) {
 

@@ -1,6 +1,8 @@
 package shop.kokodo.productservice.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewTotalDto;
@@ -16,8 +18,8 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @GetMapping("/{productId}")
-    public Response findByProductId(@PathVariable long productId){
-        return Response.success(reviewService.findByProductId(productId));
+    public Response findByProductId(@PathVariable long productId, @RequestParam("page") int page){
+        return Response.success(reviewService.findByProductId(productId,page));
     }
 
     @PostMapping
