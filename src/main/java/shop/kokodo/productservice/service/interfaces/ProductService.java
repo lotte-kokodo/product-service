@@ -2,6 +2,8 @@ package shop.kokodo.productservice.service.interfaces;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Product;
 
@@ -34,4 +36,6 @@ public interface ProductService {
     public List<Long> getProductSellerId(List<Long> productId);
 
     public List<ProductDto> findBySellerId(Long sellerId);
+
+    Optional<Product> findProductOpById(Long productId);
 }

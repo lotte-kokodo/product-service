@@ -258,4 +258,12 @@ public class ProductController {
 
         return  Response.success(productList);
     }
+
+    @GetMapping("/feign/id")
+    public ResponseEntity findProductById(@RequestParam Long productId){
+        boolean flag = productService.findProductOpById(productId).isPresent()? true: false;
+
+        return ResponseEntity.status(HttpStatus.OK).body(flag);
+
+    }
 }
