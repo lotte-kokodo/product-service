@@ -24,5 +24,4 @@ public class KafkaMessageParser {
             throw new IllegalArgumentException("");
         }
     }
-
 }

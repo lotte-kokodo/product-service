@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.CategoryDto;
 import shop.kokodo.productservice.dto.response.Response;
-import shop.kokodo.productservice.service.interfaces.CategoryService;
+import shop.kokodo.productservice.service.CategoryService;
 
 import java.util.List;
 
@@ -17,13 +17,6 @@ public class CategoryController {
     @Autowired
     public CategoryController(CategoryService categoryService) {
         this.categoryService = categoryService;
-    }
-
-    // TODO: 테스트 완료 후 삭제 예정
-    @PostMapping("/save")
-    public Response save(@RequestBody CategoryDto categoryDto) {
-        categoryService.save(categoryDto);
-        return Response.success();
     }
 
     @GetMapping("/all")

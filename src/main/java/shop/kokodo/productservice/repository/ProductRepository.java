@@ -19,10 +19,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p where p.displayName like concat('%',:productDisplayName,'%')")
     List<Product> findProductByTotalSearch(@Param("productDisplayName") String productDisplayName);
 
-    @Query("select p from Product p join fetch p.category c where c.id = :categoryId " +
-            "and p.displayName like concat('%',:productDisplayName,'%')" )
-    List<Product> findProductByCategorySearch(@Param("categoryId") long categoryId,@Param("productDisplayName") String productDisplayName);
-
     /*
     new 상품 [당월에 발매된 상품]
      */

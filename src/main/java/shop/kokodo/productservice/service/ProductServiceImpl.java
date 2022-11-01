@@ -6,15 +6,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
+import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
-import shop.kokodo.productservice.service.interfaces.ProductService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,43 +32,6 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
-
-    @Transactional
-    @Override
-    public Product saveProduct(ProductDto productDto) {
-        Product product = Product.builder()
-                .category(categoryRepository.findById(productDto.getCategoryId())
-                        .orElse(Category.builder().name("신규 카테고리- 관리자 문의 필요.").build()))
-                .name(productDto.getName())
-                .price(productDto.getPrice())
-                .displayName(productDto.getDisplayName())
-                .stock(productDto.getStock())
-                .deadline(productDto.getDeadline())
-                .thumbnail(productDto.getThumbnail())
-                .sellerId(productDto.getSellerId())
-                .deliveryFee(productDto.getDeliveryFee())
-                .build();
-
-        return productRepository.save(product);
-    }
-
-    @Transactional
-    @Override
-    public Product updateProduct(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId()).orElse(new Product());
-
-        product.setCategory(categoryRepository.findById(productDto.getCategoryId()) .orElse(new Category()));
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setDisplayName(productDto.getDisplayName());
-        product.setStock(productDto.getStock());
-        product.setDeadline(productDto.getDeadline());
-        product.setThumbnail(productDto.getThumbnail());
-        product.setSellerId(productDto.getSellerId());
-        product.setDeliveryFee(productDto.getDeliveryFee());
-
-        return productRepository.save(product);
-    }
 
     @Transactional
     @Override
@@ -141,11 +106,6 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName) {
-        return returnProductDtoList(productRepository.findProductByCategorySearch(categoryId, productDisplayName));
-    }
-
-    @Override
     public List<ProductDto> findProductByNew() {
         return returnProductDtoList(productRepository.findProductByNew());
     }
@@ -159,11 +119,10 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> findProductBySeller() { return returnProductDtoList(productRepository.findProductBySeller());  }
 
     // TODO: detail 이미지 template 부분 추가
-    public Product findProductDetail(long productId){
+    public ProductAndProductDetailDto findProductDetail(long productId){
         Product product = productRepository.findById(productId).get();
 //                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
-
-        return product;
+        return convertToProductAndProductDetailDto(product);
     }
 
     @Override
@@ -190,6 +149,37 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> findProductOpById(Long productId) {
         return productRepository.findById(productId);
+    }
+
+    public ProductAndProductDetailDto convertToProductAndProductDetailDto(Product product){
+
+        List<ProductDetail> detailList = product.getProductDetailList();
+        return ProductAndProductDetailDto.builder()
+                .id(product.getId())
+                .categoryId(product.getCategory().getId())
+                .productDetailList(convertToProductDetailDto(detailList))
+                .name(product.getName())
+                .price(product.getPrice())
+                .displayName(product.getDisplayName())
+                .stock(product.getStock())
+                .deadline(product.getDeadline())
+                .thumbnail(product.getThumbnail())
+                .sellerId(product.getSellerId())
+                .deliveryFee(product.getDeliveryFee())
+                .build();
+    }
+
+    public List<ProductDetailDto> convertToProductDetailDto(List<ProductDetail> detail){
+            List<ProductDetailDto> detailDtos = new ArrayList<>();
+        for (ProductDetail productDetail : detail) {
+            detailDtos.add(ProductDetailDto.builder()
+                            .id(productDetail.getId())
+                            .image(productDetail.getImage())
+                            .orders(productDetail.getOrders())
+                    .build());
+        }
+
+        return detailDtos;
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {

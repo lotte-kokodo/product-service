@@ -87,62 +87,6 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product save 성공")
-    public void save() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
-
-        this.mockMvc.perform(post("/product/save")
-                        .content("{\"categoryId\": \"2\", " +
-                                "\n\"name\": \"name\"}, " +
-                                "\n\"price\": \"20000\"}, " +
-                                "\n\"displayName\": \"displayName\"}, " +
-                                "\n\"stock\": \"200\"}, " +
-                                "\n\"deadline\": \"2018-12-15T10:11:22\"}, " +
-                                "\n\"thumbnail\": \"thumbnail\"}, " +
-                                "\n\"sellerId\": \"2\"}, " +
-                                "\n\"deliveryFee\": \"3000\"}" )
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-save",
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드")
-                        ))
-                );
-    }
-
-    @Test
-    @DisplayName("product update 성공")
-    public void update() throws Exception {
-        categoryRepository.save(category);
-        productRepository.save(product1);
-
-        this.mockMvc.perform(put("/product/update")
-                        .content("{\"categoryId\": \"2\", " +
-                                "\n\"name\": \"name\"}, " +
-                                "\n\"price\": \"20000\"}, " +
-                                "\n\"displayName\": \"displayName\"}, " +
-                                "\n\"stock\": \"200\"}, " +
-                                "\n\"deadline\": \"2018-12-15T10:11:22\"}, " +
-                                "\n\"thumbnail\": \"thumbnail\"}, " +
-                                "\n\"sellerId\": \"2\"}, " +
-                                "\n\"deliveryFee\": \"3000\"}" )
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-update",
-                        responseFields(
-                                fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-                                fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드")
-                        ))
-                );
-    }
-
-    @Test
     @DisplayName("product delete 성공")
     public void productDelete() throws Exception{
         categoryRepository.save(category);
@@ -294,42 +238,6 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("카테고리 내 product 검색 성공")
-    public void productByCategorySearch() throws Exception {
-        categoryRepository.save(category);
-        productRepository.save(product1);
-
-        this.mockMvc.perform(get("/product/categorySearch/{categoryId}/{displayName}",5,"닭")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-productByTotalSearch",
-                                pathParameters(
-                                        parameterWithName("categoryId").description("5"),
-                                        parameterWithName("displayName").description("닭")
-                                ),
-                                responseFields(
-                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-                                        fieldWithPath("result.data[]").type(JsonFieldType.ARRAY).description("상품 배열"),
-                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
-                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
-                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 이름"),
-                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
-                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
-                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
-                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
-                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
-                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
-                                )
-                        )
-                );
-    }
-
-
-    @Test
     @DisplayName("product detail 조회")
     public void productDetail() throws Exception {
 
@@ -353,20 +261,19 @@ public class ProductRestControllerTest {
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-                                        fieldWithPath("result.data.createdDate").type(JsonFieldType.ARRAY).description("상품 생성 날짜"),
-                                        fieldWithPath("result.data.lastModifiedDate").type(JsonFieldType.ARRAY).description("상품 마지막 수정 날짜"),
+//                                        fieldWithPath("result.data.createdDate").type(JsonFieldType.STRING).description("상품 생성 날짜"),
+//                                        fieldWithPath("result.data.lastModifiedDate").type(JsonFieldType.STRING).description("상품 마지막 수정 날짜"),
                                         fieldWithPath("result.data.id").type(JsonFieldType.NUMBER).description("상품 id"),
                                         fieldWithPath("result.data.name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data.categoryId").type(JsonFieldType.NUMBER).description("상품 이름"),
                                         fieldWithPath("result.data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("result.data.displayName").type(JsonFieldType.STRING).description("상품 노출명"),
                                         fieldWithPath("result.data.stock").type(JsonFieldType.NUMBER).description("상품 재고"),
-                                        fieldWithPath("result.data.deadline").type(JsonFieldType.ARRAY).description("상품 유통기한"),
+                                        fieldWithPath("result.data.deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
                                         fieldWithPath("result.data.thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
                                         fieldWithPath("result.data.sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
                                         fieldWithPath("result.data.deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
                                         fieldWithPath("result.data.productDetailList[]").type(JsonFieldType.ARRAY).description("상품 디테일 이미지 배열"),
-                                        fieldWithPath("result.data.productDetailList[].createdDate").type(JsonFieldType.ARRAY).description("상품 디테일 생성 날짜").optional(),
-                                        fieldWithPath("result.data.productDetailList[].lastModifiedDate").type(JsonFieldType.ARRAY).description("상품 디테일 마지막 수정일").optional(),
                                         fieldWithPath("result.data.productDetailList[].id").type(JsonFieldType.NUMBER).description("상품 디테일 아이디"),
                                         fieldWithPath("result.data.productDetailList[].image").type(JsonFieldType.STRING).description("상품 디테일 이미지 url"),
                                         fieldWithPath("result.data.productDetailList[].orders").type(JsonFieldType.NUMBER).description("상품 디테일 이미지 순서")
