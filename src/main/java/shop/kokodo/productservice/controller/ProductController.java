@@ -37,6 +37,7 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
+    //TODO: 카프카로 변경 후 삭제 예정 (SAVE 및 업데이트)
     @PostMapping("/save")
     public Response save(@RequestBody ProductDto productDto) {
         Product product = productService.saveProduct(productDto);
