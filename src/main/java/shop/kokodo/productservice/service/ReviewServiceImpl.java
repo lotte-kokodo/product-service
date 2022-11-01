@@ -1,6 +1,8 @@
 package shop.kokodo.productservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +30,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
     private final UserServiceClient userServiceClient;
+    private final CircuitBreakerFactory circuitBreakerFactory;
 
     @Override
     public List<ReviewResponseDto> findByProductId(long productId, int page) {
@@ -78,8 +81,12 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     private ReviewResponseDto convertToReviewResponse(Review review){
-        UserDto userDto = userServiceClient.findMemberName(review.getMemberId());
-        System.out.println(userDto.toString());
+        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
+
+        UserDto userDto = circuitBreaker.run(()-> userServiceClient.findMemberName(review.getMemberId())
+                ,throwable -> new UserDto("사용자",""));
+
+
         return ReviewResponseDto.builder()
                 .content(review.getContent())
                 .memberName(userDto.getLoginId())

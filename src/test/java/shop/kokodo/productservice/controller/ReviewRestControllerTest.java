@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.entity.Category;
@@ -34,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
 @Transactional
+@ActiveProfiles("test")
 public class ReviewRestControllerTest {
 
     @Autowired
@@ -102,6 +104,7 @@ public class ReviewRestControllerTest {
         reviewRepository.save(review2);
 
         this.mockMvc.perform(get("/review/{productId}",product.getId())
+                        .param("page","0")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -120,7 +123,7 @@ public class ReviewRestControllerTest {
                                 fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("리뷰 id"),
                                 fieldWithPath("result.data[].content").type(JsonFieldType.STRING).description("리뷰 내용"),
                                 fieldWithPath("result.data[].rating").type(JsonFieldType.NUMBER).description("리뷰 평점"),
-                                fieldWithPath("result.data[].memberName").type(JsonFieldType.STRING).description("리뷰 멤버 닉네임")
+                                fieldWithPath("result.data[].memberName").type(JsonFieldType.STRING).description("리뷰 멤버 닉네임").optional()
                         )
                 )
                 );
