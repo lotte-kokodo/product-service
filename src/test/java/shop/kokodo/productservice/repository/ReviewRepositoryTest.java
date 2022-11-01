@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
@@ -82,7 +83,7 @@ public class ReviewRepositoryTest {
 
         List<MypageReviewDto> reviews = reviewRepository.findByMemberId(1);
 
-        Assertions.assertEquals(reviews.size(),12);
+        Assertions.assertEquals(reviews.size(),2);
 
         for (MypageReviewDto review : reviews) {
             System.out.println(review.toString());

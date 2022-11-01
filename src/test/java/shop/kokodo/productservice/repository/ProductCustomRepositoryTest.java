@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
@@ -85,7 +86,6 @@ public class ProductCustomRepositoryTest {
             Assertions.assertEquals(product.getSellerId(),1);
         }
 
-//        Assertions.assertEquals(products.get(0).getCreatedDate().isAfter(startDateTime)&&products.get(0).getCreatedDate().isBefore(endDateTime),true);
 //
     }
 

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Product;
 
@@ -24,7 +25,7 @@ public interface ProductService {
     public List<ProductDto> findProductBySeller();
 
 
-    public Product findProductDetail(long productId);
+    public ProductAndProductDetailDto findProductDetail(long productId);
     public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime
     ,Long sellerId);
 

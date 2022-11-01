@@ -6,9 +6,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
+import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
 import shop.kokodo.productservice.repository.CategoryRepository;
@@ -116,11 +119,10 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> findProductBySeller() { return returnProductDtoList(productRepository.findProductBySeller());  }
 
     // TODO: detail 이미지 template 부분 추가
-    public Product findProductDetail(long productId){
+    public ProductAndProductDetailDto findProductDetail(long productId){
         Product product = productRepository.findById(productId).get();
 //                .orElseThrow(()->new IllegalArgumentException("존재하지 않는 상품"));
-
-        return product;
+        return convertToProductAndProductDetailDto(product);
     }
 
     @Override
@@ -147,6 +149,37 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Optional<Product> findProductOpById(Long productId) {
         return productRepository.findById(productId);
+    }
+
+    public ProductAndProductDetailDto convertToProductAndProductDetailDto(Product product){
+
+        List<ProductDetail> detailList = product.getProductDetailList();
+        return ProductAndProductDetailDto.builder()
+                .id(product.getId())
+                .categoryId(product.getCategory().getId())
+                .productDetailList(convertToProductDetailDto(detailList))
+                .name(product.getName())
+                .price(product.getPrice())
+                .displayName(product.getDisplayName())
+                .stock(product.getStock())
+                .deadline(product.getDeadline())
+                .thumbnail(product.getThumbnail())
+                .sellerId(product.getSellerId())
+                .deliveryFee(product.getDeliveryFee())
+                .build();
+    }
+
+    public List<ProductDetailDto> convertToProductDetailDto(List<ProductDetail> detail){
+            List<ProductDetailDto> detailDtos = new ArrayList<>();
+        for (ProductDetail productDetail : detail) {
+            detailDtos.add(ProductDetailDto.builder()
+                            .id(productDetail.getId())
+                            .image(productDetail.getImage())
+                            .orders(productDetail.getOrders())
+                    .build());
+        }
+
+        return detailDtos;
     }
 
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
