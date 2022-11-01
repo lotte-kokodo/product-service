@@ -49,8 +49,11 @@ public class SaveProductHandler{
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
-        Object objectDeadLine = map.get("deadline");
-        String[] strs = String.valueOf(objectDeadLine).substring(1,String.valueOf(objectDeadLine).length()-1).replaceAll(" ","").split(",");
+
+        String[] strs = String.valueOf(map.get("deadline"))
+                                .substring(1,String.valueOf(map.get("deadline")).length()-1)
+                                .replaceAll(" ","")
+                                .split(",");
         LocalDateTime dateTime = formatDate(strs);
 
         Product product = Product.builder()
@@ -66,7 +69,7 @@ public class SaveProductHandler{
                 .deliveryFee(Integer.parseInt(String.valueOf(map.get("deliveryFee"))))
                 .build();
 
-        log.info(product.toString());
+        log.info("product" + product.toString());
 
         if(product != null){
             productRepository.save(product);
@@ -77,15 +80,17 @@ public class SaveProductHandler{
     public LocalDateTime formatDate(String @NotNull [] strs) {
         String str = strs[0] + "-"
                 + twoLength(strs[1]) + "-"
-                + twoLength(strs[2]) + " "
+                + twoLength(strs[2]) + "T"
                 + twoLength(strs[3]) + ":"
                 + twoLength(strs[4]) + ":"
                 + twoLength(strs[5]) + "."
-                + "000";
+                + (int) (Math.random()*(999999-100000) + 100000);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS");
         LocalDateTime dateTime = LocalDateTime.parse(str, formatter);
 
+        log.info(str);
+        log.info(dateTime.toString());
         return dateTime;
     }
 

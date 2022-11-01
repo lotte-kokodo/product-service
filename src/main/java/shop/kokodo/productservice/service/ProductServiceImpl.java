@@ -14,7 +14,6 @@ import shop.kokodo.productservice.feign.SellerServiceClient;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
-import shop.kokodo.productservice.service.interfaces.ProductService;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,43 +29,6 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
-
-    @Transactional
-    @Override
-    public Product saveProduct(ProductDto productDto) {
-        Product product = Product.builder()
-                .category(categoryRepository.findById(productDto.getCategoryId())
-                        .orElse(Category.builder().name("신규 카테고리- 관리자 문의 필요.").build()))
-                .name(productDto.getName())
-                .price(productDto.getPrice())
-                .displayName(productDto.getDisplayName())
-                .stock(productDto.getStock())
-                .deadline(productDto.getDeadline())
-                .thumbnail(productDto.getThumbnail())
-                .sellerId(productDto.getSellerId())
-                .deliveryFee(productDto.getDeliveryFee())
-                .build();
-
-        return productRepository.save(product);
-    }
-
-    @Transactional
-    @Override
-    public Product updateProduct(ProductDto productDto) {
-        Product product = productRepository.findById(productDto.getId()).orElse(new Product());
-
-        product.setCategory(categoryRepository.findById(productDto.getCategoryId()) .orElse(new Category()));
-        product.setName(productDto.getName());
-        product.setPrice(productDto.getPrice());
-        product.setDisplayName(productDto.getDisplayName());
-        product.setStock(productDto.getStock());
-        product.setDeadline(productDto.getDeadline());
-        product.setThumbnail(productDto.getThumbnail());
-        product.setSellerId(productDto.getSellerId());
-        product.setDeliveryFee(productDto.getDeliveryFee());
-
-        return productRepository.save(product);
-    }
 
     @Transactional
     @Override
@@ -138,11 +100,6 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<ProductDto> findProductByTotalSearch(String productDisplayName) {
         return returnProductDtoList(productRepository.findProductByTotalSearch(productDisplayName));
-    }
-
-    @Override
-    public List<ProductDto> findProductByCategorySearch(long categoryId, String productDisplayName) {
-        return returnProductDtoList(productRepository.findProductByCategorySearch(categoryId, productDisplayName));
     }
 
     @Override
