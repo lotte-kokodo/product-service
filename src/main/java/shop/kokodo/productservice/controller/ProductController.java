@@ -208,12 +208,12 @@ public class ProductController {
 
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate, @Param Long sellerId){
+            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param int page){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         List<ProductDto> list = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
-                ,LocalDateTime.parse(endDate, formatter),sellerId);
+                ,LocalDateTime.parse(endDate, formatter),sellerId,page);
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }

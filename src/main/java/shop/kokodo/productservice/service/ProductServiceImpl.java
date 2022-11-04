@@ -5,6 +5,8 @@ import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
@@ -131,8 +133,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
-                                   Long sellerId) {
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId);
+                                   Long sellerId,int page) {
+
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId, PageRequest.of(page,10));
     }
 
     @Override
