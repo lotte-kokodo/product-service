@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
 import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
@@ -30,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
     private final UserServiceClient userServiceClient;
-    private final CircuitBreakerFactory circuitBreakerFactory;
+    private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
 
     @Override
     public List<ReviewResponseDto> findByProductId(long productId, int page) {
@@ -81,7 +82,6 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     private ReviewResponseDto convertToReviewResponse(Review review){
-        CircuitBreaker circuitBreaker = circuitBreakerFactory.create("circuitBreaker");
 
         UserDto userDto = circuitBreaker.run(()-> userServiceClient.findMemberName(review.getMemberId())
                 ,throwable -> new UserDto("사용자",""));

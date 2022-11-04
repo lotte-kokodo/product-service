@@ -10,71 +10,131 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.entity.Category;
-import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.dto.TemplateDto;
+import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
+import shop.kokodo.productservice.entity.*;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
-@Transactional(readOnly = true)
+@Transactional
 public class SaveProductHandler{
-    ProductRepository productRepository;
-    CategoryRepository categoryRepository;
+    private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public SaveProductHandler(ProductRepository productRepository, CategoryRepository categoryRepository) {
+    public SaveProductHandler(ProductRepository productRepository, CategoryRepository categoryRepository, ObjectMapper objectMapper) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.objectMapper = objectMapper;
     }
 
 
-    @Transactional
-    @KafkaListener(topics = "product-save")
-    public void saveProduct(String kafkaMessage) {
-        log.info("Kafka save product Message : " + kafkaMessage);
-
-        Map<Object, Object> map = new HashMap<>();
-        ObjectMapper mapper = new ObjectMapper();
+    public void saveProduct(String message) {
+        log.info("Kafka save product Message : " + message);
+        ProductAndDetailDto productAndDetailDto = new ProductAndDetailDto();
         try{
-            map = mapper.readValue(kafkaMessage, new TypeReference<Map<Object, Object>>() {});
+            productAndDetailDto = objectMapper.readValue(message, new TypeReference<ProductAndDetailDto>() {});
+
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
 
-        String[] strs = String.valueOf(map.get("deadline"))
-                                .substring(1,String.valueOf(map.get("deadline")).length()-1)
-                                .replaceAll(" ","")
-                                .split(",");
-        LocalDateTime dateTime = formatDate(strs);
+        Product product = convertToProduct(productAndDetailDto);
 
-        Product product = Product.builder()
-                .category(categoryRepository.findById(Long.parseLong(String.valueOf(map.get("categoryId"))))
-                        .orElse(Category.builder().name("신규 카테고리- 관리자 문의 필요.").build()))
-                .name(String.valueOf(map.get("name")))
-                .price(Integer.parseInt(String.valueOf(map.get("price"))))
-                .displayName(String.valueOf(map.get("displayName")))
-                .stock(Integer.parseInt(String.valueOf(map.get("stock"))))
-                .deadline(dateTime)
-                .thumbnail(String.valueOf(map.get("thumbnail")))
-                .sellerId(Long.parseLong(String.valueOf(map.get("sellerId"))))
-                .deliveryFee(Integer.parseInt(String.valueOf(map.get("deliveryFee"))))
-                .build();
+        product.changeProductDetail(convertToProductDetail(productAndDetailDto.getDetails()));
 
-        log.info("product" + product.toString());
+        productRepository.save(product);
 
-        if(product != null){
-            productRepository.save(product);
-            log.info("Kafka save product Message Success");
+    }
+
+    public void saveProductTemplate(String message) {
+        log.info("Kafka save product template Message : " + message);
+        ProductDetailTemplateDto productDetailTemplateDto = new ProductDetailTemplateDto();
+        try{
+            productDetailTemplateDto = objectMapper.readValue(message, new TypeReference<ProductDetailTemplateDto>() {});
+
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
         }
+
+        Product product = convertToProductTemplate(productDetailTemplateDto);
+
+        product.changeTemplateRec(convertToTemplateRec(productDetailTemplateDto.getTemplateDto()));
+
+        productRepository.save(product);
+
+    }
+
+    private final TemplateRec convertToTemplateRec(TemplateDto templateDto){
+        return TemplateRec.builder()
+                .imageOne(templateDto.getImageOne())
+                .imageTwo(templateDto.getImageTwo())
+                .imageThree(templateDto.getImageThree())
+                .imageFour(templateDto.getImageFour())
+                .imageFive(templateDto.getImageFive())
+                .writingTitle(templateDto.getWritingTitle())
+                .writingTitleDetail(templateDto.getWritingTitleDetail())
+                .writingHighlightOne(templateDto.getWritingHighlightOne())
+                .writingHighlightTwo(templateDto.getWritingHighlightTwo())
+                .writingName(templateDto.getWritingName())
+                .writingDescription(templateDto.getWritingDescription())
+                .build();
+    }
+
+    private final Product convertToProductTemplate(ProductDetailTemplateDto productDetailTemplateDto){
+        return Product.builder()
+                .category(categoryRepository.findById(productDetailTemplateDto.getCategoryId()).get())
+                .name(productDetailTemplateDto.getName())
+                .price(productDetailTemplateDto.getPrice())
+                .displayName(productDetailTemplateDto.getDisplayName())
+                .stock(productDetailTemplateDto.getStock())
+                .deadline(productDetailTemplateDto.getDeadline())
+                .thumbnail(productDetailTemplateDto.getThumbnail())
+                .sellerId(productDetailTemplateDto.getSellerId())
+                .deliveryFee(productDetailTemplateDto.getDeliveryFee())
+                .detailFlag(DetailFlag.TEMPLATE)
+                .build();
+    }
+
+
+
+    private final List<ProductDetail> convertToProductDetail(List<String> detailList){
+        List<ProductDetail> tmpList = new ArrayList<>();
+
+        for(int i=0;i<detailList.size();++i){
+            ProductDetail pd = ProductDetail.builder()
+                    .image(detailList.get(i))
+                    .orders(i)
+                    .build();
+
+            tmpList.add(pd);
+        }
+
+        return tmpList;
+    }
+
+    private Product convertToProduct(ProductAndDetailDto productAndDetailDto){
+        return Product.builder()
+                .category(categoryRepository.findById(productAndDetailDto.getCategoryId()).get())
+                .name(productAndDetailDto.getName())
+                .price(productAndDetailDto.getPrice())
+                .displayName(productAndDetailDto.getDisplayName())
+                .stock(productAndDetailDto.getStock())
+                .deadline(productAndDetailDto.getDeadline())
+                .thumbnail(productAndDetailDto.getThumbnail())
+                .sellerId(productAndDetailDto.getSellerId())
+                .deliveryFee(productAndDetailDto.getDeliveryFee())
+                .detailFlag(DetailFlag.IMG)
+                .build();
     }
 
     public LocalDateTime formatDate(String @NotNull [] strs) {

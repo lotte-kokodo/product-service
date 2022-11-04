@@ -79,7 +79,7 @@ public class ProductCustomRepositoryTest {
 
         List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L);
 
-
+        System.out.println(products.size());
         for (ProductDto product : products) {
             Assertions.assertEquals(product.getName().contains("맛"),true);
             Assertions.assertEquals(product.getStock()>0,true);
