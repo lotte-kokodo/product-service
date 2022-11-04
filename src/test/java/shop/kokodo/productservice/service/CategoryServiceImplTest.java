@@ -1,6 +1,7 @@
 package shop.kokodo.productservice.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -37,6 +38,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("카테고리 전체 조회")
     void findAll() {
         //given
         doReturn(categoryList).when(categoryRepository).findAll();
@@ -50,6 +52,7 @@ class CategoryServiceImplTest {
     }
 
     @Test
+    @DisplayName("카테고리 이름으로 검색")
     void findByName() {
         //given
         doReturn(categoryList).when(categoryRepository).findByName("o");
