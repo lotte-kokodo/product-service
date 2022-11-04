@@ -1,6 +1,8 @@
 package shop.kokodo.productservice.feign.repository;
 
 import java.util.List;
+
+import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +17,5 @@ public interface ProductFeignRepository extends CrudRepository<Product, Long> {
 
     @Query(value="select p from Product p " +
         "where p.id in :productIdList ")
-    List<Product> findProductListById(List<Long> productIdList);
+    List<Product> findProductListById(@Param("productIdList") List<Long> productIdList);
 }
