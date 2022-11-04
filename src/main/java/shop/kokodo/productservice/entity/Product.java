@@ -34,8 +34,12 @@ public class Product extends BaseEntity {
     @JsonIgnore
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private List<ProductDetail> productDetailList = new ArrayList<>();
+
+    @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "template_rec_id")
+    private TemplateRec templateRec;
 
     @Column(nullable = false)
     private String name;
@@ -61,6 +65,9 @@ public class Product extends BaseEntity {
     @ColumnDefault(value = "3000")
     private int deliveryFee;
 
+    @Enumerated(EnumType.STRING)
+    private DetailFlag detailFlag;
+
     //== 연관관계 메서드 ==//
     public void setCategory(Category category) {
         this.category = category;
@@ -71,9 +78,21 @@ public class Product extends BaseEntity {
         productDetailList.add(productDetail);
     }
 
+    /*
+        setter
+     */
+    public void changeProductDetail(List<ProductDetail> productDetailList){
+        this.productDetailList = productDetailList;
+    }
+    public void changeTemplateRec(TemplateRec templateRec){
+        this.templateRec = templateRec;
+    }
+
+
     @Builder
     public Product(long id, Category category, String name, int price, String displayName,
-        int stock, LocalDateTime deadline, String thumbnail, long sellerId, int deliveryFee) {
+        int stock, LocalDateTime deadline, String thumbnail, long sellerId, int deliveryFee, TemplateRec templateRec,
+                   DetailFlag detailFlag) {
         this.id = id;
         setCategory(category);
         this.name = name;
@@ -84,6 +103,8 @@ public class Product extends BaseEntity {
         this.thumbnail = thumbnail;
         this.sellerId = sellerId;
         this.deliveryFee = deliveryFee;
+        this.templateRec = templateRec;
+        this.detailFlag = detailFlag;
     }
 
 
