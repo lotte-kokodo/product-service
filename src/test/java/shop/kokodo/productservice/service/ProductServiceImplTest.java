@@ -1,21 +1,29 @@
 package shop.kokodo.productservice.service;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+
+import org.junit.jupiter.api.*;
+
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
+import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.domain.*;
+
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.feign.SellerServiceClient;
 import shop.kokodo.productservice.repository.CategoryRepository;
+import shop.kokodo.productservice.repository.ProductCustomRepositoryImpl;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 import java.time.LocalDate;
@@ -25,8 +33,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-
-
 import static org.mockito.Mockito.*;
 
 @MockitoSettings(strictness = Strictness.WARN)
@@ -35,15 +41,31 @@ class ProductServiceImplTest {
 
     @InjectMocks
     ProductServiceImpl productServiceImpl;
-
     @Mock
     ProductRepository productRepository;
-
     @Mock
     CategoryRepository categoryRepository;
 
     @Mock
+    ProductCustomRepositoryImpl productCustomRepository;
+
+    @Mock
+    SellerServiceClient sellerServiceClient;
+
+    @Mock
     CircuitBreaker circuitBreaker;
+
+    private static MockedStatic<AllCircuitBreaker> allCircuitBreakerMockedStatic;
+
+    @BeforeAll
+    public static void beforeClass() {
+        allCircuitBreakerMockedStatic = mockStatic(AllCircuitBreaker.class);
+    }
+
+    @AfterAll
+    public static void afterClass() {
+        allCircuitBreakerMockedStatic.close();
+    }
 
     Category category;
     Category category1;
@@ -57,6 +79,9 @@ class ProductServiceImplTest {
 
     @BeforeEach
     public void setUp() {
+
+        when(AllCircuitBreaker.createSellerCircuitBreaker()).thenReturn(circuitBreaker);
+
         category = Category.builder()
                 .name("healthy")
                 .build();

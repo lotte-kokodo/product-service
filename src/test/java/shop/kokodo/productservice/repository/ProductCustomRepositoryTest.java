@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
@@ -76,10 +78,9 @@ public class ProductCustomRepositoryTest {
     @Test
     @DisplayName("상품 조건 검색(name, status, regdate)")
     public void findByNameAndStock(){
+        Pageable pageable = PageRequest.of(0,10);
+        List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L,pageable);
 
-        List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L);
-
-        System.out.println(products.size());
         for (ProductDto product : products) {
             Assertions.assertEquals(product.getName().contains("맛"),true);
             Assertions.assertEquals(product.getStock()>0,true);

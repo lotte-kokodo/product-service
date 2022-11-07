@@ -36,7 +36,10 @@ public interface ProductService {
 
     /* Feign Client*/
     public ProductAndProductDetailDto findProductDetail(long productId);
-    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime, Long sellerId);
+    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime
+    ,Long sellerId,int page);
+
+
     public List<Long> getProductSellerId(List<Long> productId);
     public List<ProductDto> findBySellerId(Long sellerId);
     Optional<Product> findProductOpById(Long productId);

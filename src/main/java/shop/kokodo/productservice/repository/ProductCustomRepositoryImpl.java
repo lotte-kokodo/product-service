@@ -3,6 +3,8 @@ package shop.kokodo.productservice.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.StringUtils;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -29,13 +31,16 @@ public class ProductCustomRepositoryImpl implements ProductCustomRepository{
 
     @Override
     public List<ProductDto> findProduct(String name, Integer status, LocalDateTime startDate
-            , LocalDateTime endDate, Long sellerId) {
+            , LocalDateTime endDate, Long sellerId, Pageable pageable) {
+
 
         product = QProduct.product;
         List<Tuple> results = jpaQueryFactory.select(product.id,product.category.name,product.price,
                         product.displayName, product.thumbnail,product.stock)
                 .from(product)
                 .where(eqName(name), eqStatus(status),eqDate(startDate, endDate),eqSellerId(sellerId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetchAll().fetch();
 
         List<ProductDto> productDtoList = new ArrayList<>();
