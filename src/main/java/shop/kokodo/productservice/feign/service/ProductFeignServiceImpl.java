@@ -2,6 +2,9 @@ package shop.kokodo.productservice.feign.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -32,8 +35,9 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     }
 
     @Override
-    public List<FeignResponse.Price> getProductPrices(List<Long> ids) {
-        return productFeignRepository.findByIdIn(ids, Price.class);
+    public Map<Long, Integer> getProductsPrice(List<Long> ids) {
+        List<FeignResponse.Price> prices = productFeignRepository.findByIdIn(ids, Price.class);
+        return prices.stream().collect(Collectors.toMap(Price::getId, Price::getPrice));
     }
 
     @Override

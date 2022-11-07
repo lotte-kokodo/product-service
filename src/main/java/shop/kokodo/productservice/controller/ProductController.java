@@ -4,8 +4,12 @@ package shop.kokodo.productservice.controller;
 import feign.Param;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,7 @@ import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
@@ -232,5 +237,13 @@ public class ProductController {
         boolean flag = productService.findProductOpById(productId).isPresent()? true: false;
 
         return ResponseEntity.status(HttpStatus.OK).body(flag);
+    }
+
+    // [주문관련 상품 조회] 주문서 상품 조회
+    @GetMapping("/orderSheet")
+    public Response getOrderProducts(@RequestParam List<Long> productIds) {
+
+        Map<Long, ProductOfOrder> orderProductMap = productService.getOrderProducts(productIds);
+        return Response.success(orderProductMap);
     }
 }

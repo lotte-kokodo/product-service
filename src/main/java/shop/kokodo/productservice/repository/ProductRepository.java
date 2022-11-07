@@ -48,5 +48,11 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findBySellerId(Long sellerId);
 
+    /**
+     * @param <T> 조회할 필드 인터페이스 클래스 타입
+     * @return
+     */
+    <T> List<T> findByIdIn(List<Long> ids, Class<T> type);
     List<Product> findByIdIn(List<Long> productIds);
+
 }
