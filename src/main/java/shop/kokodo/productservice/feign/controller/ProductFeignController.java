@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.feign.response.FeignResponse;
+import shop.kokodo.productservice.feign.response.FeignResponse.Price;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
@@ -36,12 +37,11 @@ public class ProductFeignController {
 
     // [주문 등록] 장바구니 상품 가격 조회
     @GetMapping("/unitPrice")
-    public List<FeignResponse.Price> getProductsPrice(@RequestParam List<Long> productIds) {
-
-        return productFeignService.getProductPrices(productIds);
+    public Map<Long, Integer> getProductsPrice(@RequestParam List<Long> productIds) {
+        return productFeignService.getProductsPrice(productIds);
     }
 
-    // [주문관련 상품 조회] 장바구니, 주문서 상품 조회
+    // [주문관련 상품 조회] 장바구니 상품 조회
     @GetMapping("/order")
     public Map<Long, ProductOfOrder> getOrderProducts(@RequestParam List<Long> productIds) {
 

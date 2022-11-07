@@ -1,8 +1,10 @@
 package shop.kokodo.productservice.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
+
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
@@ -21,6 +23,7 @@ import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
@@ -39,6 +42,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
+
 
     public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
                               ProductCustomRepository productCustomRepository, SellerServiceClient sellerServiceClient) {
@@ -146,11 +150,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
-
-
-        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
-
-        if(!sellerValid) throw new NoSellerServiceException();
+//        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
+//
+//        if(!sellerValid) throw new NoSellerServiceException();
         return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 
@@ -207,5 +209,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return productDtoList;
+    }
+
+    @Override
+    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds) {
+        List<ProductOfOrder> productOfOrders = productRepository.findByIdIn(productIds, ProductOfOrder.class);
+        return productOfOrders.stream()
+            .collect(Collectors.toMap(ProductOfOrder::getId, Function.identity()));
     }
 }
