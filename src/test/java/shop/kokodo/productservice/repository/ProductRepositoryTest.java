@@ -6,11 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,9 @@ public class ProductRepositoryTest {
     ProductDetail productDetail1;
     ProductDetail productDetail2;
     ProductDetail productDetail3;
-    final LocalDateTime localDateTime = LocalDateTime.of(2022,10,25,0,0);
+    final LocalDateTime localDateTime = LocalDateTime.of(2022,11,30,0,0);
+
+    Pageable pageable;
 
     @BeforeEach
     public void setUp() {
@@ -64,26 +70,26 @@ public class ProductRepositoryTest {
                 .build();
 
         product2 = Product.builder()
-                .category(category)
+                .category(category1)
                 .name("맛닭볶음밥")
                 .price(1000)
                 .displayName("맛닭볶음밥")
                 .stock(10)
                 .deadline(localDateTime)
                 .thumbnail("맛닭볶음밥")
-                .sellerId(1)
+                .sellerId(2)
                 .deliveryFee(1000)
                 .build();
 
         product3 = Product.builder()
-                .category(category1)
+                .category(category)
                 .name("맛프로틴")
                 .price(1000)
                 .displayName("맛프로틴")
                 .stock(10)
                 .deadline(localDateTime)
                 .thumbnail("맛프로틴")
-                .sellerId(1)
+                .sellerId(3)
                 .deliveryFee(1000)
                 .build();
 
@@ -102,11 +108,12 @@ public class ProductRepositoryTest {
                 .image("image3")
                 .orders(1)
                 .build();
+        pageable = PageRequest.of(0,20);
     }
 
 
     @Test
-    @DisplayName("Category ID로 상품 조회 성공")
+    @DisplayName("카테고리별 상품 조회")
     void findProductByCategory() {
         //given
         categoryRepository.save(category);
@@ -117,15 +124,84 @@ public class ProductRepositoryTest {
         productRepository.save(product3);
 
         //when
-        List<Product> productList = productRepository.findProductByCategory(category.getId());
+        Page<Product> productList = productRepository.findProductByCategory(category.getId(),pageable);
         productList.forEach(System.out::println);
 
         //then
-        Assertions.assertEquals(productList.size(), 2);
+        Assertions.assertEquals(productList.getTotalElements(), 2);
+    }
+
+    /* ======= Main 화면 ======= */
+    @Test
+    @DisplayName("신상품 조회")
+    void findProductByNew() {
+        //given
+        categoryRepository.save(category);
+        categoryRepository.save(category1);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        LocalDate now = LocalDate.now();
+        String month = monthStr(now.getMonthValue());
+        String lastMonth = monthStr(now.minusMonths(1).getMonthValue());
+
+        //when
+        Page<Product> productList = productRepository.findProductByNew(month,lastMonth,pageable);
+        productList.forEach(System.out::println);
+
+        //then
+        Assertions.assertEquals(productList.getTotalElements(), 3);
     }
 
     @Test
-    @DisplayName("상품 이름 검색으로 상품 조회 성공")
+    @DisplayName("Sale상품 조회")
+    void findProductBySale() {
+        //given
+        categoryRepository.save(category);
+        categoryRepository.save(category1);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        LocalDate now = LocalDate.now();
+        int dayOfMonth = now.getDayOfMonth();
+        String nextMonth = monthStr(now.plusMonths(1).getMonthValue());
+        String month = monthStr(now.getMonthValue());
+        String day = dayOfMonth < 10 ? "0" + (dayOfMonth) : Integer.toString(dayOfMonth);
+
+        //when
+        Page<Product> productList = productRepository.findProductBySale(nextMonth,month,day,pageable);
+        productList.forEach(System.out::println);
+
+        //then
+        Assertions.assertEquals(productList.getTotalElements(), 3);
+    }
+
+    @Test
+    @DisplayName("MD 추천 상품 조회")
+    void findProductBySeller() {
+        //given
+        categoryRepository.save(category);
+        categoryRepository.save(category1);
+
+        productRepository.save(product1);
+        productRepository.save(product2);
+        productRepository.save(product3);
+
+        //when
+        Page<Product> productList = productRepository.findProductBySeller(pageable);
+        productList.forEach(System.out::println);
+
+        //then
+        Assertions.assertEquals(productList.getTotalElements(), 3);
+    }
+
+    /* ======= 전체 상품 검색 ======= */
+    @Test
+    @DisplayName("전체 상품 검색")
     void findProductByTotalSearch() {
         //given
         categoryRepository.save(category);
@@ -136,11 +212,11 @@ public class ProductRepositoryTest {
         productRepository.save(product3);
 
         //when
-        List<Product> productList = productRepository.findProductByTotalSearch("닭");
+        Page<Product> productList = productRepository.findProductByTotalSearch("닭",pageable);
         productList.forEach(System.out::println);
 
         //then
-        Assertions.assertEquals(productList.size(), productList.size());
+        Assertions.assertEquals(productList.getTotalElements(), 2);
     }
 
     @Test
@@ -171,6 +247,10 @@ public class ProductRepositoryTest {
 
         List<Product> productList = productFeignRepository.findProductListById(productIdList);
         Assertions.assertEquals(productList.size(),2);
+    }
+
+    public String monthStr (int monthValue) {
+        return monthValue < 10 ? "0"+monthValue : Integer.toString(monthValue);
     }
 
 }

@@ -26,25 +26,32 @@ ext {
 }
 
 dependencies {
+    //spring
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-//    implementation 'org.springframework.cloud:spring-cloud-sleuth-zipkin'
-    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
-    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
+    //zipkin
+//    implementation 'org.springframework.cloud:spring-cloud-starter-sleuth'
+//    implementation 'org.springframework.cloud:spring-cloud-starter-zipkin:2.2.3.RELEASE'
+    //db (mysql,h2,jpa)
     implementation 'mysql:mysql-connector-java:8.0.30'
     implementation 'com.h2database:h2:2.1.214'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    //skill (eureke, feign, kafka)
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'com.google.code.gson:gson:2.9.0'
+    //format (gson,mapper,jackson)
+    implementation 'com.google.code.gson:gson:2.10'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.1.1'
-    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
+    implementation 'org.jetbrains:annotations:23.0.0'
+    //compile,runtime
     compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.amqp:spring-rabbit-test'
-
     testImplementation group: 'org.springframework.restdocs', name: 'spring-restdocs-mockmvc', version: '2.0.4.RELEASE'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.0'
@@ -52,13 +59,15 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok' // 테스트 의존성 추가
     testCompileOnly 'com.h2database:h2:2.1.214'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+
     testImplementation 'org.mockito:mockito-inline:3.6.0'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
 
+
+    testImplementation("com.graphhopper.external:jackson-datatype-jts:1.0-2.7")
+
     // resilence4j- circuit breaker
     implementation 'org.springframework.cloud:spring-cloud-starter-circuitbreaker-resilience4j'
-
-    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.13.3'
     // QueryDsl
     implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
     annotationProcessor(

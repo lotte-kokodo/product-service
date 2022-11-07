@@ -170,19 +170,20 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product 카테고리로 조회 성공")
-    public void productByCategory() throws Exception{
+    @DisplayName("product 카테고리 조회 및 정렬 성공")
+    public void productByCategorySorting() throws Exception{
         categoryRepository.save(category);
         productRepository.save(product1);
 
-        this.mockMvc.perform(get("/product/categoryId/{categoryId}",category.getId())
+        this.mockMvc.perform(get("/product/categoryId/{categoryId}/{sortingId}",category.getId(),1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-productByCategory",
+                .andDo(document("product-rest-controller/product-productByCategorySorting",
                                 pathParameters(
-                                        parameterWithName("categoryId").description("카테고리 id")
+                                        parameterWithName("categoryId").description("카테고리 id"),
+                                        parameterWithName("sortingId").description("정렬 순서")
                                 ),
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),

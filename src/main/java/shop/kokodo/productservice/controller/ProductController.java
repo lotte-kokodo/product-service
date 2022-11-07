@@ -4,10 +4,10 @@ package shop.kokodo.productservice.controller;
 import feign.Param;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
@@ -34,111 +35,19 @@ public class ProductController {
         this.categoryService = categoryService;
     }
 
+    /* 상품 삭제 */
+    /* TODO : 카프카 이동 예정 */
     @DeleteMapping("/delete/{productId}")
     public Response productDelete(@PathVariable("productId") long id){
         productService.deleteProduct(id);
         return Response.success();
     }
 
-    /*
-    main 상품(new, sale, seller) 12개만 보여주기
-     */
-
-    // main new상품 
-    @GetMapping("/main/new")
-    public Response findByNew() {
-        List<ProductDto> productDtoList = productService.findProductByNew();
-        if(productDtoList.size()>12){
-            while(productDtoList.size()>12){
-                productDtoList.remove(12);
-            }
-        }else if(productDtoList.size() == 0) {
-            return Response.failure(0,"상품이 존재하지 않습니다.");
-        }
-
-        return Response.success(productDtoList);
-    }
-
-    // main sale상품
-    @GetMapping("/main/sale")
-    public Response findBySale() {
-        List<ProductDto> productDtoList = productService.findProductBySale();
-        if(productDtoList.size()>12){
-            while(productDtoList.size()>12){
-                productDtoList.remove(12);
-            }
-        }else if(productDtoList.size() == 0) {
-            return Response.failure(0,"상품이 존재하지 않습니다.");
-        }
-
-        return Response.success(productDtoList);
-    }
-
-    //sale 상품 정렬 및 상품 전체
-    @GetMapping("/main/sale/all/{sortingId}")
-    public Response productBySaleSorting(@PathVariable("sortingId") long sortingId){
-        List<ProductDto> productDtoList = productService.findProductBySale();
-
-        if(sortingId == 1){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getDeadline)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 2){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice).reversed()).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 3){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 4){
-            productDtoList = productService.findProductBySaleSortingNew();
-        }else if(sortingId == 5){
-            productDtoList = productService.findProductBySaleSortingReview();
-        }
-
-        return Response.success(productDtoList);
-    }
-
-    // main MD추천 상품
-    @GetMapping("/main/seller")
-    public Response findBySeller() {
-        List<ProductDto> productDtoList = productService.findProductBySeller();
-        if(productDtoList.size()>12){
-            while(productDtoList.size()>12){
-                productDtoList.remove(12);
-            }
-        }else if(productDtoList.size() == 0) {
-            return Response.failure(0,"상품이 존재하지 않습니다.");
-        }
-
-        return Response.success(productDtoList);
-    }
-
-    // MD추천 상품 정렬 및 상품전체
-    @GetMapping("/main/seller/all/{sortingId}")
-    public Response productBySellerSorting(@PathVariable("sortingId") long sortingId){
-        List<ProductDto> productDtoList = productService.findProductBySeller();
-
-        if(sortingId == 1){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getDeadline)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 2){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice).reversed()).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 3){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 4){
-            productDtoList = productService.findProductBySellerSortingNew();
-        }else if(sortingId == 5){
-            productDtoList = productService.findProductBySellerSortingReview();
-        }
-
-        return Response.success(productDtoList);
-    }
-
-    // 상품별
+    // 단일 상품 조회
     @GetMapping("/productId/{productId}")
     public Response findById(@PathVariable("productId") long id) {
-        Product product = productService.findById(id);
+        Optional<Product> optionalProduct = productService.findById(id);
+        Product product = optionalProduct.get();
 
         if(product == null){
             return Response.failure(0,"해당 상품이 존재하지 않습니다.");
@@ -159,53 +68,137 @@ public class ProductController {
         return Response.success(productDto);
     }
 
-    // 상품전체
+    // 상품전체 조회
     @GetMapping("/productAll")
     public Response findAll() {
         return Response.success(productService.findAll());
     }
 
-    // 카테고리별 상품
-    @GetMapping("/categoryId/{categoryId}")
-    public Response productByCategory(@PathVariable("categoryId") long categoryId){
-        return Response.success(productService.findProductByCategory(categoryId));
-    }
+    /*
+    =============== 정렬 정의 ===============
+    * 1. 추천순 (유통기한 가까운 것)
+    * 2. 높은 가격순
+    * 3. 낮은 가격순
+    * 4. 신상품순
+    */
 
     // 카테고리별 상품 정렬
-    @GetMapping("/categoryId/{categoryId}/{sortingId}")
+    @GetMapping("/categoryId/{categoryId}/{sortingId}/{currentpage}")
     public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
-                                      @PathVariable("sortingId") long sortingId){
-        List<ProductDto> productDtoList = productService.findProductByCategory(categoryId);
+                                             @PathVariable("sortingId") long sortingId,
+                                             @PathVariable("currentpage") int page){
+        Page<Product> pageProduct = productService.findProductByCategory(categoryId,page-1);
+        return Response.success(sortingDto(pageProduct,sortingId));
+    }
 
-        if(sortingId == 1){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getDeadline)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 2){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice).reversed()).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 3){
-            ProductDto[] pr = productDtoList.stream().sorted(Comparator.comparing(ProductDto::getPrice)).toArray(ProductDto[]::new);
-            productDtoList = Arrays.asList(pr);
-        }else if(sortingId == 4){
-            productDtoList = productService.findProductByCategorySortingNew(categoryId);
-        }else if(sortingId == 5){
-            productDtoList = productService.findProductByCategorySortingReview(categoryId);
-        }
+    /* main 상품(new, sale, seller) 12개만 보여주기 */
 
-        return Response.success(productDtoList);
+    /* 신상품 */
+    @GetMapping("/main/new")
+    public Response findByNew() {
+        Page<Product> productList = productService.findProductByNew(0);
+        return Response.success(pagingDto(productList));
+    }
+
+    /* 타임 세일 상품 */
+    @GetMapping("/main/sale")
+    public Response findBySale() {
+        Page<Product> productList = productService.findProductBySale(0);
+        return Response.success(pagingDto(productList));
+    }
+
+    /* MD추천 */
+    @GetMapping("/main/seller")
+    public Response findBySeller() {
+        Page<Product> productList = productService.findProductBySeller(0);
+        return Response.success(pagingDto(productList));
+    }
+
+    // sale 상품 정렬 및 상품 전체
+    @GetMapping("/main/sale/all/{sortingId}/{currentpage}")
+    public Response productBySaleSorting(@PathVariable("sortingId") long sortingId
+                                        ,@PathVariable("currentpage") int page){
+        Page<Product> pageProduct = productService.findProductBySale(page-1);
+        return Response.success(sortingDto(pageProduct,sortingId));
+    }
+
+    // MD추천 상품 정렬 및 상품전체
+    @GetMapping("/main/seller/all/{sortingId}/{currentpage}")
+    public Response productBySellerSorting(@PathVariable("sortingId") long sortingId
+                                            ,@PathVariable("currentpage") int page){
+        Page<Product> pageProduct = productService.findProductBySeller(page-1);
+        return Response.success(sortingDto(pageProduct,sortingId));
     }
 
     // 전체검색
-    @GetMapping("/totalSearch/{totalSearch}")
-    public Response productByTotalSearch(@PathVariable("totalSearch") String totalSearch){
-        return Response.success(productService.findProductByTotalSearch(totalSearch));
+    @GetMapping("/totalSearch/{totalSearch}/{sortingId}/{currentpage}")
+    public Response productByTotalSearch(@PathVariable("totalSearch") String totalSearch
+                                         ,@PathVariable("sortingId") long sortingId
+                                         ,@PathVariable("currentpage") int page){
+        Page<Product> pageProduct = productService.findProductByTotalSearch(totalSearch,page-1);
+        return Response.success(sortingDto(pageProduct,sortingId));
     }
+
+    public List<ProductDto> pagingDto(Page<Product> productList){
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for(Product p : productList){
+            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
+                    p.getName(),p.getPrice(),p.getDisplayName(),
+                    p.getStock(),p.getDeadline(),p.getThumbnail(),
+                    p.getSellerId(),p.getDeliveryFee());
+
+            productDtoList.add(productDto);
+        }
+
+        if(productDtoList.size()>12){
+            while(productDtoList.size()>12){
+                productDtoList.remove(12);
+            }
+        }
+
+        return productDtoList;
+    }
+
+    public PagingProductDto sortingDto(Page<Product> pageProduct, long sortingId){
+        List<Product> pr = new ArrayList<>();
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        if(sortingId == 1){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getDeadline)).toArray(Product[]::new));
+        }else if(sortingId == 2){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice).reversed()).toArray(Product[]::new));
+        }else if(sortingId == 3){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice)).toArray(Product[]::new));
+        }else if(sortingId == 4){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new));
+        }
+
+        for(Product p : pr){
+            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
+                    p.getName(),p.getPrice(),p.getDisplayName(),
+                    p.getStock(),p.getDeadline(),p.getThumbnail(),
+                    p.getSellerId(),p.getDeliveryFee());
+
+            productDtoList.add(productDto);
+        }
+
+        PagingProductDto pagingProductDto = PagingProductDto.builder()
+                .productDtoList(productDtoList)
+                .totalCount(pageProduct.getTotalElements())
+                .build();
+
+        return pagingProductDto;
+    }
+
+    /* ==================Feign Client ======================= */
 
     @GetMapping("/detail/{productId}")
     public Response productDetail(@PathVariable long productId){
         return Response.success(productService.findProductDetail(productId));
     }
 
+    /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
             , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param int page){
@@ -239,6 +232,5 @@ public class ProductController {
         boolean flag = productService.findProductOpById(productId).isPresent()? true: false;
 
         return ResponseEntity.status(HttpStatus.OK).body(flag);
-
     }
 }
