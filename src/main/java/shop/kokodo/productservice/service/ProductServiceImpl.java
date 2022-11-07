@@ -30,14 +30,23 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
-    private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
+                              ProductCustomRepository productCustomRepository, SellerServiceClient sellerServiceClient) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.productCustomRepository = productCustomRepository;
+        this.sellerServiceClient = sellerServiceClient;
+    }
+
+    private CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
 
     @Transactional
     @Override
