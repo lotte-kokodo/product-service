@@ -7,6 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
@@ -240,5 +244,13 @@ public class ProductController {
 
         return ResponseEntity.status(HttpStatus.OK).body(flag);
 
+    }
+
+    // [주문관련 상품 조회] 주문서 상품 조회
+    @GetMapping("/orderSheet")
+    public Response getOrderProducts(@RequestParam List<Long> productIds) {
+
+        Map<Long, ProductOfOrder> orderProductMap = productService.getOrderProducts(productIds);
+        return Response.success(orderProductMap);
     }
 }

@@ -2,11 +2,13 @@ package shop.kokodo.productservice.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 
 public interface ProductService {
     public void deleteProduct(long productId);
@@ -34,4 +36,6 @@ public interface ProductService {
     public List<ProductDto> findBySellerId(Long sellerId);
 
     Optional<Product> findProductOpById(Long productId);
+
+    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds);
 }

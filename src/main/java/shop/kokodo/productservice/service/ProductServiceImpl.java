@@ -2,6 +2,8 @@ package shop.kokodo.productservice.service;
 
 import java.util.*;
 
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,7 @@ import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
+import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
@@ -195,5 +198,12 @@ public class ProductServiceImpl implements ProductService {
         }
 
         return productDtoList;
+    }
+
+    @Override
+    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds) {
+        List<ProductOfOrder> productOfOrders = productRepository.findByIdIn(productIds, ProductOfOrder.class);
+        return productOfOrders.stream()
+            .collect(Collectors.toMap(ProductOfOrder::getId, Function.identity()));
     }
 }
