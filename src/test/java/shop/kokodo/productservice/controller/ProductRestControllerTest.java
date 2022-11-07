@@ -37,6 +37,7 @@ public class ProductRestControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -50,7 +51,7 @@ public class ProductRestControllerTest {
     ProductDetail productDetail1;
     ProductDetail productDetail2;
     ProductDetail productDetail3;
-    final LocalDateTime localDateTime = LocalDateTime.of(2022,10,25,0,0);
+    final LocalDateTime localDateTime = LocalDateTime.of(2022,11,26,0,0);
 
     @BeforeEach
     public void setUp(){
@@ -84,13 +85,18 @@ public class ProductRestControllerTest {
                 .image("image3")
                 .orders(1)
                 .build();
+
+        product1.addProductDetail(productDetail1);
+        product1.addProductDetail(productDetail2);
+        product1.addProductDetail(productDetail3);
+
+        categoryRepository.save(category);
+        productRepository.save(product1);
     }
 
     @Test
-    @DisplayName("product delete 성공")
+    @DisplayName("상품 삭제 성공")
     public void productDelete() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
 
         this.mockMvc.perform(delete("/product/delete/{productId}", product1.getId()))
                 .andExpect(status().isOk())
@@ -106,10 +112,8 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product ID로 조회 성공")
+    @DisplayName("단일 상품 조회 성공")
     public void findById() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
 
         this.mockMvc.perform(get("/product/productId/{productId}",product1.getId())
                         .contentType(MediaType.APPLICATION_JSON)
@@ -139,10 +143,8 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product 전체 조회 성공")
+    @DisplayName("전체 상품 조회 성공")
     public void findAll() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
 
         this.mockMvc.perform(get("/product/productAll")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -170,21 +172,51 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product 카테고리 조회 및 정렬 성공")
+    @DisplayName("카테고리 별 상품 조회 및 정렬 성공")
     public void productByCategorySorting() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
 
-        this.mockMvc.perform(get("/product/categoryId/{categoryId}/{sortingId}",category.getId(),1)
+        this.mockMvc.perform(get("/product/categoryId/{categoryId}/{sortingId}/{currentpage}",category.getId(),1,1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("product-rest-controller/product-productByCategorySorting",
                                 pathParameters(
-                                        parameterWithName("categoryId").description("카테고리 id"),
-                                        parameterWithName("sortingId").description("정렬 순서")
+                                        parameterWithName("categoryId").description("카테고리 Id"),
+                                        parameterWithName("sortingId").description("정렬 순서"),
+                                        parameterWithName("currentpage").description("현재 페이지")
                                 ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data.productDtoList[]").type(JsonFieldType.ARRAY).description("상품 배열"),
+                                        fieldWithPath("result.data.productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data.productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data.productDtoList[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data.productDtoList[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data.productDtoList[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data.productDtoList[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data.productDtoList[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
+                                        fieldWithPath("result.data.productDtoList[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
+                                        fieldWithPath("result.data.productDtoList[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
+                                        fieldWithPath("result.data.productDtoList[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
+                                        fieldWithPath("result.data.totalCount").type(JsonFieldType.NUMBER).description("상품 총수")
+                                )
+                        )
+                );
+    }
+
+    /* ======= Main 상품 =======*/
+    @Test
+    @DisplayName("신상품 조회 성공")
+    public void findByNew() throws Exception{
+
+        this.mockMvc.perform(get("/product/main/new")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/product-main-new",
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
@@ -205,20 +237,15 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("전체 product 검색 성공")
-    public void productByTotalSearch() throws Exception{
-        categoryRepository.save(category);
-        productRepository.save(product1);
+    @DisplayName("타임 세일 조회 성공")
+    public void findBySale() throws Exception{
 
-        this.mockMvc.perform(get("/product/totalSearch/{totalSearch}","닭")
+        this.mockMvc.perform(get("/product/main/sale")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-productByTotalSearch",
-                                pathParameters(
-                                        parameterWithName("totalSearch").description("전체 검색 단어")
-                                ),
+                .andDo(document("product-rest-controller/product-main-sale",
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
@@ -233,6 +260,137 @@ public class ProductRestControllerTest {
                                         fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
                                         fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
                                         fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("MD 추천 조회 성공")
+    public void findBySeller() throws Exception{
+
+        this.mockMvc.perform(get("/product/main/seller")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/product-main-seller",
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data[]").type(JsonFieldType.ARRAY).description("상품 배열"),
+                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
+                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
+                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
+                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                )
+                        )
+                );
+    }
+
+    /* ======= 상품 나열 ======= */
+    @Test
+    @DisplayName("세일 상품 조회 및 정렬 성공")
+    public void productBySaleSorting() throws Exception{
+
+        this.mockMvc.perform(get("/product/main/sale/all/{sortingId}/{currentpage}",1,1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/product-main-sale-all",
+                                pathParameters(
+                                        parameterWithName("sortingId").description("정렬 순서"),
+                                        parameterWithName("currentpage").description("현재 페이지")
+                                ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data.productDtoList[]").type(JsonFieldType.ARRAY).description("상품 배열"),
+                                        fieldWithPath("result.data.productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data.productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data.productDtoList[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data.productDtoList[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data.productDtoList[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data.productDtoList[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data.productDtoList[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
+                                        fieldWithPath("result.data.productDtoList[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
+                                        fieldWithPath("result.data.productDtoList[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
+                                        fieldWithPath("result.data.productDtoList[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
+                                        fieldWithPath("result.data.totalCount").type(JsonFieldType.NUMBER).description("상품 총수")
+                                )
+                        )
+                );
+    }
+    @Test
+    @DisplayName("MD추천 상품 조회 및 정렬 성공")
+    public void productBySellerSorting() throws Exception{
+
+        this.mockMvc.perform(get("/product/main/seller/all/{sortingId}/{currentpage}",1,1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/product-main-seller-all",
+                                pathParameters(
+                                        parameterWithName("sortingId").description("정렬 순서"),
+                                        parameterWithName("currentpage").description("현재 페이지")
+                                ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data.productDtoList[]").type(JsonFieldType.ARRAY).description("상품 배열"),
+                                        fieldWithPath("result.data.productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data.productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data.productDtoList[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data.productDtoList[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data.productDtoList[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data.productDtoList[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data.productDtoList[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
+                                        fieldWithPath("result.data.productDtoList[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
+                                        fieldWithPath("result.data.productDtoList[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
+                                        fieldWithPath("result.data.productDtoList[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
+                                        fieldWithPath("result.data.totalCount").type(JsonFieldType.NUMBER).description("상품 총수")
+                                )
+                        )
+                );
+    }
+    @Test
+    @DisplayName("전체 상품 검색 조회 및 정렬 성공")
+    public void productByTotalSearch() throws Exception{
+
+        this.mockMvc.perform(get("/product/totalSearch/{totalSearch}/{sortingId}/{currentpage}","닭",1,1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/product-totalSearch",
+                                pathParameters(
+                                        parameterWithName("totalSearch").description("상품 검색"),
+                                        parameterWithName("sortingId").description("정렬 순서"),
+                                        parameterWithName("currentpage").description("현재 페이지")
+                                ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data.productDtoList[]").type(JsonFieldType.ARRAY).description("상품 배열"),
+                                        fieldWithPath("result.data.productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data.productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data.productDtoList[].name").type(JsonFieldType.STRING).description("상품 이름"),
+                                        fieldWithPath("result.data.productDtoList[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data.productDtoList[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data.productDtoList[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data.productDtoList[].deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
+                                        fieldWithPath("result.data.productDtoList[].thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
+                                        fieldWithPath("result.data.productDtoList[].sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
+                                        fieldWithPath("result.data.productDtoList[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
+                                        fieldWithPath("result.data.totalCount").type(JsonFieldType.NUMBER).description("상품 총수")
                                 )
                         )
                 );
@@ -241,14 +399,6 @@ public class ProductRestControllerTest {
     @Test
     @DisplayName("product detail 조회")
     public void productDetail() throws Exception {
-
-        product1.addProductDetail(productDetail1);
-        product1.addProductDetail(productDetail2);
-        product1.addProductDetail(productDetail3);
-
-        categoryRepository.save(category);
-
-        productRepository.save(product1);
 
         this.mockMvc.perform(get("/product/detail/{productId}",product1.getId())
                         .contentType(MediaType.APPLICATION_JSON)

@@ -46,7 +46,7 @@ public class ProductServiceImpl implements ProductService {
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
-    private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
+//    private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
 
     /* 상품삭제 */
     @Transactional
@@ -143,11 +143,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
-
-
-        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
-
-        if(!sellerValid) throw new NoSellerServiceException();
+//        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
+//
+//        if(!sellerValid) throw new NoSellerServiceException();
         return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 

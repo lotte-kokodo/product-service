@@ -33,6 +33,7 @@ class CategoryControllerTest {
 
     @Autowired
     MockMvc mockMvc;
+
     @Autowired
     ObjectMapper objectMapper;
 
@@ -46,13 +47,14 @@ class CategoryControllerTest {
     public void setUp() {
         category1 = Category.builder().id(1).name("test1").build();
         category2 = Category.builder().id(2).name("test2").build();
+
+        categoryRepository.save(category1);
+        categoryRepository.save(category2);
     }
 
     @Test
     @DisplayName("Category 전체 조회")
     void all() throws Exception {
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
 
         this.mockMvc.perform(get("/category/all")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,8 +74,6 @@ class CategoryControllerTest {
     @Test
     @DisplayName("Category 이름으로 조회")
     void findByName() throws Exception{
-        categoryRepository.save(category1);
-        categoryRepository.save(category2);
 
         this.mockMvc.perform(get("/category/categoryName/{name}", category1.getName())
                     .contentType(MediaType.APPLICATION_JSON)

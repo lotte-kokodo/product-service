@@ -41,7 +41,6 @@ public class ProductController {
     }
 
     /* 상품 삭제 */
-    /* TODO : 카프카 이동 예정 */
     @DeleteMapping("/delete/{productId}")
     public Response productDelete(@PathVariable("productId") long id){
         productService.deleteProduct(id);
