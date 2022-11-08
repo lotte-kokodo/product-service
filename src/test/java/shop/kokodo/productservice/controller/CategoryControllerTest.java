@@ -53,7 +53,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Category 전체 조회")
+    @DisplayName("카테고리 전체 조회")
     void all() throws Exception {
 
         this.mockMvc.perform(get("/category/all")
@@ -72,7 +72,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    @DisplayName("Category 이름으로 조회")
+    @DisplayName("카테고리 이름으로 조회")
     void findByName() throws Exception{
 
         this.mockMvc.perform(get("/category/categoryName/{name}", category1.getName())
