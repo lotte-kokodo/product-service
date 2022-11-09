@@ -21,7 +21,6 @@ public class ProductDetailController {
     @GetMapping("/{productId}")
     public Response findByProductId(@PathVariable long productId){
 
-        System.out.println(productId);
         List<ProductDetail> list = productDetailService.findByProductId(productId);
 
         return Response.success(list);

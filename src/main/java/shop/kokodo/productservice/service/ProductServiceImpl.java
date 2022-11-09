@@ -150,9 +150,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
-//        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
-//
-//        if(!sellerValid) throw new NoSellerServiceException();
+        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
+
+        if(!sellerValid) throw new NoSellerServiceException();
         return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 

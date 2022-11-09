@@ -11,6 +11,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
@@ -19,10 +21,8 @@ import shop.kokodo.productservice.repository.ProductRepository;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -52,7 +52,7 @@ public class ProductRestControllerTest {
     ProductDetail productDetail2;
     ProductDetail productDetail3;
     final LocalDateTime localDateTime = LocalDateTime.of(2022,11,26,0,0);
-
+    final long sellerId = 1L;
     @BeforeEach
     public void setUp(){
         category = Category.builder()
@@ -67,7 +67,7 @@ public class ProductRestControllerTest {
                 .stock(10)
                 .deadline(localDateTime)
                 .thumbnail("맛닭")
-                .sellerId(1)
+                .sellerId(sellerId)
                 .deliveryFee(1000)
                 .build();
         productDetail1 = ProductDetail.builder()
@@ -406,30 +406,124 @@ public class ProductRestControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("product-rest-controller/product-detail",
-                                pathParameters(
-                                        parameterWithName("productId").description("상품 id")
-                                ),
+                        pathParameters(
+                                parameterWithName("productId").description("검색 상품 이름")
+                        ),
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-//                                        fieldWithPath("result.data.createdDate").type(JsonFieldType.STRING).description("상품 생성 날짜"),
-//                                        fieldWithPath("result.data.lastModifiedDate").type(JsonFieldType.STRING).description("상품 마지막 수정 날짜"),
                                         fieldWithPath("result.data.id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data.categoryId").type(JsonFieldType.NUMBER).description("카테고리 id"),
+                                        fieldWithPath("result.data.productDetailList").type(JsonFieldType.ARRAY).description("상품 디테일 이미지"),
+                                        fieldWithPath("result.data.productDetailList[].id").type(JsonFieldType.NUMBER).description("상품 디테일 이미지 id"),
+                                        fieldWithPath("result.data.productDetailList[].image").type(JsonFieldType.STRING).description("상품 디테일 이미지 url"),
+                                        fieldWithPath("result.data.productDetailList[].orders").type(JsonFieldType.NUMBER).description("상품 디테일 이미지 순서"),
                                         fieldWithPath("result.data.name").type(JsonFieldType.STRING).description("상품 이름"),
-                                        fieldWithPath("result.data.categoryId").type(JsonFieldType.NUMBER).description("상품 이름"),
                                         fieldWithPath("result.data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("result.data.displayName").type(JsonFieldType.STRING).description("상품 노출명"),
                                         fieldWithPath("result.data.stock").type(JsonFieldType.NUMBER).description("상품 재고"),
                                         fieldWithPath("result.data.deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
-                                        fieldWithPath("result.data.thumbnail").type(JsonFieldType.STRING).description("상품 썸네일"),
-                                        fieldWithPath("result.data.sellerId").type(JsonFieldType.NUMBER).description("상품 셀러 아이디"),
-                                        fieldWithPath("result.data.deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
-                                        fieldWithPath("result.data.productDetailList[]").type(JsonFieldType.ARRAY).description("상품 디테일 이미지 배열"),
-                                        fieldWithPath("result.data.productDetailList[].id").type(JsonFieldType.NUMBER).description("상품 디테일 아이디"),
-                                        fieldWithPath("result.data.productDetailList[].image").type(JsonFieldType.STRING).description("상품 디테일 이미지 url"),
-                                        fieldWithPath("result.data.productDetailList[].orders").type(JsonFieldType.NUMBER).description("상품 디테일 이미지 순서")
+                                        fieldWithPath("result.data.thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+                                        fieldWithPath("result.data.sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+                                        fieldWithPath("result.data.deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
                                 )
                         )
                 );
     }
+
+    @Test
+    @DisplayName("product 조건 검색")
+    public void findByProductNameAndStatusAndDate() throws Exception {
+
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+
+        params.add("productName","닭");
+        params.add("status","0");
+        params.add("startDate","2020-01-01 11:11");
+        params.add("endDate","2025-02-02 22:22");
+        params.add("sellerId","1");
+        params.add("page","0");
+
+        this.mockMvc.perform(get("/product")
+                        .params(params)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/find-by-name-status-date",
+                                requestParameters(
+                                        parameterWithName("productName").description("상품 이름"),
+                                        parameterWithName("status").description("상품 판매 상태"),
+                                        parameterWithName("startDate").description("상품 등록 시작 일자"),
+                                        parameterWithName("endDate").description("상품 등록 마감 일자"),
+                                        parameterWithName("sellerId").description("셀러 id"),
+                                        parameterWithName("page").description("페이지 번호")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("[].categoryName").type(JsonFieldType.STRING).description("상품 카테고리 이름"),
+                                        fieldWithPath("[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+                                        fieldWithPath("[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+                                        fieldWithPath("[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("seller 아이디로 상품 조회")
+    public void findBySellerId() throws Exception {
+
+        this.mockMvc.perform(get("/product/seller/{sellerId}",sellerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/find-by-seller-id",
+                                pathParameters(
+                                        parameterWithName("sellerId").description("셀러 id")
+                                ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 id"),
+                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                )
+                        )
+                );
+    }
+
+//    // TODO : 응답 문서 다시 수정
+//    @Test
+//    @DisplayName("상품 id로 상품 조회")
+//    public void findProductById() throws Exception {
+//
+//        this.mockMvc.perform(get("/product/feign/id")
+//                        .param("productId",""+product1.getId())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andDo(document("product-rest-controller/find-by-product-id",
+//                                requestParameters(
+//                                        parameterWithName("productId").description("상품 id")
+//                                ),
+//                                responseFields(
+//                                        fieldWithPath("flag").type(JsonFieldType.BOOLEAN).description("상품 존재 유무")
+//                                )
+//                        )
+//                );
+//    }
 }

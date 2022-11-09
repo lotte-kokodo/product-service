@@ -205,7 +205,7 @@ public class ProductController {
     /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param int page){
+            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param Integer page){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 

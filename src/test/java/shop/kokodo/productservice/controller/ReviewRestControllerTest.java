@@ -165,4 +165,60 @@ public class ReviewRestControllerTest {
                         )
                 );
     }
+
+    @Test
+    @DisplayName("마이페이지 사용자 별 리뷰 조회")
+    public void findByMemberId() throws Exception {
+
+        reviewRepository.save(review1);
+        reviewRepository.save(review2);
+
+        this.mockMvc.perform(get("/review/member/{memberId}",memberId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("review-rest-controller/get_total_rate",
+                                pathParameters(
+                                        parameterWithName("memberId").description("멤버 id")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("성공여부"),
+                                        fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("상태코드").optional(),
+                                        fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("성공여부"),
+                                        fieldWithPath("[].content").type(JsonFieldType.STRING).description("상태코드"),
+                                        fieldWithPath("[].rating").type(JsonFieldType.NUMBER).description("상품 당 총 평점"),
+                                        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("리뷰 총 개수"),
+                                        fieldWithPath("[].displayName").type(JsonFieldType.STRING).description("리뷰 총 개수"),
+                                        fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("리뷰 총 개수")
+                                )
+                        )
+                );
+    }
+
+    @Test
+    @DisplayName("상품의 리뷰 총 평점")
+    public void getTotalRate() throws Exception {
+
+        reviewRepository.save(review1);
+        reviewRepository.save(review2);
+
+        this.mockMvc.perform(get("/review/total/{productId}",product.getId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("review-rest-controller/get_total_rate",
+                        pathParameters(
+                                parameterWithName("productId").description("상품 id")
+                        ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data.totalRate").type(JsonFieldType.NUMBER).description("상품 당 총 평점"),
+                                        fieldWithPath("result.data.reviewCnt").type(JsonFieldType.NUMBER).description("리뷰 총 개수")
+                                )
+                        )
+                );
+    }
 }
