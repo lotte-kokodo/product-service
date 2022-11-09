@@ -156,7 +156,6 @@ public class ReviewRestControllerTest {
                                 responseFields(
                                         fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                         fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-                                        fieldWithPath("result.data.id").type(JsonFieldType.NUMBER).description("리뷰 리스트"),
                                         fieldWithPath("result.data.rating").type(JsonFieldType.NUMBER).description("리뷰 생성 날짜").optional(),
                                         fieldWithPath("result.data.content").type(JsonFieldType.STRING).description("리뷰 마지막 수정 날짜").optional(),
                                         fieldWithPath("result.data.productId").type(JsonFieldType.NUMBER).description("리뷰 id"),
@@ -178,7 +177,7 @@ public class ReviewRestControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andDo(document("review-rest-controller/get_total_rate",
+                .andDo(document("review-rest-controller/get-total-rate",
                                 pathParameters(
                                         parameterWithName("memberId").description("멤버 id")
                                 ),

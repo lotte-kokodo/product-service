@@ -101,3 +101,36 @@ include::{snippets}/product-rest-controller/product-totalSearch/httpie-request.a
 include::{snippets}/product-rest-controller/product-totalSearch/request-body.adoc[]
 include::{snippets}/product-rest-controller/product-totalSearch/response-body.adoc[]
 include::{snippets}/product-rest-controller/product-totalSearch/response-fields.adoc[]
+
+== product-detail
+include::{snippets}/product-rest-controller/product-detail/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-detail/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/path-parameters.adoc[]
+include::{snippets}/product-rest-controller/product-detail/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-detail/request-parameters.adoc[]
+include::{snippets}/product-rest-controller/product-detail/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-detail/response-fields.adoc[]
+
+== find-by-name-status-date
+include::{snippets}/product-rest-controller/find-by-name-status-date/curl-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/http-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/http-response.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/request-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/request-parameters.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/response-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/response-fields.adoc[]
+
+== find-by-seller-id
+include::{snippets}/product-rest-controller/find-by-seller-id/curl-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/http-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/http-response.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/path-parameters.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/request-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/response-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/response-fields.adoc[]
+
+

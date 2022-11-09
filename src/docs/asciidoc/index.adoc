@@ -14,3 +14,5 @@ endif::[]
 link:category-rest-controller-api.html[]
 
 link:product-rest-controller-api.html[]
+
+link:review-rest-controller-api.html[]
