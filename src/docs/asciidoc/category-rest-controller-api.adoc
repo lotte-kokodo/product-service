@@ -1,0 +1,30 @@
+= Category-Rest-Controller-Api
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+
+endif::[]
+
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+== category-all
+include::{snippets}/category-rest-controller/category-all/curl-request.adoc[]
+include::{snippets}/category-rest-controller/category-all/http-request.adoc[]
+include::{snippets}/category-rest-controller/category-all/http-response.adoc[]
+include::{snippets}/category-rest-controller/category-all/httpie-request.adoc[]
+include::{snippets}/category-rest-controller/category-all/request-body.adoc[]
+include::{snippets}/category-rest-controller/category-all/response-body.adoc[]
+include::{snippets}/category-rest-controller/category-all/response-fields.adoc[]
+
+== category-name
+include::{snippets}/category-rest-controller/category-name/curl-request.adoc[]
+include::{snippets}/category-rest-controller/category-name/http-request.adoc[]
+include::{snippets}/category-rest-controller/category-name/http-response.adoc[]
+include::{snippets}/category-rest-controller/category-name/httpie-request.adoc[]
+include::{snippets}/category-rest-controller/category-name/request-body.adoc[]
+include::{snippets}/category-rest-controller/category-name/response-body.adoc[]
+include::{snippets}/category-rest-controller/category-name/response-fields.adoc[]
