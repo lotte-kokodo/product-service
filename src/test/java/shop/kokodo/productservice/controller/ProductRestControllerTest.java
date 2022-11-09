@@ -100,7 +100,7 @@ public class ProductRestControllerTest {
 
         this.mockMvc.perform(delete("/product/delete/{productId}", product1.getId()))
                 .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/product-update",
+                .andDo(document("product-rest-controller/product-delete",
                         pathParameters(
                                 parameterWithName("productId").description("상품 id")
                         ),
@@ -266,7 +266,7 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("MD 추천 조회 성공")
+    @DisplayName("셀러 추천 조회 성공")
     public void findBySeller() throws Exception{
 
         this.mockMvc.perform(get("/product/main/seller")
@@ -329,7 +329,7 @@ public class ProductRestControllerTest {
                 );
     }
     @Test
-    @DisplayName("MD추천 상품 조회 및 정렬 성공")
+    @DisplayName("셀러추천 상품 조회 및 정렬 성공")
     public void productBySellerSorting() throws Exception{
 
         this.mockMvc.perform(get("/product/main/seller/all/{sortingId}/{currentpage}",1,1)
@@ -397,7 +397,7 @@ public class ProductRestControllerTest {
     }
 
     @Test
-    @DisplayName("product detail 조회")
+    @DisplayName("상품 상세 조회")
     public void productDetail() throws Exception {
 
         this.mockMvc.perform(get("/product/detail/{productId}",product1.getId())
