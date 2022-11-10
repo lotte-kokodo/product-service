@@ -1,4 +1,6 @@
 = Review-Rest-Controller-Api
+:toc: left
+:toclevels: 4
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
 
