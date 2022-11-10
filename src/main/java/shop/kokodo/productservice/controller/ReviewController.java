@@ -46,10 +46,10 @@ public class ReviewController {
                 .build();
     }
 
-    /* 마이페이지 사용자 별 리뷰 조회 */
-    @GetMapping("/member/{memberId}")
-    public ResponseEntity findByMemberId(@PathVariable("memberId") long memberId){
-        return ResponseEntity.status(HttpStatus.OK).body(reviewService.findByMemberId(memberId));
+    /* Feign(member->product) 마이페이지 사용자 별 리뷰 조회 */
+    @GetMapping("/member/{memberId}/{currentpage}")
+    public ResponseEntity findByMemberId(@PathVariable("memberId") long memberId,@PathVariable("currentpage") int page){
+        return ResponseEntity.status(HttpStatus.OK).body(reviewService.findByMemberId(memberId, page -1));
     }
 
     @GetMapping("/total/{productId}")

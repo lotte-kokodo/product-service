@@ -6,6 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import shop.kokodo.productservice.dto.MypageReviewDto;
 import shop.kokodo.productservice.entity.Category;
@@ -81,9 +84,11 @@ public class ReviewRepositoryTest {
         reviewRepository.save(review1);
         reviewRepository.save(review2);
 
-        List<MypageReviewDto> reviews = reviewRepository.findByMemberId(1);
+        Pageable pageable = PageRequest.of(0,8);
 
-        Assertions.assertEquals(reviews.size(),2);
+        Page<MypageReviewDto> reviews = reviewRepository.findByMemberId(1,pageable);
+
+        Assertions.assertEquals(reviews.getTotalElements(),2);
 
         for (MypageReviewDto review : reviews) {
             System.out.println(review.toString());
