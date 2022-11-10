@@ -25,5 +25,5 @@ public interface ReviewRepository extends JpaRepository<Review,Long>{
 
     @Query("select new shop.kokodo.productservice.dto.MypageReviewDto( r.id, r.createdDate , r.product.id, r.content, r.rating, r.memberId, p.displayName, p.thumbnail ) " +
             "from Review r join r.product p where r.memberId = :memberId")
-    public List<MypageReviewDto> findByMemberId(@Param("memberId") long memberId);
+    Page<MypageReviewDto> findByMemberId(@Param("memberId") long memberId, Pageable pageable);
 }

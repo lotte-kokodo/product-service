@@ -2,6 +2,7 @@ package shop.kokodo.productservice.service;
 
 import org.springframework.data.domain.Pageable;
 import shop.kokodo.productservice.dto.MypageReviewDto;
+import shop.kokodo.productservice.dto.PageMypageReviewDto;
 import shop.kokodo.productservice.dto.ReviewRequestDto;
 import shop.kokodo.productservice.dto.ReviewResponseDto;
 import shop.kokodo.productservice.entity.Review;
@@ -14,7 +15,7 @@ public interface ReviewService {
 
     public Review save(ReviewRequestDto reviewDto);
 
-    public List<MypageReviewDto> findByMemberId(long memberId);
+    public PageMypageReviewDto findByMemberId(long memberId, int page);
 
     public Double calcTotalRate(long productId);
 
