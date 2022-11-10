@@ -205,14 +205,14 @@ public class ProductController {
     /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param int page){
+            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param Integer page){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        List<ProductDto> list = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
+        PagingProductDto pagingProductDto = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
                 ,LocalDateTime.parse(endDate, formatter),sellerId,page);
 
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(pagingProductDto);
     }
 
     @GetMapping("/productSellerId")

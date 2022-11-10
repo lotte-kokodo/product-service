@@ -1,0 +1,44 @@
+= Review-Rest-Controller-Api
+:toc: left
+:toclevels: 4
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+
+endif::[]
+
+:doctype:  book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+[[Review-Rest-Controller-API]]
+== find-review
+include::{snippets}/review-rest-controller/find-review/curl-request.adoc[]
+include::{snippets}/review-rest-controller/find-review/http-request.adoc[]
+include::{snippets}/review-rest-controller/find-review/http-response.adoc[]
+include::{snippets}/review-rest-controller/find-review/httpie-request.adoc[]
+include::{snippets}/review-rest-controller/find-review/path-parameters.adoc[]
+include::{snippets}/review-rest-controller/find-review/request-body.adoc[]
+include::{snippets}/review-rest-controller/find-review/response-body.adoc[]
+include::{snippets}/review-rest-controller/find-review/response-fields.adoc[]
+
+== save
+include::{snippets}/review-rest-controller/save/curl-request.adoc[]
+include::{snippets}/review-rest-controller/save/http-request.adoc[]
+include::{snippets}/review-rest-controller/save/http-response.adoc[]
+include::{snippets}/review-rest-controller/save/httpie-request.adoc[]
+include::{snippets}/review-rest-controller/save/request-body.adoc[]
+include::{snippets}/review-rest-controller/save/response-body.adoc[]
+include::{snippets}/review-rest-controller/save/response-fields.adoc[]
+
+== get-total-rate
+include::{snippets}/review-rest-controller/get-total-rate/curl-request.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/http-request.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/http-response.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/httpie-request.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/path-parameters.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/request-body.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/response-body.adoc[]
+include::{snippets}/review-rest-controller/get-total-rate/response-fields.adoc[]

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
 
+import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -133,8 +134,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
-                                   Long sellerId,int page) {
+    public PagingProductDto findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   Long sellerId, int page) {
 
             return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId, PageRequest.of(page,10));
     }
@@ -150,9 +151,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
-//        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
-//
-//        if(!sellerValid) throw new NoSellerServiceException();
+        Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
+
+        if(!sellerValid) throw new NoSellerServiceException();
         return returnProductDtoList(productRepository.findBySellerId(sellerId));
     }
 

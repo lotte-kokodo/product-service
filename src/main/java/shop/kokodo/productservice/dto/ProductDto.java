@@ -17,7 +17,7 @@ public class ProductDto {
     long id;
     long categoryId;
     String categoryName;
-    private String name;
+    String name;
     private int price;
     private String displayName;
     private int stock;
