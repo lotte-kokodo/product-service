@@ -38,11 +38,9 @@ public class ReviewController {
 
     private ReviewRequestDto convertToReviewDto(Review review){
         return ReviewRequestDto.builder()
-                .id(review.getId())
                 .rating(review.getRating())
                 .content(review.getContent())
                 .productId(review.getProduct().getId())
-                .memberId(review.getMemberId())
                 .build();
     }
 
@@ -57,14 +55,12 @@ public class ReviewController {
         Double totalRate = reviewService.calcTotalRate(productId);
         long reviewCnt = reviewService.countReview(productId);
 
-        System.out.println(totalRate+" "+reviewCnt);
 
         ReviewTotalDto reviewTotalDto = ReviewTotalDto.builder()
                 .totalRate(Math.round(totalRate * 10) / 10.0)
                 .reviewCnt(reviewCnt)
                 .build();
 
-        System.out.println(reviewTotalDto.getTotalRate());
 
         return Response.success(reviewTotalDto);
     }
