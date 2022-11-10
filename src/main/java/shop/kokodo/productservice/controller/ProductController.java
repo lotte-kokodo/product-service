@@ -209,10 +209,10 @@ public class ProductController {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-        List<ProductDto> list = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
+        PagingProductDto pagingProductDto = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
                 ,LocalDateTime.parse(endDate, formatter),sellerId,page);
 
-        return ResponseEntity.status(HttpStatus.OK).body(list);
+        return ResponseEntity.status(HttpStatus.OK).body(pagingProductDto);
     }
 
     @GetMapping("/productSellerId")
