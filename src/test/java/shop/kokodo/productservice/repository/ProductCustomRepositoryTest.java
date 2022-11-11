@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
+import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 public class ProductCustomRepositoryTest {
 
     private final ProductCustomRepository productCustomRepository;
@@ -79,9 +80,9 @@ public class ProductCustomRepositoryTest {
     @DisplayName("상품 조건 검색(name, status, regdate)")
     public void findByNameAndStock(){
         Pageable pageable = PageRequest.of(0,10);
-        List<ProductDto> products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L,pageable);
+        PagingProductDto products = productCustomRepository.findProduct("맛",1,startDateTime,endDateTime,1L,pageable);
 
-        for (ProductDto product : products) {
+        for (ProductDto product : products.getProductDtoList()) {
             Assertions.assertEquals(product.getName().contains("맛"),true);
             Assertions.assertEquals(product.getStock()>0,true);
             Assertions.assertEquals(product.getSellerId(),1);

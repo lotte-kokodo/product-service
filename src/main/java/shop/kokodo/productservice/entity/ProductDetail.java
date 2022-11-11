@@ -26,6 +26,11 @@ public class ProductDetail extends BaseEntity{
     private String image;
     private int orders;
 
+    public void changeProduct(Product product){
+        this.product=product;
+        product.getProductDetailList().add(this);
+    }
+
     @Builder
     public ProductDetail(long id, Product product, String image, int orders) {
         this.id = id;

@@ -19,20 +19,22 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import shop.kokodo.productservice.entity.TemplateRec;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 
 @SpringBootTest
-@Transactional
+//@Transactional
 public class ProductRepositoryTest {
 
     @Autowired
     ProductRepository productRepository;
-
     @Autowired
     ProductFeignRepository productFeignRepository;
-
     @Autowired
     CategoryRepository categoryRepository;
+    @Autowired
+            TemplateRecRepository templateRecRepository;
 
     Category category;
     Category category1;
@@ -43,6 +45,8 @@ public class ProductRepositoryTest {
     ProductDetail productDetail1;
     ProductDetail productDetail2;
     ProductDetail productDetail3;
+
+    TemplateRec templateRec;
     final LocalDateTime localDateTime = LocalDateTime.of(2022,11,30,0,0);
 
     Pageable pageable;
@@ -109,6 +113,21 @@ public class ProductRepositoryTest {
                 .orders(1)
                 .build();
         pageable = PageRequest.of(0,20);
+
+        templateRec = TemplateRec.builder()
+                .imageOne("image1")
+                .imageTwo("image2")
+                .imageThree("image3")
+                .imageFour("image4")
+                .imageFive("image5")
+                .writingTitle("writingTitle")
+                .writingDescription("writingDescription")
+                .writingHighlightOne("writimgHighligntOne")
+                .writingHighlightTwo("writingHighlightTwo")
+                .writingName("writionName")
+                .writingTitleDetail("writionTitleDetail")
+                .build();
+
     }
 
 
@@ -253,4 +272,28 @@ public class ProductRepositoryTest {
         return monthValue < 10 ? "0"+monthValue : Integer.toString(monthValue);
     }
 
+
+    @Test
+    @DisplayName("상품, 상품 디테일 이미지 저장")
+    public void saveProductAndDetail(){
+        product1.addProductDetail(productDetail1);
+
+        productRepository.save(product1);
+        productDetail1.changeProduct(product1);
+
+        System.out.println(productRepository.findById(product1.getId()));
+
+    }
+
+    @Test
+    @DisplayName("상품, 상품 템플릿 저장")
+    public void saveProductAndTemplate(){
+        product1.setTemplateRec(templateRec);
+
+        productRepository.save(product1);
+        templateRec.changeProduct(product1);
+
+        System.out.println(templateRecRepository.findAll());
+
+    }
 }
