@@ -9,10 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
-import shop.kokodo.productservice.dto.MypageReviewDto;
-import shop.kokodo.productservice.dto.ReviewRequestDto;
-import shop.kokodo.productservice.dto.ReviewResponseDto;
-import shop.kokodo.productservice.dto.UserDto;
+import shop.kokodo.productservice.dto.*;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.Review;
 import shop.kokodo.productservice.feign.UserServiceClient;
@@ -59,8 +56,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public List<MypageReviewDto> findByMemberId(long memberId) {
-        return reviewRepository.findByMemberId(memberId);
+    public PageMypageReviewDto findByMemberId(long memberId, int page) {
+        Pageable pageable = PageRequest.of(page,8);
+        Page<MypageReviewDto> mypageReviewDtoList = reviewRepository.findByMemberId(memberId, pageable);
+        PageMypageReviewDto pageMypageReviewDto = new PageMypageReviewDto(mypageReviewDtoList.toList(),mypageReviewDtoList.getTotalElements());
+        return pageMypageReviewDto;
     }
 
     @Override

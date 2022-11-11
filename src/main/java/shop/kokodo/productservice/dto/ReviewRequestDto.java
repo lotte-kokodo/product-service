@@ -1,28 +1,24 @@
 package shop.kokodo.productservice.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.stereotype.Service;
 
 @Getter
 @Setter
-@NoArgsConstructor
+@AllArgsConstructor
 public class ReviewRequestDto {
-
-    private long id;
-    private long productId;
+    private Long productId;
     private String content;
     private double rating;
     private long memberId;
 
+    public ReviewRequestDto() {
+    }
+
     @Builder
-    public ReviewRequestDto(long id, long productId, String content, double rating, long memberId) {
-        this.id = id;
+    public ReviewRequestDto( Long productId, String content, double rating) {
         this.productId = productId;
         this.content = content;
         this.rating = rating;
-        this.memberId = memberId;
     }
 }

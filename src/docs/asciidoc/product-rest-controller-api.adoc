@@ -1,0 +1,138 @@
+= Product-Rest-Controller-Api
+:toc: left
+:toclevels: 4
+ifndef::snippets[]
+:snippets: ./build/generated-snippets
+
+endif::[]
+
+:doctype:  book
+:icons: font
+:source-highlighter: highlightjs // 문서에 표기되는 코드들의 하이라이팅을 highlightjs를 사용
+:toc: left // toc (Table Of Contents)를 문서의 좌측에 두기
+:toclevels: 2
+:sectlinks:
+
+[[Product-Rest-Controller-API]]
+== product-delete
+include::{snippets}/product-rest-controller/product-delete/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-delete/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-delete/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-delete/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-delete/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-delete/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-delete/response-fields.adoc[]
+
+== product-productId
+include::{snippets}/product-rest-controller/product-productId/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-productId/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-productId/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-productId/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-productId/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-productId/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-productId/response-fields.adoc[]
+
+== product-all
+include::{snippets}/product-rest-controller/product-all/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-all/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-all/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-all/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-all/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-all/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-all/response-fields.adoc[]
+
+== product-productByCategorySorting
+include::{snippets}/product-rest-controller/product-productByCategorySorting/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-productByCategorySorting/response-fields.adoc[]
+
+== product-main-new
+include::{snippets}/product-rest-controller/product-main-new/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-new/response-fields.adoc[]
+
+== product-main-sale
+include::{snippets}/product-rest-controller/product-main-sale/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale/response-fields.adoc[]
+
+== product-main-seller
+include::{snippets}/product-rest-controller/product-main-seller/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller/response-fields.adoc[]
+
+== product-main-sale-all
+include::{snippets}/product-rest-controller/product-main-sale-all/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-sale-all/response-fields.adoc[]
+
+== product-main-seller-all
+include::{snippets}/product-rest-controller/product-main-seller-all/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-main-seller-all/response-fields.adoc[]
+
+== product-totalSearch
+include::{snippets}/product-rest-controller/product-totalSearch/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-totalSearch/response-fields.adoc[]
+
+== product-detail
+include::{snippets}/product-rest-controller/product-detail/curl-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/http-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/http-response.adoc[]
+include::{snippets}/product-rest-controller/product-detail/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/product-detail/path-parameters.adoc[]
+include::{snippets}/product-rest-controller/product-detail/request-body.adoc[]
+include::{snippets}/product-rest-controller/product-detail/request-parameters.adoc[]
+include::{snippets}/product-rest-controller/product-detail/response-body.adoc[]
+include::{snippets}/product-rest-controller/product-detail/response-fields.adoc[]
+
+== find-by-name-status-date
+include::{snippets}/product-rest-controller/find-by-name-status-date/curl-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/http-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/http-response.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/request-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/request-parameters.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/response-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-name-status-date/response-fields.adoc[]
+
+== find-by-seller-id
+include::{snippets}/product-rest-controller/find-by-seller-id/curl-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/http-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/http-response.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/httpie-request.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/path-parameters.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/request-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/response-body.adoc[]
+include::{snippets}/product-rest-controller/find-by-seller-id/response-fields.adoc[]
+
+

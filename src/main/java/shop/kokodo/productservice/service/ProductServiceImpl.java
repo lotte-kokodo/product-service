@@ -1,27 +1,24 @@
 package shop.kokodo.productservice.service;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import shop.kokodo.productservice.dto.PagingProductDto;
-import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
 
+import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.dto.UserDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
@@ -39,14 +36,24 @@ import java.util.List;
 @Service
 @Slf4j
 @Transactional(readOnly = true)
-@RequiredArgsConstructor
+
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductCustomRepository productCustomRepository;
     private final SellerServiceClient sellerServiceClient;
-    private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
+
+
+    public ProductServiceImpl(ProductRepository productRepository, CategoryRepository categoryRepository,
+                              ProductCustomRepository productCustomRepository, SellerServiceClient sellerServiceClient) {
+        this.productRepository = productRepository;
+        this.categoryRepository = categoryRepository;
+        this.productCustomRepository = productCustomRepository;
+        this.sellerServiceClient = sellerServiceClient;
+    }
+
+    private CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
 
     /* 상품삭제 */
     @Transactional
@@ -127,9 +134,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
-                                   Long sellerId) {
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId);
+    public PagingProductDto findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
+                                   Long sellerId, int page) {
+
+            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId, PageRequest.of(page,10));
     }
 
     @Override
@@ -143,8 +151,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDto> findBySellerId(Long sellerId) {
-
-
         Boolean sellerValid = circuitBreaker.run(()->sellerServiceClient.getSeller(sellerId),throwable -> false);
 
         if(!sellerValid) throw new NoSellerServiceException();

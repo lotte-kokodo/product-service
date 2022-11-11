@@ -18,12 +18,12 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review,Long>{
 
     @Query("select r from Review r where r.product.id = :productId order by r.id desc ")
-    Page<Review> findByProductIdPaging(long productId, Pageable pageable);
+    Page<Review> findByProductIdPaging(@Param("productId") long productId, Pageable pageable);
 
     @Query("select r from Review r where r.product.id = :productId ")
-    List<Review> findByProductId(long productId);
+    List<Review> findByProductId(@Param("productId") long productId);
 
     @Query("select new shop.kokodo.productservice.dto.MypageReviewDto( r.id, r.createdDate , r.product.id, r.content, r.rating, r.memberId, p.displayName, p.thumbnail ) " +
             "from Review r join r.product p where r.memberId = :memberId")
-    public List<MypageReviewDto> findByMemberId(@Param("memberId") long memberId);
+    Page<MypageReviewDto> findByMemberId(@Param("memberId") long memberId, Pageable pageable);
 }

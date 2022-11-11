@@ -1,4 +1,4 @@
-= Product Service
+# 상품 시스템 API 문서
 
 ifndef::snippets[]
 :snippets: ./build/generated-snippets
@@ -11,6 +11,8 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-== Category
-include::{snippets}/category-rest-controller/category-all/curl-request.adoc[]
-include::{snippets}/category-rest-controller/category-all/http-request.adoc[]
+link:category-rest-controller-api.html[]
+
+link:product-rest-controller-api.html[]
+
+link:review-rest-controller-api.html[]
