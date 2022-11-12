@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import shop.kokodo.productservice.entity.Category;
+import shop.kokodo.productservice.entity.DetailFlag;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.repository.CategoryRepository;
@@ -69,6 +70,7 @@ public class ProductRestControllerTest {
                 .thumbnail("맛닭")
                 .sellerId(sellerId)
                 .deliveryFee(1000)
+                .detailFlag(DetailFlag.IMG)
                 .build();
         productDetail1 = ProductDetail.builder()
                 .product(product1)
@@ -421,6 +423,8 @@ public class ProductRestControllerTest {
                                         fieldWithPath("result.data.name").type(JsonFieldType.STRING).description("상품 이름"),
                                         fieldWithPath("result.data.price").type(JsonFieldType.NUMBER).description("상품 가격"),
                                         fieldWithPath("result.data.displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data.detailFlag").type(JsonFieldType.STRING).description("디테일 구분"),
+                                        fieldWithPath("result.data.templateRec").type(JsonFieldType.OBJECT).description("디테일 템플릿").optional(),
                                         fieldWithPath("result.data.stock").type(JsonFieldType.NUMBER).description("상품 재고"),
                                         fieldWithPath("result.data.deadline").type(JsonFieldType.STRING).description("상품 유통기한"),
                                         fieldWithPath("result.data.thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
@@ -460,15 +464,16 @@ public class ProductRestControllerTest {
                                         parameterWithName("page").description("페이지 번호")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("상품 id"),
-                                        fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
-                                        fieldWithPath("[].categoryName").type(JsonFieldType.STRING).description("상품 카테고리 이름"),
-                                        fieldWithPath("[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
-                                        fieldWithPath("[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
-                                        fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
-                                        fieldWithPath("[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
-                                        fieldWithPath("[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                        fieldWithPath("productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("productDtoList[].categoryName").type(JsonFieldType.STRING).description("상품 카테고리 이름"),
+                                        fieldWithPath("productDtoList[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("productDtoList[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("productDtoList[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("productDtoList[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+                                        fieldWithPath("productDtoList[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+                                        fieldWithPath("productDtoList[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비"),
+                                        fieldWithPath("totalCount").type(JsonFieldType.NUMBER).description("total count")
                                 )
                         )
                 );

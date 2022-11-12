@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 public class ProductCustomRepositoryTest {
 
     private final ProductCustomRepository productCustomRepository;

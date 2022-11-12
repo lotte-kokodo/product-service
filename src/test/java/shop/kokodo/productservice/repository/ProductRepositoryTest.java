@@ -24,7 +24,7 @@ import shop.kokodo.productservice.entity.TemplateRec;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 
 @SpringBootTest
-//@Transactional
+@Transactional
 public class ProductRepositoryTest {
 
     @Autowired
@@ -34,7 +34,7 @@ public class ProductRepositoryTest {
     @Autowired
     CategoryRepository categoryRepository;
     @Autowired
-            TemplateRecRepository templateRecRepository;
+    TemplateRecRepository templateRecRepository;
 
     Category category;
     Category category1;
