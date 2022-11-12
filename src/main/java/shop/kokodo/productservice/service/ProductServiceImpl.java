@@ -141,6 +141,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public PagingProductDto findByProductStockLack(long sellerId, int page) {
+        Page<Product> pageProducts = productRepository.findByProductStockLack(sellerId,PageRequest.of(page,10));
+
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        for(Product p : pageProducts){
+            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
+                    p.getName(),p.getPrice(),p.getDisplayName(),
+                    p.getStock(),p.getDeadline(),p.getThumbnail(),
+                    p.getSellerId(),p.getDeliveryFee());
+
+            productDtoList.add(productDto);
+        }
+
+        PagingProductDto pagingProductDto = new PagingProductDto(productDtoList,pageProducts.getTotalElements());
+
+        return pagingProductDto;
+    }
+
+    @Override
     public List<Long> getProductSellerId(List<Long> productId) {
         List<Long> sellerIdList = new ArrayList<>();
         for (Long pId : productId) {

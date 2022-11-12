@@ -198,8 +198,13 @@ public class ProductController {
     /* ==================Feign Client ======================= */
 
     @GetMapping("/detail/{productId}")
-    public Response productDetail(@PathVariable long productId){
+    public Response productDetail(@PathVariable long productId) {
         return Response.success(productService.findProductDetail(productId));
+    }
+
+    @GetMapping("seller/stock/{sellerId}/{page}")
+    public ResponseEntity findByProductStockLack(@PathVariable long sellerId, @PathVariable int page) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findByProductStockLack(sellerId, page-1));
     }
 
     /* seller 상품 조회 Feign Client */
