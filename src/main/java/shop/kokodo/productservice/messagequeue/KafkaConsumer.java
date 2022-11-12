@@ -26,7 +26,7 @@ public class KafkaConsumer {
     }
 
 
-    @KafkaListener(topics = "kokodo.product.de-stock")
+    @KafkaListener(topics = "product-decrease-stock")
     public void decreaseStock(String message) {
         log.info("[KafkaConsumer] consume message: {}", message);
 
