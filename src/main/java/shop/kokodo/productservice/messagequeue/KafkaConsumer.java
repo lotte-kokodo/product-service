@@ -38,7 +38,6 @@ public class KafkaConsumer {
         log.info("[KafkaConsumer] consume message: {}", message);
 
         saveProductHandler.saveProduct(message);
-
     }
 
     @KafkaListener(topics = "product-save-template")
@@ -46,5 +45,12 @@ public class KafkaConsumer {
         log.info("[KafkaConsumer] consume product-save-template message: {}",message);
 
         saveProductHandler.saveProductTemplate(message);
+    }
+
+    @KafkaListener(topics = "product-stock-update")
+    public void updateStock(String message){
+        log.info("[KafkaConsumer] consume product-stock-update: {}",message);
+
+        saveProductHandler.updateStock(message);
     }
 }
