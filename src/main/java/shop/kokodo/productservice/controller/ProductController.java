@@ -215,7 +215,7 @@ public class ProductController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         PagingProductDto pagingProductDto = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
-                ,LocalDateTime.parse(endDate, formatter),sellerId,page);
+                ,LocalDateTime.parse(endDate, formatter),sellerId,page-1);
 
         return ResponseEntity.status(HttpStatus.OK).body(pagingProductDto);
     }
