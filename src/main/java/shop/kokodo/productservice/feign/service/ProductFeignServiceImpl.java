@@ -6,6 +6,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
@@ -52,5 +53,10 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     public Map<Long, ProductThumbnailDto> findProductListById(List<Long> productIdList) {
         List<ProductThumbnailDto> productThumbnailDtoList = productFeignRepository.findByIdIn(productIdList, ProductThumbnailDto.class);
         return productThumbnailDtoList.stream().collect(Collectors.toMap(ProductThumbnailDto::getId, Function.identity()));
+    }
+
+    @Override
+    public Long getSellerOrderProductCount(Long sellerId, List<Long> productIds) {
+        return productFeignRepository.countByIdInAndSellerId(productIds, sellerId);
     }
 }

@@ -18,4 +18,6 @@ public interface ProductFeignService {
 
     Map<Long, ProductThumbnailDto> findProductListById(List<Long> productList);
 
+    Long getSellerOrderProductCount(Long sellerId, List<Long> productIds);
+
 }
