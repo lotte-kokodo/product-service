@@ -24,7 +24,7 @@ import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
@@ -242,7 +242,7 @@ public class ProductController {
     @GetMapping("/orderSheet")
     public Response getOrderProducts(@RequestParam List<Long> productIds) {
 
-        Map<Long, ProductOfOrder> orderProductMap = productService.getOrderProducts(productIds);
+        Map<Long, ProductThumbnailDto> orderProductMap = productService.getOrderProducts(productIds);
         return Response.success(orderProductMap);
     }
 }

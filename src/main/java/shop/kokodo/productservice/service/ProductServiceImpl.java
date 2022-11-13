@@ -19,12 +19,13 @@ import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductOfOrder;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
@@ -213,9 +214,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds) {
-        List<ProductOfOrder> productOfOrders = productRepository.findByIdIn(productIds, ProductOfOrder.class);
+    public Map<Long, ProductThumbnailDto> getOrderProducts(List<Long> productIds) {
+        List<ProductThumbnailDto> productOfOrders = productRepository.findByIdIn(productIds, ProductThumbnailDto.class);
         return productOfOrders.stream()
-            .collect(Collectors.toMap(ProductOfOrder::getId, Function.identity()));
+            .collect(Collectors.toMap(ProductThumbnailDto::getId, Function.identity()));
     }
 }
