@@ -6,10 +6,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.dto.ProductOfOrder;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 
@@ -46,5 +46,5 @@ public interface ProductService {
     public List<ProductDto> findBySellerId(Long sellerId);
     Optional<Product> findProductOpById(Long productId);
 
-    public Map<Long, ProductThumbnailDto> getOrderProducts(List<Long> productIds);
+    public Map<Long, OrderSheetProductDto> getOrderProducts(List<Long> productIds);
 }

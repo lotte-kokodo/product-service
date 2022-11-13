@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
-import shop.kokodo.productservice.feign.response.ProductOfCartDto;
+import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
 import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
@@ -38,8 +38,8 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     }
 
     @Override
-    public List<ProductOfCartDto> getOrderProducts(List<Long> productIds) {
-        return productFeignRepository.findByIdIn(productIds, ProductOfCartDto.class);
+    public List<CartProductDto> getOrderProducts(List<Long> productIds) {
+        return productFeignRepository.findByIdIn(productIds, CartProductDto.class);
     }
 
     @Override

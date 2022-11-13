@@ -1,6 +1,6 @@
 package shop.kokodo.productservice.feign.response;
 
-public interface ProductOfCartDto {
+public interface CartProductDto {
     Long getId();
     String getThumbnail();
     String getName();

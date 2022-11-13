@@ -15,11 +15,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
 
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.dto.ProductOfOrder;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
@@ -214,9 +214,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Map<Long, ProductThumbnailDto> getOrderProducts(List<Long> productIds) {
-        List<ProductThumbnailDto> productOfOrders = productRepository.findByIdIn(productIds, ProductThumbnailDto.class);
-        return productOfOrders.stream()
-            .collect(Collectors.toMap(ProductThumbnailDto::getId, Function.identity()));
+    public Map<Long, OrderSheetProductDto> getOrderProducts(List<Long> productIds) {
+        List<OrderSheetProductDto> orderSheetProducts = productRepository.findByIdIn(productIds, OrderSheetProductDto.class);
+        return orderSheetProducts.stream()
+            .collect(Collectors.toMap(OrderSheetProductDto::getId, Function.identity()));
     }
 }

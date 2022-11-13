@@ -11,9 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
-import shop.kokodo.productservice.feign.response.ProductOfCartDto;
+import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
 import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
@@ -46,11 +45,11 @@ public class ProductFeignController {
 
     // [주문관련 상품 조회] 장바구니 상품 조회
     @GetMapping("/cart")
-    public ResponseEntity<Map<Long, ProductOfCartDto>> getOrderProducts(@RequestParam List<Long> productIds) {
+    public ResponseEntity<Map<Long, CartProductDto>> getOrderProducts(@RequestParam List<Long> productIds) {
 
-        List<ProductOfCartDto> productOfOrders = productFeignService.getOrderProducts(productIds);
-        Map<Long, ProductOfCartDto> productOfCartDtoMap = productOfOrders.stream()
-            .collect(Collectors.toMap(ProductOfCartDto::getId, Function.identity()));
+        List<CartProductDto> productOfOrders = productFeignService.getOrderProducts(productIds);
+        Map<Long, CartProductDto> productOfCartDtoMap = productOfOrders.stream()
+            .collect(Collectors.toMap(CartProductDto::getId, Function.identity()));
         return ResponseEntity.ok(productOfCartDtoMap);
     }
 
