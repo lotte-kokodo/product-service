@@ -5,4 +5,5 @@ public interface OrderSheetProductDto {
     String getThumbnail();
     String getName();
     Integer getPrice();
+    Long sellerId();
 }
