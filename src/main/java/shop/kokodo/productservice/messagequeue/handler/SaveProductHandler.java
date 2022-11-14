@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.RequestReview;
 import shop.kokodo.productservice.dto.TemplateDto;
 import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.entity.*;
@@ -69,6 +70,21 @@ public class SaveProductHandler{
 
         productService.saveProductTemplate(productDetailTemplateDto);
 
+    }
+
+    public void updateStock(String message) {
+        log.info("Kafka update product Stock : " + message);
+        RequestReview requestReview = new RequestReview();
+
+        try{
+            requestReview = objectMapper.readValue(message, new TypeReference<RequestReview>() {});
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+
+        Product product = productRepository.findById(requestReview.getId()).get();
+        product.setStock(requestReview.getStock());
+        productRepository.save(product);
     }
 
     private final TemplateRec convertToTemplateRec(TemplateDto templateDto){

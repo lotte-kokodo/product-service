@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.PathVariable;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
@@ -39,8 +40,11 @@ public interface ProductService {
 
     /* Feign Client*/
     public ProductAndProductDetailDto findProductDetail(long productId);
+
     PagingProductDto findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime
     , Long sellerId, int page);
+
+    PagingProductDto findByProductStockLack(long sellerId, int page);
 
 
     public List<Long> getProductSellerId(List<Long> productId);

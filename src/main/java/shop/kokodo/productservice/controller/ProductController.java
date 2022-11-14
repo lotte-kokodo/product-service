@@ -205,6 +205,11 @@ public class ProductController {
         return Response.success(pr);
     }
 
+    @GetMapping("seller/stock/{sellerId}/{page}")
+    public ResponseEntity findByProductStockLack(@PathVariable long sellerId, @PathVariable int page) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findByProductStockLack(sellerId, page-1));
+    }
+
     /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
@@ -213,7 +218,7 @@ public class ProductController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         PagingProductDto pagingProductDto = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
-                ,LocalDateTime.parse(endDate, formatter),sellerId,page);
+                ,LocalDateTime.parse(endDate, formatter),sellerId,page-1);
 
         return ResponseEntity.status(HttpStatus.OK).body(pagingProductDto);
     }
