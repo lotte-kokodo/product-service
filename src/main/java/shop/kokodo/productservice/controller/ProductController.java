@@ -228,8 +228,11 @@ public class ProductController {
 
     @GetMapping("/seller/{sellerId}")
     public Response findBySellerId(@PathVariable long sellerId){
+        System.out.println("ProductController.findBySellerId");
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
+
+        System.out.println(productList.toString());
 
         return  Response.success(productList);
     }
