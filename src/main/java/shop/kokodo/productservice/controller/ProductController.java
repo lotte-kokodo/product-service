@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.PagingProductDto;
+import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
@@ -198,8 +199,10 @@ public class ProductController {
     /* ==================Feign Client ======================= */
 
     @GetMapping("/detail/{productId}")
-    public Response productDetail(@PathVariable long productId) {
-        return Response.success(productService.findProductDetail(productId));
+    public Response productDetail(@PathVariable long productId){
+        ProductAndProductDetailDto pr = productService.findProductDetail(productId);
+        System.out.println(pr.toString());
+        return Response.success(pr);
     }
 
     @GetMapping("seller/stock/{sellerId}/{page}")
@@ -230,8 +233,11 @@ public class ProductController {
 
     @GetMapping("/seller/{sellerId}")
     public Response findBySellerId(@PathVariable long sellerId){
+        System.out.println("ProductController.findBySellerId");
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
+
+        System.out.println(productList.toString());
 
         return  Response.success(productList);
     }

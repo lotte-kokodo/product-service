@@ -31,7 +31,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final CircuitBreaker circuitBreaker = AllCircuitBreaker.createSellerCircuitBreaker();
 
     @Override
-    public List<ReviewResponseDto> findByProductId(long productId, int page) {
+    public PagingReviewDto findByProductId(long productId, int page) {
 
         productRepository.findById(productId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품"));
@@ -44,7 +44,12 @@ public class ReviewServiceImpl implements ReviewService{
             reviewResponseDtoList.add(convertToReviewResponse(review));
         }
 
-        return reviewResponseDtoList;
+        PagingReviewDto pagingReviewDto = PagingReviewDto.builder()
+                .reviewResponseDtoList(reviewResponseDtoList)
+                .totalCount(reviewList.getTotalElements())
+                .build();
+
+        return pagingReviewDto;
     }
 
     @Transactional

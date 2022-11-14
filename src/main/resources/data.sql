@@ -2564,3 +2564,28 @@ INSERT INTO product_detail(product_id, orders, image, created_date, last_modifie
 INSERT INTO product_detail(product_id, orders, image, created_date, last_modified_date) VALUES (236, 8, 'https://file.rankingdak.com/store/snt/item/d1_snt3163248m/d1_snt3163248m_05.jpg', '2022-10-31 11:27:44.803486', '2022-10-31 11:27:44.803486');
 INSERT INTO product_detail(product_id, orders, image, created_date, last_modified_date) VALUES (236, 9, 'https://file.rankingdak.com/store/snt/item/d1_snt3163248m/d1_snt3163248m_06.jpg', '2022-10-31 11:27:44.803494', '2022-10-31 11:27:44.803494');
 INSERT INTO product_detail(product_id, orders, image, created_date, last_modified_date) VALUES (236, 10, 'https://file.rankingdak.com/store/snt/item/d1_snt3163248m/d1_snt3163248m_07.jpg', '2022-10-31 11:27:44.803502', '2022-10-31 11:27:44.803502');
+
+insert into review(content, member_id, rating, product_id) values("여라기지 맛이 있어서 질리지 않게 먹을 수 있어요!!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("전에 구매했던 닭가슴살 다 먹어서 이번에도 냉동실칸을 가득 채울만큼 새로운 걸로 다양하게 시켜봤습니다~! 신랑이랑 다이어트 때문에 항상 식사대용으로 먹고 있어요~!! 많이 시켜서 든든하네요! 믿고 먹는 랭킹닭컴 빠른 배송 감사드려요~! 다먹으면 재구매할께요!!", 2,4.5,1);
+insert into review(content, member_id, rating, product_id) values("당일 배송으로 잘 받았습니다.다양한 방법으로 먹어볼까 합니다.", 1,4.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 다른브랜드도 먹어 봐도 이거 또 찾게되네요 간편하고 맛있어요^^", 1,4.5,1);
+insert into review(content, member_id, rating, product_id) values("신랑이 운동 시작하면서 닭가슴살 먹는데 이것저것 다 먹어보더니 랭킹닷컴이 제일 맛있대요~다 먹어갈때쯤 재주문하러 올께요~", 2,3.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 3,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 3,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+insert into review(content, member_id, rating, product_id) values("닭가슴살 스테이크는 처음 주문해 먹어 보는데 생각 보다 괜찮네요... 먹기도 편하고 맛도 있고.자주 주문할 예정!", 1,5.0,1);
+
+update product set detail_flag='IMG';

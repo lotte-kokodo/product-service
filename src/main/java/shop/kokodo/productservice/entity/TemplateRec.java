@@ -1,5 +1,6 @@
 package shop.kokodo.productservice.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,6 +16,10 @@ public class TemplateRec extends BaseEntity{
     @Column(name = "template_rec_id")
     private long id;
 
+    @OneToOne
+    @JoinColumn(name = "product_id")
+    @JsonIgnore
+    private Product product;
     @Column( nullable = false )
     private String imageOne;
     @Column( nullable = false )
@@ -38,6 +43,11 @@ public class TemplateRec extends BaseEntity{
     private String writingName;
     @Column( nullable = false )
     private String writingDescription;
+
+    public void changeProduct(Product product){
+        this.product=product;
+        product.setTemplateRec(this);
+    }
 
     @Builder
     public TemplateRec(long id, String imageOne, String imageTwo, String imageThree, String imageFour, String imageFive,

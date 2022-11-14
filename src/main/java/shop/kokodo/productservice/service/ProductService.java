@@ -9,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.PathVariable;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
+import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
 
@@ -50,4 +52,7 @@ public interface ProductService {
     Optional<Product> findProductOpById(Long productId);
 
     public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds);
+
+    public void saveProductDetail(ProductAndDetailDto productAndDetailDto);
+    public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto);
 }
