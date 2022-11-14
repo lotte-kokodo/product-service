@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreaker;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -88,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
 
     /* ===메인화면=== */
     /* 신상품 */
+    @Cacheable(value="new-product",cacheManager = "cacheManager")
     @Override
     public Page<Product> findProductByNew(int page) {
         LocalDate now = LocalDate.now();

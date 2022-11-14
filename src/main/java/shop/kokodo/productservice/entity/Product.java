@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Product extends BaseEntity {
+public class Product extends BaseEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

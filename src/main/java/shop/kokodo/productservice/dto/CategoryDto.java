@@ -2,9 +2,11 @@ package shop.kokodo.productservice.dto;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor
-public class CategoryDto {
+public class CategoryDto implements Serializable{
 
     long id;
     String name;
