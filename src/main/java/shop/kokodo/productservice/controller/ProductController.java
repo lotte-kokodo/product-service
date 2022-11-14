@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
+import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
@@ -200,7 +201,14 @@ public class ProductController {
 
     @GetMapping("/detail/{productId}")
     public Response productDetail(@PathVariable long productId){
-        return Response.success(productService.findProductDetail(productId));
+        ProductAndProductDetailDto pr = productService.findProductDetail(productId);
+        System.out.println(pr.toString());
+        return Response.success(pr);
+    }
+
+    @GetMapping("seller/stock/{sellerId}/{page}")
+    public ResponseEntity findByProductStockLack(@PathVariable long sellerId, @PathVariable int page) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findByProductStockLack(sellerId, page-1));
     }
 
     /* seller 상품 조회 Feign Client */
@@ -211,7 +219,7 @@ public class ProductController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         PagingProductDto pagingProductDto = productService.findBy(productName,status, LocalDateTime.parse(startDate, formatter)
-                ,LocalDateTime.parse(endDate, formatter),sellerId,page);
+                ,LocalDateTime.parse(endDate, formatter),sellerId,page-1);
 
         return ResponseEntity.status(HttpStatus.OK).body(pagingProductDto);
     }
@@ -226,8 +234,11 @@ public class ProductController {
 
     @GetMapping("/seller/{sellerId}")
     public Response findBySellerId(@PathVariable long sellerId){
+        System.out.println("ProductController.findBySellerId");
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
+
+        System.out.println(productList.toString());
 
         return  Response.success(productList);
     }

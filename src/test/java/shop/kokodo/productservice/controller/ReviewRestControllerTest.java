@@ -104,7 +104,7 @@ public class ReviewRestControllerTest {
         reviewRepository.save(review2);
 
         this.mockMvc.perform(get("/review/{productId}",product.getId())
-                        .param("page","0")
+                        .param("page","1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -117,13 +117,14 @@ public class ReviewRestControllerTest {
                                 fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
                                 fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
                                 fieldWithPath("result").description("응답데이터"),
-                                fieldWithPath("result.data[]").type(JsonFieldType.ARRAY).description("리뷰 리스트"),
-                                fieldWithPath("result.data[].createdDate").type(JsonFieldType.STRING).description("리뷰 생성 날짜").optional(),
-                                fieldWithPath("result.data[].lastModifiedDate").type(JsonFieldType.STRING).description("리뷰 마지막 수정 날짜").optional(),
-                                fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("리뷰 id"),
-                                fieldWithPath("result.data[].content").type(JsonFieldType.STRING).description("리뷰 내용"),
-                                fieldWithPath("result.data[].rating").type(JsonFieldType.NUMBER).description("리뷰 평점"),
-                                fieldWithPath("result.data[].memberName").type(JsonFieldType.STRING).description("리뷰 멤버 닉네임").optional()
+                                fieldWithPath("result.data.totalCount").type(JsonFieldType.NUMBER).description("리뷰 total count"),
+                                fieldWithPath("result.data.reviewResponseDtoList[]").type(JsonFieldType.ARRAY).description("리뷰 리스트"),
+                                fieldWithPath("result.data.reviewResponseDtoList[].createdDate").type(JsonFieldType.STRING).description("리뷰 생성 날짜").optional(),
+                                fieldWithPath("result.data.reviewResponseDtoList[].lastModifiedDate").type(JsonFieldType.STRING).description("리뷰 마지막 수정 날짜").optional(),
+                                fieldWithPath("result.data.reviewResponseDtoList[].id").type(JsonFieldType.NUMBER).description("리뷰 id"),
+                                fieldWithPath("result.data.reviewResponseDtoList[].content").type(JsonFieldType.STRING).description("리뷰 내용"),
+                                fieldWithPath("result.data.reviewResponseDtoList[].rating").type(JsonFieldType.NUMBER).description("리뷰 평점"),
+                                fieldWithPath("result.data.reviewResponseDtoList[].memberName").type(JsonFieldType.STRING).description("리뷰 멤버 닉네임").optional()
                         )
                 )
                 );

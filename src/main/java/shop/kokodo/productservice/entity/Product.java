@@ -21,7 +21,6 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Product extends BaseEntity {
 
     @Id

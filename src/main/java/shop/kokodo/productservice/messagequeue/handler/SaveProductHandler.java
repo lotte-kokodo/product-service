@@ -12,11 +12,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.RequestReview;
 import shop.kokodo.productservice.dto.TemplateDto;
 import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.entity.*;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
+import shop.kokodo.productservice.service.ProductService;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -27,14 +29,17 @@ import java.util.*;
 @Transactional
 public class SaveProductHandler{
     private final ProductRepository productRepository;
+    private final ProductService productService;
     private final CategoryRepository categoryRepository;
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public SaveProductHandler(ProductRepository productRepository, CategoryRepository categoryRepository, ObjectMapper objectMapper) {
+    public SaveProductHandler(ProductRepository productRepository, CategoryRepository categoryRepository,
+                              ObjectMapper objectMapper, ProductService productService) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
         this.objectMapper = objectMapper;
+        this.productService = productService;
     }
 
 
@@ -43,16 +48,12 @@ public class SaveProductHandler{
         ProductAndDetailDto productAndDetailDto = new ProductAndDetailDto();
         try{
             productAndDetailDto = objectMapper.readValue(message, new TypeReference<ProductAndDetailDto>() {});
-
         } catch (JsonProcessingException ex) {
             ex.printStackTrace();
         }
 
-        Product product = convertToProduct(productAndDetailDto);
 
-        product.changeProductDetail(convertToProductDetail(productAndDetailDto.getDetails()));
-
-        productRepository.save(product);
+        productService.saveProductDetail(productAndDetailDto);
 
     }
 
@@ -66,12 +67,24 @@ public class SaveProductHandler{
             ex.printStackTrace();
         }
 
-        Product product = convertToProductTemplate(productDetailTemplateDto);
 
-        product.changeTemplateRec(convertToTemplateRec(productDetailTemplateDto.getTemplateDto()));
+        productService.saveProductTemplate(productDetailTemplateDto);
 
+    }
+
+    public void updateStock(String message) {
+        log.info("Kafka update product Stock : " + message);
+        RequestReview requestReview = new RequestReview();
+
+        try{
+            requestReview = objectMapper.readValue(message, new TypeReference<RequestReview>() {});
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        }
+
+        Product product = productRepository.findById(requestReview.getId()).get();
+        product.setStock(requestReview.getStock());
         productRepository.save(product);
-
     }
 
     private final TemplateRec convertToTemplateRec(TemplateDto templateDto){
@@ -122,20 +135,7 @@ public class SaveProductHandler{
         return tmpList;
     }
 
-    private Product convertToProduct(ProductAndDetailDto productAndDetailDto){
-        return Product.builder()
-                .category(categoryRepository.findById(productAndDetailDto.getCategoryId()).get())
-                .name(productAndDetailDto.getName())
-                .price(productAndDetailDto.getPrice())
-                .displayName(productAndDetailDto.getDisplayName())
-                .stock(productAndDetailDto.getStock())
-                .deadline(productAndDetailDto.getDeadline())
-                .thumbnail(productAndDetailDto.getThumbnail())
-                .sellerId(productAndDetailDto.getSellerId())
-                .deliveryFee(productAndDetailDto.getDeliveryFee())
-                .detailFlag(DetailFlag.IMG)
-                .build();
-    }
+
 
     public LocalDateTime formatDate(String @NotNull [] strs) {
         String str = strs[0] + "-"

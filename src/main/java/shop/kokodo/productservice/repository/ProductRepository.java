@@ -46,6 +46,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p.sellerId from Product p where p.id = :pId")
     Long findSellerIdByProductId(Long pId);
 
+    @Query("select p from Product p where p.stock < 10 and p.sellerId = :sellerId")
+    Page<Product> findByProductStockLack(@Param("sellerId") long sellerId, Pageable pageable);
+
     List<Product> findBySellerId(Long sellerId);
 
     /**
