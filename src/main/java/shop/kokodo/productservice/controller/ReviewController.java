@@ -26,7 +26,7 @@ public class ReviewController {
 
     @GetMapping("/{productId}")
     public Response findByProductId(@PathVariable long productId, @RequestParam("page") int page){
-        return Response.success(reviewService.findByProductId(productId,page));
+        return Response.success(reviewService.findByProductId(productId,page-1));
     }
 
     @PostMapping

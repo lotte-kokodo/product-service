@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.circuitbreaker.AllCircuitBreaker;
 
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailDto;
@@ -23,9 +24,13 @@ import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.entity.ProductDetail;
+import shop.kokodo.productservice.dto.*;
+import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
+import shop.kokodo.productservice.entity.*;
+
 import shop.kokodo.productservice.exception.NoSellerServiceException;
 import shop.kokodo.productservice.feign.SellerServiceClient;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductCustomRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
@@ -199,6 +204,7 @@ public class ProductServiceImpl implements ProductService {
                 .thumbnail(product.getThumbnail())
                 .sellerId(product.getSellerId())
                 .deliveryFee(product.getDeliveryFee())
+                .detailFlag(product.getDetailFlag().toString())
                 .build();
     }
 
@@ -235,9 +241,85 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds) {
-        List<ProductOfOrder> productOfOrders = productRepository.findByIdIn(productIds, ProductOfOrder.class);
-        return productOfOrders.stream()
-            .collect(Collectors.toMap(ProductOfOrder::getId, Function.identity()));
+    public Map<Long, OrderSheetProductDto> getOrderProducts(List<Long> productIds) {
+        List<OrderSheetProductDto> orderSheetProducts = productRepository.findByIdIn(productIds, OrderSheetProductDto.class);
+        return orderSheetProducts.stream()
+            .collect(Collectors.toMap(OrderSheetProductDto::getId, Function.identity()));
+    }
+
+    @Override
+    public void saveProductDetail(ProductAndDetailDto productAndDetailDto) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+
+        Product product = convertToProduct(productAndDetailDto);
+        for(int i=1;i<=productAndDetailDto.getDetails().size();++i){
+            ProductDetail pd = ProductDetail.builder()
+                            .image(productAndDetailDto.getDetails().get(i-1))
+                            .orders(i)
+                    .build();
+
+            pd.changeProduct(product);
+        }
+        product.setDetailFlag(DetailFlag.IMG);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto) {
+        List<ProductDetail> productDetails = new ArrayList<>();
+
+        Product product = convertToProductTemplate(productDetailTemplateDto);
+        TemplateRec templateRec = convertToTemplateRec(productDetailTemplateDto.getTemplateDto());
+
+        templateRec.changeProduct(product);
+        product.setDetailFlag(DetailFlag.TEMPLATE);
+
+        productRepository.save(product);
+    }
+
+    private final TemplateRec convertToTemplateRec(TemplateDto templateDto){
+        return TemplateRec.builder()
+                .imageOne(templateDto.getImageOne())
+                .imageTwo(templateDto.getImageTwo())
+                .imageThree(templateDto.getImageThree())
+                .imageFour(templateDto.getImageFour())
+                .imageFive(templateDto.getImageFive())
+                .writingTitle(templateDto.getWritingTitle())
+                .writingTitleDetail(templateDto.getWritingTitleDetail())
+                .writingHighlightOne(templateDto.getWritingHighlightOne())
+                .writingHighlightTwo(templateDto.getWritingHighlightTwo())
+                .writingName(templateDto.getWritingName())
+                .writingDescription(templateDto.getWritingDescription())
+                .build();
+    }
+
+    private final Product convertToProductTemplate(ProductDetailTemplateDto productDetailTemplateDto){
+        return Product.builder()
+                .category(categoryRepository.findById(productDetailTemplateDto.getCategoryId()).get())
+                .name(productDetailTemplateDto.getName())
+                .price(productDetailTemplateDto.getPrice())
+                .displayName(productDetailTemplateDto.getDisplayName())
+                .stock(productDetailTemplateDto.getStock())
+                .deadline(productDetailTemplateDto.getDeadline())
+                .thumbnail(productDetailTemplateDto.getThumbnail())
+                .sellerId(productDetailTemplateDto.getSellerId())
+                .deliveryFee(productDetailTemplateDto.getDeliveryFee())
+                .detailFlag(DetailFlag.TEMPLATE)
+                .build();
+    }
+
+    private Product convertToProduct(ProductAndDetailDto productAndDetailDto){
+        return Product.builder()
+                .category(categoryRepository.findById(productAndDetailDto.getCategoryId()).get())
+                .name(productAndDetailDto.getName())
+                .price(productAndDetailDto.getPrice())
+                .displayName(productAndDetailDto.getDisplayName())
+                .stock(productAndDetailDto.getStock())
+                .deadline(productAndDetailDto.getDeadline())
+                .thumbnail(productAndDetailDto.getThumbnail())
+                .sellerId(productAndDetailDto.getSellerId())
+                .deliveryFee(productAndDetailDto.getDeliveryFee())
+                .detailFlag(DetailFlag.IMG)
+                .build();
     }
 }

@@ -2,20 +2,23 @@ package shop.kokodo.productservice.feign.service.interfaces;
 
 import java.util.List;
 import java.util.Map;
-import shop.kokodo.productservice.dto.ProductDto;
-import shop.kokodo.productservice.feign.response.FeignResponse;
-import shop.kokodo.productservice.feign.response.FeignResponse.Price;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.OrderProductDto;
+import shop.kokodo.productservice.feign.response.CartProductDto;
+import shop.kokodo.productservice.feign.response.ProductStockDto;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 
 public interface ProductFeignService {
 
-    FeignResponse.Price getProductPrice(Long productId);
-    Map<Long, Integer> getProductsPrice(List<Long> productId);
+    OrderProductDto getSingleOrderProduct(Long productId);
+    Map<Long, OrderProductDto> getCartOrderProducts(List<Long> productId);
 
-    List<ProductOfOrder> getOrderProducts(List<Long> productIds);
+    List<CartProductDto> getOrderProducts(List<Long> productIds);
 
-    FeignResponse.Stock getProductStock(Long productId);
+    ProductStockDto getProductStock(Long productId);
 
-    List<ProductDto> findProductListById(List<Long> productList);
+    Map<Long, ProductThumbnailDto> findProductListById(List<Long> productList);
 
+    Long getSellerOrderProductCount(Long sellerId, List<Long> productIds);
+
+    List<Long> getSellerProductIds(Long sellerId);
 }
