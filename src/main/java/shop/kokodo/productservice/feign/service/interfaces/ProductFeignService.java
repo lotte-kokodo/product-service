@@ -20,4 +20,5 @@ public interface ProductFeignService {
 
     Long getSellerOrderProductCount(Long sellerId, List<Long> productIds);
 
+    List<Long> getSellerProductIds(Long sellerId);
 }

@@ -59,4 +59,10 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     public Long getSellerOrderProductCount(Long sellerId, List<Long> productIds) {
         return productFeignRepository.countByIdInAndSellerId(productIds, sellerId);
     }
+
+    @Override
+    public List<Long> getSellerProductIds(Long sellerId) {
+        List<Product> products = productFeignRepository.findAllBySellerId(sellerId);
+        return products.stream().map(Product::getId).collect(Collectors.toList());
+    }
 }

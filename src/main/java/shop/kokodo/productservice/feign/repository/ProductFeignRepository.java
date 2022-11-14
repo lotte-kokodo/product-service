@@ -20,4 +20,6 @@ public interface ProductFeignRepository extends CrudRepository<Product, Long> {
     List<Product> findProductListById(@Param("productIdList") List<Long> productIdList);
 
     Long countByIdInAndSellerId(List<Long> productIds, Long sellerId);
+
+    List<Product> findAllBySellerId(Long sellerId);
 }

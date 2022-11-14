@@ -71,4 +71,10 @@ public class ProductFeignController {
         Long todayOrderCount = productFeignService.getSellerOrderProductCount(sellerId, productIds);
         return ResponseEntity.ok(todayOrderCount);
     }
+
+    @GetMapping("/seller/{sellerId}/productId")
+    public ResponseEntity<List<Long>> getSellerProductIds(@PathVariable Long sellerId) {
+        List<Long> productIds = productFeignService.getSellerProductIds(sellerId);
+        return ResponseEntity.ok(productIds);
+    }
 }
