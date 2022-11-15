@@ -240,18 +240,15 @@ public class ProductController {
     }
 
     @GetMapping("/seller")
-    public Response findBySellerId(@RequestHeader long sellerId){
-        System.out.println("ProductController.findBySellerId");
+    public Response findBySellerId(@RequestHeader long sellerId ){
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
-
-        System.out.println(productList.toString());
 
         return  Response.success(productList);
     }
 
     @GetMapping("/feign/id")
-    public ResponseEntity findProductById(@RequestParam Long productId){
+    public ResponseEntity findProductById(@RequestHeader Long productId){
         boolean flag = productService.findProductOpById(productId).isPresent()? true: false;
 
         return ResponseEntity.status(HttpStatus.OK).body(flag);
