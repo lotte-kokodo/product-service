@@ -15,12 +15,19 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
@@ -200,6 +207,12 @@ public class ProductController {
         return Response.success(pr);
     }
 
+    @GetMapping("/detail/name")
+    public Response productDetailName(@RequestParam String productName) {
+        List<ProductDto> pr = productService.findProductDetailByName(productName);
+        return Response.success(pr);
+    }
+
     @GetMapping("seller/stock/{sellerId}/{page}")
     public ResponseEntity findByProductStockLack(@PathVariable long sellerId, @PathVariable int page) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByProductStockLack(sellerId, page-1));
@@ -245,10 +258,10 @@ public class ProductController {
     }
 
     // [주문관련 상품 조회] 주문서 상품 조회
-    @GetMapping("/orderSheet")
+    @GetMapping("/ordersheet")
     public Response getOrderProducts(@RequestParam List<Long> productIds) {
 
-        Map<Long, ProductOfOrder> orderProductMap = productService.getOrderProducts(productIds);
+        Map<Long, OrderSheetProductDto> orderProductMap = productService.getOrderProducts(productIds);
         return Response.success(orderProductMap);
     }
 }
