@@ -1,0 +1,18 @@
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:9001/eureka
+
+spring:
+  application:
+    name: product-service
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+kafka:
+  address: 127.0.0.1:9092
