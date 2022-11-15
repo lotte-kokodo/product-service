@@ -436,11 +436,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left">
 <div id="header">
 <h1>Review-Rest-Controller-Api</h1>
 <div class="details">
 <span id="revnumber">version 0.0.1-SNAPSHOT</span>
+</div>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#Review-Rest-Controller-API">find-review</a></li>
+<li><a href="#_save">save</a></li>
+<li><a href="#_get_total_rate">get-total-rate</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
@@ -449,14 +457,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/3?page=0' -i -X GET \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/3?page=1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/3?page=0 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/3?page=1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -469,14 +477,14 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 175
+Content-Length: 224
 
-{"success":true,"code":200,"result":{"data":[{"id":0,"content":"리뷰2","rating":4.5,"memberName":"kokodo"},{"id":0,"content":"리뷰1","rating":5.0,"memberName":"kokodo"}]}}</code></pre>
+{"success":true,"code":200,"result":{"data":{"reviewResponseDtoList":[{"id":0,"content":"리뷰2","rating":4.5,"memberName":"2526121943"},{"id":0,"content":"리뷰1","rating":5.0,"memberName":"2526121943"}],"totalCount":2}}}</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/review/3?page=0' \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/review/3?page=1' \
     'Content-Type:application/json;charset=UTF-8' \
     'Accept:application/json'</code></pre>
 </div>
@@ -507,7 +515,7 @@ Content-Length: 175
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code>{"success":true,"code":200,"result":{"data":[{"id":0,"content":"리뷰2","rating":4.5,"memberName":"kokodo"},{"id":0,"content":"리뷰1","rating":5.0,"memberName":"kokodo"}]}}</code></pre>
+<pre class="highlight nowrap"><code>{"success":true,"code":200,"result":{"data":{"reviewResponseDtoList":[{"id":0,"content":"리뷰2","rating":4.5,"memberName":"2526121943"},{"id":0,"content":"리뷰1","rating":5.0,"memberName":"2526121943"}],"totalCount":2}}}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -540,37 +548,42 @@ Content-Length: 175
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답데이터</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.totalCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 total count</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 리스트</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].createdDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 생성 날짜</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].lastModifiedDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].lastModifiedDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 마지막 수정 날짜</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].rating</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].rating</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 평점</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].memberName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data.reviewResponseDtoList[].memberName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 멤버 닉네임</p></td>
 </tr>
@@ -685,14 +698,14 @@ Content-Length: 114
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/member/1' -i -X GET \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/review/member/1/1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/member/1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /review/member/1/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -705,20 +718,20 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 281
+Content-Length: 320
 
-[{"id":8,"createdDate":"2022-11-09","productId":4,"content":"리뷰1","rating":5.0,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"},{"id":9,"createdDate":"2022-11-09","productId":4,"content":"리뷰2","rating":4.5,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"}]</code></pre>
+{"mypageReviewDtoList":[{"id":8,"createdDate":"2022-11-15","productId":4,"content":"리뷰1","rating":5.0,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"},{"id":9,"createdDate":"2022-11-15","productId":4,"content":"리뷰2","rating":4.5,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"}],"totalCount":2}</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/review/member/1' \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/review/member/1/1' \
     'Content-Type:application/json;charset=UTF-8' \
     'Accept:application/json'</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 2. /review/member/{memberId}</caption>
+<caption class="title">Table 2. /review/member/{memberId}/{currentpage}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -734,6 +747,10 @@ Content-Length: 281
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">멤버 id</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>currentpage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지</p></td>
+</tr>
 </tbody>
 </table>
 <div class="listingblock">
@@ -743,7 +760,7 @@ Content-Length: 281
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code>[{"id":8,"createdDate":"2022-11-09","productId":4,"content":"리뷰1","rating":5.0,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"},{"id":9,"createdDate":"2022-11-09","productId":4,"content":"리뷰2","rating":4.5,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"}]</code></pre>
+<pre class="highlight nowrap"><code>{"mypageReviewDtoList":[{"id":8,"createdDate":"2022-11-15","productId":4,"content":"리뷰1","rating":5.0,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"},{"id":9,"createdDate":"2022-11-15","productId":4,"content":"리뷰2","rating":4.5,"memberId":1,"displayName":"맛닭","thumbnail":"맛닭"}],"totalCount":2}</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -761,44 +778,54 @@ Content-Length: 281
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">성공여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].createdDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 생성 날짜</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].productId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].productId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">성공여부</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 상품 Id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].content</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태코드</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 내용</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].rating</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].rating</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상품 당 총 평점</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 별점</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].memberId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].memberId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 총 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 고객 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].displayName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].thumbnail</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 총 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 쓴 상품 사진</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].thumbnail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].displayName</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 총 개수</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 쓴 상품명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mypageReviewDtoList[].thumbnail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">리뷰 쓴 사진</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>totalCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">총 상품 수</p></td>
 </tr>
 </tbody>
 </table>
@@ -808,7 +835,7 @@ Content-Length: 281
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-11-09 15:52:15 +0900
+Last updated 2022-11-10 15:59:25 +0900
 </div>
 </div>
 </body>
