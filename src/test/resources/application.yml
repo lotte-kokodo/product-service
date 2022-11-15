@@ -13,6 +13,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+  redis:
+    host:
+    port: 6379
+    timeout: 6
 
 kafka:
   address: 127.0.0.1:9092
