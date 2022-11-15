@@ -1,0 +1,57 @@
+server:
+  port: 0 # Eureka 로부터 자동 포트 부여
+
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://eureka-service:9001/eureka
+
+spring:
+  application:
+    name: product-service
+  zipkin:
+    base-url: http://zipkin:9411
+    enabled: true
+  sleuth:
+      sampler:
+        probability: 1.0
+  datasource:
+    driver-class-name:
+    url:
+    slave-list:
+      - name: slave-1
+        url:
+      - name: slave-2
+        url:
+    username:
+    password:
+
+  redis:
+    host:
+    port: 6379
+    timeout: 6
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, busresfresh, beans
+
+#gateway:
+#  ip: 172.18.0.254
+
+kafka:
+  address:
