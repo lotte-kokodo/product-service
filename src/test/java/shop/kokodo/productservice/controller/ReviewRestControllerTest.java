@@ -173,24 +173,27 @@ public class ReviewRestControllerTest {
         reviewRepository.save(review1);
         reviewRepository.save(review2);
 
-        this.mockMvc.perform(get("/review/member/{memberId}",memberId)
+        this.mockMvc.perform(get("/review/member/{memberId}/{currentpage}",memberId,1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andDo(document("review-rest-controller/get-total-rate",
                                 pathParameters(
-                                        parameterWithName("memberId").description("멤버 id")
+                                        parameterWithName("memberId").description("멤버 id"),
+                                        parameterWithName("currentpage").description("페이지")
                                 ),
                                 responseFields(
-                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("성공여부"),
-                                        fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("상태코드").optional(),
-                                        fieldWithPath("[].productId").type(JsonFieldType.NUMBER).description("성공여부"),
-                                        fieldWithPath("[].content").type(JsonFieldType.STRING).description("상태코드"),
-                                        fieldWithPath("[].rating").type(JsonFieldType.NUMBER).description("상품 당 총 평점"),
-                                        fieldWithPath("[].memberId").type(JsonFieldType.NUMBER).description("리뷰 총 개수"),
-                                        fieldWithPath("[].displayName").type(JsonFieldType.STRING).description("리뷰 총 개수"),
-                                        fieldWithPath("[].thumbnail").type(JsonFieldType.STRING).description("리뷰 총 개수")
+                                        fieldWithPath("mypageReviewDtoList[].id").type(JsonFieldType.NUMBER).description("리뷰 id"),
+                                        fieldWithPath("mypageReviewDtoList[].createdDate").type(JsonFieldType.STRING).description("리뷰 생성 날짜"),
+                                        fieldWithPath("mypageReviewDtoList[].productId").type(JsonFieldType.NUMBER).description("리뷰 상품 Id"),
+                                        fieldWithPath("mypageReviewDtoList[].content").type(JsonFieldType.STRING).description("리뷰 내용"),
+                                        fieldWithPath("mypageReviewDtoList[].rating").type(JsonFieldType.NUMBER).description("리뷰 별점"),
+                                        fieldWithPath("mypageReviewDtoList[].memberId").type(JsonFieldType.NUMBER).description("리뷰 고객 id"),
+                                        fieldWithPath("mypageReviewDtoList[].thumbnail").type(JsonFieldType.STRING).description("리뷰 쓴 상품 사진"),
+                                        fieldWithPath("mypageReviewDtoList[].displayName").type(JsonFieldType.STRING).description("리뷰 쓴 상품명"),
+                                        fieldWithPath("mypageReviewDtoList[].thumbnail").type(JsonFieldType.STRING).description("리뷰 쓴 사진"),
+                                        fieldWithPath("totalCount").type(JsonFieldType.NUMBER).description("총 상품 수")
                                 )
                         )
                 );

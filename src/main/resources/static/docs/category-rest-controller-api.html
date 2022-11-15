@@ -469,9 +469,9 @@ Vary: Origin
 Vary: Access-Control-Request-Method
 Vary: Access-Control-Request-Headers
 Content-Type: application/json
-Content-Length: 95
+Content-Length: 49
 
-{"success":true,"code":200,"result":{"data":[{"id":3,"name":"test1"},{"id":4,"name":"test2"}]}}</code></pre>
+[{"id":3,"name":"test1"},{"id":4,"name":"test2"}]</code></pre>
 </div>
 </div>
 <div class="listingblock">
@@ -488,7 +488,7 @@ Content-Length: 95
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code>{"success":true,"code":200,"result":{"data":[{"id":3,"name":"test1"},{"id":4,"name":"test2"}]}}</code></pre>
+<pre class="highlight nowrap"><code>[{"id":3,"name":"test1"},{"id":4,"name":"test2"}]</code></pre>
 </div>
 </div>
 <table class="tableblock frame-all grid-all stretch">
@@ -506,27 +506,17 @@ Content-Length: 95
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">성공여부</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상태코드</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[]</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[]</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 배열</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].id</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 id</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>[].name</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">카테고리 이름</p></td>
 </tr>
