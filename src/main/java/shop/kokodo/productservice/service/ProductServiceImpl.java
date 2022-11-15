@@ -277,6 +277,18 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(product);
     }
 
+    @Override
+    public List<ProductDto> findProductDetailByName(String productName) {
+        List<Product> productList = productRepository.findByNameContains(productName);
+        System.out.println(productList.toString());
+        List<ProductDto> productAndProductDetailDtos = new ArrayList<>();
+        for(Product product : productList) {
+            productAndProductDetailDtos.add(convertToProductDto(product));
+        }
+
+        return productAndProductDetailDtos;
+    }
+
     private final TemplateRec convertToTemplateRec(TemplateDto templateDto){
         return TemplateRec.builder()
                 .imageOne(templateDto.getImageOne())
@@ -320,6 +332,22 @@ public class ProductServiceImpl implements ProductService {
                 .sellerId(productAndDetailDto.getSellerId())
                 .deliveryFee(productAndDetailDto.getDeliveryFee())
                 .detailFlag(DetailFlag.IMG)
+                .build();
+    }
+
+    private ProductDto convertToProductDto(Product product) {
+        return ProductDto.builder()
+                .id(product.getId())
+                .categoryName(product.getCategory().getName())
+                .categoryId(product.getCategory().getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .displayName(product.getDisplayName())
+                .stock(product.getStock())
+                .deadline(product.getDeadline())
+                .thumbnail(product.getThumbnail())
+                .deliveryFee(product.getDeliveryFee())
+                .sellerId(product.getSellerId())
                 .build();
     }
 }

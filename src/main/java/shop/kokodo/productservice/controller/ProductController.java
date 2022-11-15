@@ -206,6 +206,12 @@ public class ProductController {
         return Response.success(pr);
     }
 
+    @GetMapping("/detail/name")
+    public Response productDetailName(@RequestParam String productName) {
+        List<ProductDto> pr = productService.findProductDetailByName(productName);
+        return Response.success(pr);
+    }
+
     @GetMapping("seller/stock/{sellerId}/{page}")
     public ResponseEntity findByProductStockLack(@PathVariable long sellerId, @PathVariable int page) {
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByProductStockLack(sellerId, page-1));
