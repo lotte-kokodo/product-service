@@ -20,12 +20,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.response.Response;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
@@ -256,10 +257,10 @@ public class ProductController {
     }
 
     // [주문관련 상품 조회] 주문서 상품 조회
-    @GetMapping("/orderSheet")
+    @GetMapping("/ordersheet")
     public Response getOrderProducts(@RequestParam List<Long> productIds) {
 
-        Map<Long, ProductOfOrder> orderProductMap = productService.getOrderProducts(productIds);
+        Map<Long, OrderSheetProductDto> orderProductMap = productService.getOrderProducts(productIds);
         return Response.success(orderProductMap);
     }
 }

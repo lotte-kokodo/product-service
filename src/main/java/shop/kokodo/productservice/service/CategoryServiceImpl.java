@@ -3,6 +3,7 @@ package shop.kokodo.productservice.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import shop.kokodo.productservice.dto.CategoryDto;
@@ -24,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Cacheable(value = "category-all",cacheManager = "cacheManager")
     @Override
     public List<CategoryDto> findAll() {
         List<Category> categoryList = categoryRepository.findAll();

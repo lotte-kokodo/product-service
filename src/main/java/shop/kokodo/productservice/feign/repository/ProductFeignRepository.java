@@ -18,4 +18,8 @@ public interface ProductFeignRepository extends CrudRepository<Product, Long> {
     @Query(value="select p from Product p " +
         "where p.id in :productIdList ")
     List<Product> findProductListById(@Param("productIdList") List<Long> productIdList);
+
+    Long countByIdInAndSellerId(List<Long> productIds, Long sellerId);
+
+    List<Product> findAllBySellerId(Long sellerId);
 }

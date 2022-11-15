@@ -12,10 +12,10 @@ import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
-import shop.kokodo.productservice.feign.response.FeignResponse;
-import shop.kokodo.productservice.feign.response.FeignResponse.Price;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
-import shop.kokodo.productservice.feign.response.FeignResponse.Stock;
+import shop.kokodo.productservice.feign.response.OrderProductDto;
+import shop.kokodo.productservice.feign.response.CartProductDto;
+import shop.kokodo.productservice.feign.response.ProductStockDto;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
 
@@ -31,27 +31,26 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     }
 
     @Override
-    public FeignResponse.Price getProductPrice(Long productId) {
+    public OrderProductDto getSingleOrderProduct(Long productId) {
 
-        return productFeignRepository.findById(productId, Price.class);
+        return productFeignRepository.findById(productId, OrderProductDto.class);
     }
 
     @Override
-    public Map<Long, Integer> getProductsPrice(List<Long> ids) {
-        List<FeignResponse.Price> prices = productFeignRepository.findByIdIn(ids, Price.class);
-        return prices.stream().collect(Collectors.toMap(Price::getId, Price::getPrice));
+    public Map<Long, OrderProductDto> getCartOrderProducts(List<Long> ids) {
+        List<OrderProductDto> prices = productFeignRepository.findByIdIn(ids, OrderProductDto.class);
+        return prices.stream().collect(Collectors.toMap(OrderProductDto::getId, Function.identity()));
     }
 
     @Override
-    public List<ProductOfOrder> getOrderProducts(List<Long> productIds) {
-        return productFeignRepository.findByIdIn(productIds, ProductOfOrder.class);
+    public List<CartProductDto> getOrderProducts(List<Long> productIds) {
+        return productFeignRepository.findByIdIn(productIds, CartProductDto.class);
     }
 
     @Override
-    public FeignResponse.Stock getProductStock(Long productId) {
-        return productFeignRepository.findById(productId, Stock.class);
+    public ProductStockDto getProductStock(Long productId) {
+        return productFeignRepository.findById(productId, ProductStockDto.class);
     }
-
 
     @Override
     public List<ProductDto> findProductListById(List<Long> productIdList) {
@@ -60,6 +59,11 @@ public class ProductFeignServiceImpl implements ProductFeignService{
 
         List<ProductDto> productDtoList = returnProductDtoList(productList);
         return productDtoList;
+    }
+
+    @Override
+    public Long getSellerOrderProductCount(Long sellerId, List<Long> productIds) {
+        return productFeignRepository.countByIdInAndSellerId(productIds, sellerId);
     }
 
     @Override
@@ -74,16 +78,22 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
         List<ProductDto> productDtoList = new ArrayList<>();
 
-        for(Product p : productList){
-            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
-                p.getName(),p.getPrice(),p.getDisplayName(),
-                p.getStock(),p.getDeadline(),p.getThumbnail(),
-                p.getSellerId(),p.getDeliveryFee());
+        for (Product p : productList) {
+            ProductDto productDto = new ProductDto(p.getId(), p.getCategory().getId(),
+                    p.getName(), p.getPrice(), p.getDisplayName(),
+                    p.getStock(), p.getDeadline(), p.getThumbnail(),
+                    p.getSellerId(), p.getDeliveryFee());
 
             productDtoList.add(productDto);
         }
 
         return productDtoList;
+    }
+
+    @Override
+    public List<Long> getSellerProductIds(Long sellerId) {
+        List<Product> products = productFeignRepository.findAllBySellerId(sellerId);
+        return products.stream().map(Product::getId).collect(Collectors.toList());
     }
 
     public Map<Long, ProductFeignDto> returnProductDtoMap (List<Product> productList) {
