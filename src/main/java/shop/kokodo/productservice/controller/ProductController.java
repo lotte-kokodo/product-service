@@ -14,12 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -213,7 +208,7 @@ public class ProductController {
     /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param Integer page){
+            , @Param String startDate, @Param String endDate, @RequestHeader Long sellerId, @Param Integer page){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -231,8 +226,8 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
     }
 
-    @GetMapping("/seller/{sellerId}")
-    public Response findBySellerId(@PathVariable long sellerId){
+    @GetMapping("/seller")
+    public Response findBySellerId(@RequestHeader long sellerId){
         System.out.println("ProductController.findBySellerId");
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
