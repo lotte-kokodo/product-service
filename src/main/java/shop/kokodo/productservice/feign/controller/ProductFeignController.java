@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
-import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
 @RestController
@@ -61,11 +62,20 @@ public class ProductFeignController {
     }
 
     @GetMapping("/list")
-    public ResponseEntity<Map<Long, ProductThumbnailDto>> findProductListById(@RequestParam List<Long> productIdList) {
-        Map<Long, ProductThumbnailDto> productList = productFeignService.findProductListById(productIdList);
-        return ResponseEntity.ok(productList);
+    public List<ProductDto> findProductListById(@RequestParam List<Long> productIdList) {
+
+        List<ProductDto> productList = productFeignService.findProductListById(productIdList);
+
+        return productList;
     }
 
+    @GetMapping("/list/map")
+    public Map<Long, ProductFeignDto> findProductListByIdMap(@RequestParam List<Long> productIdList) {
+
+        Map<Long, ProductFeignDto> productList = productFeignService.findProductListByIdMap(productIdList);
+
+        return productList;
+    }
     @GetMapping("/seller/{sellerId}/todayOrderCount")
     public ResponseEntity<Long> getSellerOrderProductCount(@PathVariable Long sellerId, @RequestParam List<Long> productIds) {
         Long todayOrderCount = productFeignService.getSellerOrderProductCount(sellerId, productIds);
