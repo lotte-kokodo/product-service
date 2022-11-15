@@ -446,7 +446,7 @@ public class ProductRestControllerTest {
         params.add("startDate","2020-01-01 11:11");
         params.add("endDate","2025-02-02 22:22");
         params.add("sellerId","1");
-        params.add("page","0");
+        params.add("page","1");
 
         this.mockMvc.perform(get("/product")
                         .params(params)
