@@ -1,6 +1,8 @@
 package shop.kokodo.productservice.repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,6 +58,8 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
      * @return
      */
     <T> List<T> findByIdIn(List<Long> ids, Class<T> type);
+
     List<Product> findByIdIn(List<Long> productIds);
 
+    List<Product> findByNameContains(String productName);
 }

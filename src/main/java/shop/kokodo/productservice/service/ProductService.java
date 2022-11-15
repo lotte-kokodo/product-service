@@ -55,4 +55,6 @@ public interface ProductService {
 
     public void saveProductDetail(ProductAndDetailDto productAndDetailDto);
     public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto);
+
+    public List<ProductDto> findProductDetailByName(String productName);
 }
