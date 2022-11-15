@@ -25,7 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    @Cacheable(value = "category-all",cacheManager = "cacheManager")
+//    @Cacheable(value = "category-all",cacheManager = "cacheManager")
     @Override
     public List<CategoryDto> findAll() {
         List<Category> categoryList = categoryRepository.findAll();
