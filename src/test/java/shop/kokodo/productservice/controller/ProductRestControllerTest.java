@@ -479,36 +479,38 @@ public class ProductRestControllerTest {
                 );
     }
 
-    @Test
-    @DisplayName("seller 아이디로 상품 조회")
-    public void findBySellerId() throws Exception {
-
-        this.mockMvc.perform(get("/product/seller/{sellerId}",sellerId)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("product-rest-controller/find-by-seller-id",
-                                pathParameters(
-                                        parameterWithName("sellerId").description("셀러 id")
-                                ),
-                                responseFields(
-                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
-                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 id"),
-                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
-                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
-                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
-                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 노출명"),
-                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
-                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
-                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
-                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
-                                )
-                        )
-                );
-    }
+//    @Test
+//    @DisplayName("seller 아이디로 상품 조회")
+//    public void findBySellerId() throws Exception {
+//        categoryRepository.save(category);
+//        productRepository.save(product1);
+//
+//        this.mockMvc.perform(get("/product/seller/{sellerId}",sellerId)
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .accept(MediaType.APPLICATION_JSON))
+//                .andDo(print())
+//                .andExpect(status().isOk())
+//                .andDo(document("product-rest-controller/find-by-seller-id",
+//                                pathParameters(
+//                                        parameterWithName("sellerId").description("셀러 id")
+//                                ),
+//                                responseFields(
+//                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+//                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+//                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+//                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 id"),
+//                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+//                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+//                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+//                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 노출명"),
+//                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+//                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+//                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+//                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+//                                )
+//                        )
+//                );
+//    }
 
 //    // TODO : 응답 문서 다시 수정
 //    @Test
