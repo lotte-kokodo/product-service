@@ -7,12 +7,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.io.Serializable;
+
 import static javax.persistence.FetchType.LAZY;
 
 @Getter
 @Entity
 @NoArgsConstructor
-public class ProductDetail extends BaseEntity{
+public class ProductDetail extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_detail_id")

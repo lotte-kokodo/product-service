@@ -62,11 +62,9 @@ class CategoryControllerTest {
                         .andExpect(status().isOk())
                         .andDo(document("category-rest-controller/category-all",
                             responseFields(
-                                    fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-                                    fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-                                    fieldWithPath("result.data[]").type(JsonFieldType.ARRAY).description("카테고리 배열"),
-                                    fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("카테고리 id"),
-                                    fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("카테고리 이름")
+                                    fieldWithPath("[]").type(JsonFieldType.ARRAY).description("카테고리 배열"),
+                                    fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("카테고리 id"),
+                                    fieldWithPath("[].name").type(JsonFieldType.STRING).description("카테고리 이름")
                             ))
                         );
     }
