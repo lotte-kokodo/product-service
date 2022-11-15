@@ -14,7 +14,7 @@ spring:
     hibernate:
       ddl-auto: create
   redis:
-    host:
+    host: 35.79.175.205
     port: 6379
     timeout: 6
 
