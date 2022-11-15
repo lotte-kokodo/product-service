@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.feign.response.FeignResponse;
 import shop.kokodo.productservice.feign.response.FeignResponse.Price;
 import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
@@ -65,4 +66,11 @@ public class ProductFeignController {
         return productList;
     }
 
+    @GetMapping("/list/map")
+    public Map<Long, ProductFeignDto> findProductListByIdMap(@RequestParam List<Long> productIdList) {
+
+        Map<Long, ProductFeignDto> productList = productFeignService.findProductListByIdMap(productIdList);
+
+        return productList;
+    }
 }

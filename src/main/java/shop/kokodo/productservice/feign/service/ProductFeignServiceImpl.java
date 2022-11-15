@@ -1,6 +1,7 @@
 package shop.kokodo.productservice.feign.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
 import shop.kokodo.productservice.feign.response.FeignResponse;
@@ -60,6 +62,15 @@ public class ProductFeignServiceImpl implements ProductFeignService{
         return productDtoList;
     }
 
+    @Override
+    public Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList) {
+        List<Product> productList = productFeignRepository.findProductListById(productIdList);
+        System.out.println(productList.toString());
+        Map<Long, ProductFeignDto> productDtoList = returnProductDtoMap(productList);
+        System.out.println(productDtoList.toString());
+        return productDtoList;
+    }
+
     public List<ProductDto> returnProductDtoList (List<Product> productList) {
         List<ProductDto> productDtoList = new ArrayList<>();
 
@@ -73,5 +84,22 @@ public class ProductFeignServiceImpl implements ProductFeignService{
         }
 
         return productDtoList;
+    }
+
+    public Map<Long, ProductFeignDto> returnProductDtoMap (List<Product> productList) {
+        Map<Long, ProductFeignDto> productDtoMap = new HashMap<>();
+
+        for(Product product : productList) {
+            ProductFeignDto productDto = ProductFeignDto.builder()
+                    .id(product.getId())
+                    .name(product.getName())
+                    .displayName(product.getDisplayName())
+                    .thumbnail(product.getThumbnail())
+                    .build();
+
+            productDtoMap.put(product.getId(), productDto);
+        }
+
+        return productDtoMap;
     }
 }
