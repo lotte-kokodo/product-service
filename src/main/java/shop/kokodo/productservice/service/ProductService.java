@@ -6,14 +6,16 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import org.springframework.web.bind.annotation.PathVariable;
+
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
 import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.entity.Product;
-import shop.kokodo.productservice.feign.response.FeignResponse.ProductOfOrder;
+import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 
 public interface ProductService {
 
@@ -51,10 +53,11 @@ public interface ProductService {
     public List<ProductDto> findBySellerId(Long sellerId);
     Optional<Product> findProductOpById(Long productId);
 
-    public Map<Long, ProductOfOrder> getOrderProducts(List<Long> productIds);
+    public Map<Long, OrderSheetProductDto> getOrderProducts(List<Long> productIds);
 
     public void saveProductDetail(ProductAndDetailDto productAndDetailDto);
     public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto);
 
     public List<ProductDto> findProductDetailByName(String productName);
+
 }

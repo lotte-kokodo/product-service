@@ -50,7 +50,7 @@ public class RedisController {
         log.info("Category - Product redis start");
 
         ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        String key = "categoryProduct" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
+        String key = "categoryProduct-" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
         PagingProductDto pagingProductDto = new PagingProductDto();
         String jsonInString = "";
 
