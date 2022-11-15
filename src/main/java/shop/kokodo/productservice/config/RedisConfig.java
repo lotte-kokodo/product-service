@@ -59,9 +59,8 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory());
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(timeout));
+                .entryTtl(Duration.ofMinutes(10));
         builder.cacheDefaults(configuration);
         return builder.build();
     }
-
 }
