@@ -2,10 +2,11 @@ package shop.kokodo.productservice.feign.service.interfaces;
 
 import java.util.List;
 import java.util.Map;
+import shop.kokodo.productservice.dto.ProductDto;
+import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
-import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 
 public interface ProductFeignService {
 
@@ -16,9 +17,12 @@ public interface ProductFeignService {
 
     ProductStockDto getProductStock(Long productId);
 
-    Map<Long, ProductThumbnailDto> findProductListById(List<Long> productList);
+    List<ProductDto> findProductListById(List<Long> productList);
+
+    Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList);
 
     Long getSellerOrderProductCount(Long sellerId, List<Long> productIds);
 
     List<Long> getSellerProductIds(Long sellerId);
+
 }
