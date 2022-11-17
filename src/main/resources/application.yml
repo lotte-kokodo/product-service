@@ -21,7 +21,7 @@ spring:
       probability: 1.0
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url:
+    jdbc-url:
     slave-list:
       - name: slave-1
         jdbc-url:
