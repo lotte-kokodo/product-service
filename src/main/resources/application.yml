@@ -24,9 +24,9 @@ spring:
     url:
     slave-list:
       - name: slave-1
-        url:
+        jdbc-url:
       - name: slave-2
-        url:
+        jdbc-url:
     username:
     password:
 
