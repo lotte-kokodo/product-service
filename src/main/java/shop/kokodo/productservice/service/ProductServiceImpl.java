@@ -94,7 +94,6 @@ public class ProductServiceImpl implements ProductService {
 
     /* ===메인화면=== */
     /* 신상품 */
-    @Cacheable(value="new-product",cacheManager = "cacheManager")
     @Override
     public Page<Product> findProductByNew(int page) {
         LocalDate now = LocalDate.now();
