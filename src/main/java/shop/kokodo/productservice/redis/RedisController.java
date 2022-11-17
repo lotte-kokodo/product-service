@@ -27,84 +27,84 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
-//@Slf4j
-//@RestController
-//@RequestMapping("/redis")
+@Slf4j
+@RestController
+@RequestMapping("/redis")
 public class RedisController {
-//
-//    private RedisTemplate<String, String> redisTemplate;
-//    private ProductService productService;
-//    private ObjectMapper objectMapper;
-//
-//    @Autowired
-//    public RedisController(RedisTemplate<String, String> redisTemplate, ProductService productService, ObjectMapper objectMapper) {
-//        this.redisTemplate = redisTemplate;
-//        this.productService = productService;
-//        this.objectMapper = objectMapper;
-//    }
-//
-//    @GetMapping("/categoryId/{categoryId}/{sortingId}/{currentpage}")
-//    public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
-//                                             @PathVariable("sortingId") long sortingId,
-//                                             @PathVariable("currentpage") int page){
-//        log.info("Category - Product redis start");
-//
-//        ValueOperations<String, String> vop = redisTemplate.opsForValue();
-//        String key = "categoryProduct-" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
-//        PagingProductDto pagingProductDto = new PagingProductDto();
-//        String jsonInString = "";
-//
-//        if(vop.get(key) == null){
-//            log.info("Category - Product no Cache");
-//            Page<Product> pageProduct = productService.findProductByCategory(categoryId,page-1);
-//
-//            try{
-//                jsonInString = objectMapper.writeValueAsString(sortingDto(pageProduct,sortingId));
-//                vop.set(key,jsonInString);
-//            } catch (JsonProcessingException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
-//
-//        try {
-//            pagingProductDto = objectMapper.readValue(vop.get(key), new TypeReference<PagingProductDto>() {});
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
-//
-//        log.info(pagingProductDto.toString());
-//
-//        return Response.success(pagingProductDto);
-//    }
-//
-//    public PagingProductDto sortingDto(Page<Product> pageProduct, long sortingId){
-//        List<Product> pr = new ArrayList<>();
-//        List<ProductDto> productDtoList = new ArrayList<>();
-//
-//        if(sortingId == 1){
-//            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getDeadline)).toArray(Product[]::new));
-//        }else if(sortingId == 2){
-//            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice).reversed()).toArray(Product[]::new));
-//        }else if(sortingId == 3){
-//            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice)).toArray(Product[]::new));
-//        }else if(sortingId == 4){
-//            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new));
-//        }
-//
-//        for(Product p : pr){
-//            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
-//                    p.getName(),p.getPrice(),p.getDisplayName(),
-//                    p.getStock(),p.getDeadline(),p.getThumbnail(),
-//                    p.getSellerId(),p.getDeliveryFee());
-//
-//            productDtoList.add(productDto);
-//        }
-//
-//        PagingProductDto pagingProductDto = PagingProductDto.builder()
-//                .productDtoList(productDtoList)
-//                .totalCount(pageProduct.getTotalElements())
-//                .build();
-//
-//        return pagingProductDto;
-//    }
+
+    private RedisTemplate<String, String> redisTemplate;
+    private ProductService productService;
+    private ObjectMapper objectMapper;
+
+    @Autowired
+    public RedisController(RedisTemplate<String, String> redisTemplate, ProductService productService, ObjectMapper objectMapper) {
+        this.redisTemplate = redisTemplate;
+        this.productService = productService;
+        this.objectMapper = objectMapper;
+    }
+
+    @GetMapping("/categoryId/{categoryId}/{sortingId}/{currentpage}")
+    public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
+                                             @PathVariable("sortingId") long sortingId,
+                                             @PathVariable("currentpage") int page){
+        log.info("Category - Product redis start");
+
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        String key = "categoryProduct-" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
+        PagingProductDto pagingProductDto = new PagingProductDto();
+        String jsonInString = "";
+
+        if(vop.get(key) == null){
+            log.info("Category - Product no Cache");
+            Page<Product> pageProduct = productService.findProductByCategory(categoryId,page-1);
+
+            try{
+                jsonInString = objectMapper.writeValueAsString(sortingDto(pageProduct,sortingId));
+                vop.set(key,jsonInString);
+            } catch (JsonProcessingException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        try {
+            pagingProductDto = objectMapper.readValue(vop.get(key), new TypeReference<PagingProductDto>() {});
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+
+        log.info(pagingProductDto.toString());
+
+        return Response.success(pagingProductDto);
+    }
+
+    public PagingProductDto sortingDto(Page<Product> pageProduct, long sortingId){
+        List<Product> pr = new ArrayList<>();
+        List<ProductDto> productDtoList = new ArrayList<>();
+
+        if(sortingId == 1){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getDeadline)).toArray(Product[]::new));
+        }else if(sortingId == 2){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice).reversed()).toArray(Product[]::new));
+        }else if(sortingId == 3){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getPrice)).toArray(Product[]::new));
+        }else if(sortingId == 4){
+            pr = Arrays.asList(pageProduct.stream().sorted(Comparator.comparing(Product::getCreatedDate).reversed()).toArray(Product[]::new));
+        }
+
+        for(Product p : pr){
+            ProductDto productDto = new ProductDto(p.getId(),p.getCategory().getId(),
+                    p.getName(),p.getPrice(),p.getDisplayName(),
+                    p.getStock(),p.getDeadline(),p.getThumbnail(),
+                    p.getSellerId(),p.getDeliveryFee());
+
+            productDtoList.add(productDto);
+        }
+
+        PagingProductDto pagingProductDto = PagingProductDto.builder()
+                .productDtoList(productDtoList)
+                .totalCount(pageProduct.getTotalElements())
+                .build();
+
+        return pagingProductDto;
+    }
 }
