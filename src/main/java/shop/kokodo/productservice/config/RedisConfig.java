@@ -35,7 +35,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         redisStandaloneConfiguration.setPort(Integer.parseInt(redisPort));
 
         LettuceClientConfiguration lettuceClientConfiguration = LettuceClientConfiguration.builder()
-                .commandTimeout(Duration.ofMinutes(1))
+                .commandTimeout(Duration.ofSeconds(timeout))
                 .shutdownTimeout(Duration.ZERO)
                 .build();
 
@@ -59,7 +59,7 @@ public class RedisConfig extends CachingConfigurerSupport {
                 .RedisCacheManagerBuilder
                 .fromConnectionFactory(redisConnectionFactory());
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10));
+                .entryTtl(Duration.ofMinutes(30));
         builder.cacheDefaults(configuration);
         return builder.build();
     }
