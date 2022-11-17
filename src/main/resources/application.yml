@@ -17,8 +17,8 @@ spring:
     base-url: http://zipkin:9411
     enabled: true
   sleuth:
-      sampler:
-        probability: 1.0
+    sampler:
+      probability: 1.0
   datasource:
     driver-class-name:
     url:
@@ -31,9 +31,9 @@ spring:
     password:
 
   redis:
-    host: 
+    host:
     port: 6379
-    timeout: 6
+    timeout: 3
 
   jpa:
     hibernate:
@@ -49,9 +49,6 @@ management:
     web:
       exposure:
         include: health, busresfresh, beans
-
-#gateway:
-#  ip: 172.18.0.254
 
 kafka:
   address:

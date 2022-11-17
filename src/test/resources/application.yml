@@ -16,7 +16,7 @@ spring:
   redis:
     host: 35.79.175.205
     port: 6379
-    timeout: 6
+    timeout: 3
 
 kafka:
   address: 127.0.0.1:9092

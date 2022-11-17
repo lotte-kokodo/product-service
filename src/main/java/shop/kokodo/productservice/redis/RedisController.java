@@ -3,6 +3,7 @@ package shop.kokodo.productservice.redis;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.lettuce.core.RedisCommandTimeoutException;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +15,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import shop.kokodo.productservice.dto.CategoryDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductDetailTemplateDto;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.dto.response.Response;
+import shop.kokodo.productservice.entity.Category;
 import shop.kokodo.productservice.entity.Product;
+import shop.kokodo.productservice.service.CategoryService;
 import shop.kokodo.productservice.service.ProductService;
 
 import java.util.ArrayList;
@@ -34,45 +38,75 @@ public class RedisController {
 
     private RedisTemplate<String, String> redisTemplate;
     private ProductService productService;
+    private CategoryService categoryService;
     private ObjectMapper objectMapper;
 
     @Autowired
-    public RedisController(RedisTemplate<String, String> redisTemplate, ProductService productService, ObjectMapper objectMapper) {
+    public RedisController(RedisTemplate<String, String> redisTemplate, ProductService productService, CategoryService categoryService, ObjectMapper objectMapper) {
         this.redisTemplate = redisTemplate;
         this.productService = productService;
+        this.categoryService = categoryService;
         this.objectMapper = objectMapper;
     }
 
-    @GetMapping("/categoryId/{categoryId}/{sortingId}/{currentpage}")
-    public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
-                                             @PathVariable("sortingId") long sortingId,
-                                             @PathVariable("currentpage") int page){
-        log.info("Category - Product redis start");
+    @GetMapping("/category/all")
+    public ResponseEntity all() {
+        List<CategoryDto> categoryDtoList = new ArrayList<>();
+        String key = "categoryAll";
 
-        ValueOperations<String, String> vop = redisTemplate.opsForValue();
-        String key = "categoryProduct-" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
-        PagingProductDto pagingProductDto = new PagingProductDto();
-        String jsonInString = "";
+        try {
+            ValueOperations<String, String> vop = redisTemplate.opsForValue();
 
-        if(vop.get(key) == null){
-            log.info("Category - Product no Cache");
-            Page<Product> pageProduct = productService.findProductByCategory(categoryId,page-1);
-
-            try{
-                jsonInString = objectMapper.writeValueAsString(sortingDto(pageProduct,sortingId));
-                vop.set(key,jsonInString);
-            } catch (JsonProcessingException ex) {
-                ex.printStackTrace();
+            if(vop.get(key) == null){
+                log.info("Category All - no Cache");
+                categoryDtoList = categoryService.findAll();
+                vop.set(key,objectMapper.writeValueAsString(categoryDtoList));
+            } else{
+                categoryDtoList = objectMapper.readValue(vop.get(key), new TypeReference<List<CategoryDto>>() {});
+            }
+        } catch (RedisCommandTimeoutException e){
+            log.warn("Redis Timeout : " + e);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if(categoryDtoList == null || categoryDtoList.size() == 0){
+                categoryDtoList = categoryService.findAll();
             }
         }
 
-        try {
-            pagingProductDto = objectMapper.readValue(vop.get(key), new TypeReference<PagingProductDto>() {});
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDtoList);
+    }
 
-        log.info(pagingProductDto.toString());
+    @GetMapping("/product/categoryId/{categoryId}/{sortingId}/{currentpage}")
+    public Response productByCategorySorting(@PathVariable("categoryId") long categoryId,
+                                             @PathVariable("sortingId") long sortingId,
+                                             @PathVariable("currentpage") int page){
+        String key = "categoryProduct-" + Long.toString(categoryId) + Long.toString(sortingId) + Integer.toString(page);
+        PagingProductDto pagingProductDto = new PagingProductDto(new ArrayList<>(),0);
+
+        try {
+            ValueOperations<String, String> vop = redisTemplate.opsForValue();
+
+            if(vop.get(key) == null){
+                log.info("Category Product - no Cache");
+                pagingProductDto = sortingDto(productService.findProductByCategory(categoryId,page-1),sortingId);
+                vop.set(key,objectMapper.writeValueAsString(pagingProductDto));
+            } else{
+                pagingProductDto = objectMapper.readValue(vop.get(key), new TypeReference<PagingProductDto>() {});
+            }
+        } catch (RedisCommandTimeoutException e){
+            log.warn("Redis Timeout : " + e);
+        } catch (JsonProcessingException ex) {
+            ex.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        } finally {
+            if(pagingProductDto == null || pagingProductDto.getTotalCount() ==0){
+                pagingProductDto = sortingDto(productService.findProductByCategory(categoryId,page-1),sortingId);
+            }
+        }
 
         return Response.success(pagingProductDto);
     }
