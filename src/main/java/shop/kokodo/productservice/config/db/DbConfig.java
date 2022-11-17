@@ -38,6 +38,7 @@ public class DbConfig {
         dataSourceMap.put("master", masterDataSource);
         dbProperty.getSlaveList().forEach(slave -> {
             dataSourceMap.put(slave.getName(), createDataSource(slave.getUrl()));
+            System.out.println(slave.getName() + " ");
             System.out.println(slave.getUrl() + " ");
         });
 
