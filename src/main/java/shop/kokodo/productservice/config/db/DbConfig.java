@@ -37,6 +37,7 @@ public class DbConfig {
         DataSource masterDataSource = createDataSource(dbProperty.getUrl());
         dataSourceMap.put("master", masterDataSource);
 
+
         String slave1Url = dbProperty.getSlaveList().getSlave1();
         dataSourceMap.put("slave1", createDataSource(slave1Url));
         System.out.println("slave1 - "+slave1Url);
@@ -51,6 +52,7 @@ public class DbConfig {
 //            System.out.println(slave.getName()+" : "+slave.getUrl());
 //
 //        });
+
 
         replicationRoutingDataSource.setTargetDataSources(dataSourceMap);
 
