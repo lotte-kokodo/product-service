@@ -32,7 +32,7 @@ public class ProductFeignController {
 
     // [주문 등록] 단일 상품 가격 조회
     @GetMapping("/singleOrderProduct")
-    public ResponseEntity<OrderProductDto> getSingleProductOrder(@PathVariable Long productId) {
+    public ResponseEntity<OrderProductDto> getSingleProductOrder(@RequestParam Long productId) {
         OrderProductDto orderProductDto = productFeignService.getSingleOrderProduct(productId);
         return ResponseEntity.ok(orderProductDto);
     }
