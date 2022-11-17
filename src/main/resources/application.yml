@@ -20,13 +20,13 @@ spring:
     sampler:
       probability: 1.0
   datasource:
-    driver-class-name:
-    jdbc-url:
+    driver-class-name: com.mysql.jdbc.Driver
+    url:
     slave-list:
       - name: slave-1
-        jdbc-url:
+        url:
       - name: slave-2
-        jdbc-url:
+        url:
     username:
     password:
 
