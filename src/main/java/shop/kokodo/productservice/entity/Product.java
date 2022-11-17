@@ -49,13 +49,13 @@ public class Product extends BaseEntity implements Serializable {
     @Column(nullable = false, name = "price")
     private int price;
 
-    @Column(nullable = false, name = "displayName")
+    @Column(nullable = false, name = "display_name")
     private String displayName;
 
     @Column(nullable = false, name = "stock")
     private int stock;
 
-    @Column(nullable = false, name = "dead_line")
+    @Column(nullable = false, name = "deadline")
     private LocalDateTime deadline;
 
     @Column(nullable = false)
