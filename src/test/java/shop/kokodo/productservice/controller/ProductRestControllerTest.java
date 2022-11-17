@@ -20,6 +20,8 @@ import shop.kokodo.productservice.entity.ProductDetail;
 import shop.kokodo.productservice.repository.CategoryRepository;
 import shop.kokodo.productservice.repository.ProductRepository;
 
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
@@ -445,11 +447,11 @@ public class ProductRestControllerTest {
         params.add("status","0");
         params.add("startDate","2020-01-01 11:11");
         params.add("endDate","2025-02-02 22:22");
-        params.add("sellerId","1");
         params.add("page","1");
 
         this.mockMvc.perform(get("/product")
                         .params(params)
+                        .header("sellerId","1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -460,9 +462,11 @@ public class ProductRestControllerTest {
                                         parameterWithName("status").description("상품 판매 상태"),
                                         parameterWithName("startDate").description("상품 등록 시작 일자"),
                                         parameterWithName("endDate").description("상품 등록 마감 일자"),
-                                        parameterWithName("sellerId").description("셀러 id"),
                                         parameterWithName("page").description("페이지 번호")
                                 ),
+                        requestHeaders(
+                                headerWithName("sellerId").description("seller id")
+                        ),
                                 responseFields(
                                         fieldWithPath("productDtoList[].id").type(JsonFieldType.NUMBER).description("상품 id"),
                                         fieldWithPath("productDtoList[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
@@ -479,38 +483,39 @@ public class ProductRestControllerTest {
                 );
     }
 
-//    @Test
-//    @DisplayName("seller 아이디로 상품 조회")
-//    public void findBySellerId() throws Exception {
-//        categoryRepository.save(category);
-//        productRepository.save(product1);
-//
-//        this.mockMvc.perform(get("/product/seller/{sellerId}",sellerId)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andDo(document("product-rest-controller/find-by-seller-id",
-//                                pathParameters(
-//                                        parameterWithName("sellerId").description("셀러 id")
-//                                ),
-//                                responseFields(
-//                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
-//                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
-//                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
-//                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 id"),
-//                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
-//                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
-//                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
-//                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 노출명"),
-//                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
-//                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
-//                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
-//                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
-//                                )
-//                        )
-//                );
-//    }
+
+    @Test
+    @DisplayName("seller 아이디로 상품 조회")
+    public void findBySellerId() throws Exception {
+
+        this.mockMvc.perform(get("/product/seller")
+                        .header("sellerId",sellerId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("product-rest-controller/find-by-seller-id",
+
+                                requestHeaders(
+                                    headerWithName("sellerId").description("seller id")
+                                ),
+                                responseFields(
+                                        fieldWithPath("success").type(JsonFieldType.BOOLEAN).description("성공여부"),
+                                        fieldWithPath("code").type(JsonFieldType.NUMBER).description("상태코드"),
+                                        fieldWithPath("result.data[].id").type(JsonFieldType.NUMBER).description("상품 id"),
+                                        fieldWithPath("result.data[].name").type(JsonFieldType.STRING).description("상품 id"),
+                                        fieldWithPath("result.data[].categoryId").type(JsonFieldType.NUMBER).description("상품 카테고리 id"),
+                                        fieldWithPath("result.data[].price").type(JsonFieldType.NUMBER).description("상품 가격"),
+                                        fieldWithPath("result.data[].displayName").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data[].deadline").type(JsonFieldType.STRING).description("상품 노출명"),
+                                        fieldWithPath("result.data[].stock").type(JsonFieldType.NUMBER).description("상품 재고"),
+                                        fieldWithPath("result.data[].thumbnail").type(JsonFieldType.STRING).description("상품 대표 이미지"),
+                                        fieldWithPath("result.data[].sellerId").type(JsonFieldType.NUMBER).description("셀러 id"),
+                                        fieldWithPath("result.data[].deliveryFee").type(JsonFieldType.NUMBER).description("상품 배송비")
+                                )
+                        )
+                );
+    }
 
 //    // TODO : 응답 문서 다시 수정
 //    @Test

@@ -1777,9 +1777,6 @@ Content-Length: 390
 <pre class="highlight nowrap"><code></code></pre>
 </div>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in product-rest-controller-api.adoc - include::./build/generated-snippets/product-rest-controller/product-detail/request-parameters.adoc[]</p>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code>{"success":true,"code":200,"result":{"data":{"id":8,"categoryId":12,"productDetailList":[{"id":22,"image":"image1","orders":1},{"id":23,"image":"image2","orders":1},{"id":24,"image":"image3","orders":1}],"name":"맛닭","price":1000,"displayName":"맛닭","stock":10,"deadline":"2022-11-26T00:00","thumbnail":"맛닭","sellerId":1,"deliveryFee":1000,"detailFlag":"IMG","templateRec":null}}}</code></pre>
@@ -1898,15 +1895,17 @@ Content-Length: 390
 <div class="sectionbody">
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;sellerId=1&amp;page=1' -i -X GET \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;page=1' -i -X GET \
     -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'sellerId: 1' \
     -H 'Accept: application/json'</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;sellerId=1&amp;page=1 HTTP/1.1
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;page=1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
+sellerId: 1
 Accept: application/json
 Host: localhost:8080</code></pre>
 </div>
@@ -1925,8 +1924,9 @@ Content-Length: 181
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;sellerId=1&amp;page=1' \
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/product?productName=%EB%8B%AD&amp;status=0&amp;startDate=2020-01-01+11%3A11&amp;endDate=2025-02-02+22%3A22&amp;page=1' \
     'Content-Type:application/json;charset=UTF-8' \
+    'sellerId:1' \
     'Accept:application/json'</code></pre>
 </div>
 </div>
@@ -1962,10 +1962,6 @@ Content-Length: 181
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>endDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">상품 등록 마감 일자</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sellerId</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">셀러 id</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
@@ -2049,6 +2045,151 @@ Content-Length: 181
 <div class="sect1">
 <h2 id="_find_by_seller_id"><a class="link" href="#_find_by_seller_id">find-by-seller-id</a></h2>
 <div class="sectionbody">
+<<<<<<< HEAD
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ curl 'http://localhost:8080/product/seller' -i -X GET \
+    -H 'Content-Type: application/json;charset=UTF-8' \
+    -H 'sellerId: 1' \
+    -H 'Accept: application/json'</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /product/seller HTTP/1.1
+Content-Type: application/json;charset=UTF-8
+sellerId: 1
+Accept: application/json
+Host: localhost:8080</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 200 OK
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Content-Type: application/json
+Content-Length: 220
+
+{"success":true,"code":200,"result":{"data":[{"id":3,"categoryId":7,"name":"맛닭","price":1000,"displayName":"맛닭","stock":10,"deadline":"2022-11-26T00:00:00","thumbnail":"맛닭","sellerId":1,"deliveryFee":1000}]}}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-bash" data-lang="bash">$ http GET 'http://localhost:8080/product/seller' \
+    'Content-Type:application/json;charset=UTF-8' \
+    'sellerId:1' \
+    'Accept:application/json'</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 2. /product/seller/{sellerId}</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Parameter</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>sellerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">셀러 id</p></td>
+</tr>
+</tbody>
+</table>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code>{"success":true,"code":200,"result":{"data":[{"id":3,"categoryId":7,"name":"맛닭","price":1000,"displayName":"맛닭","stock":10,"deadline":"2022-11-26T00:00:00","thumbnail":"맛닭","sellerId":1,"deliveryFee":1000}]}}</code></pre>
+</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>success</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성공여부</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상태코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].categoryId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 카테고리 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].price</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 가격</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].displayName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 노출명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].deadline</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 노출명</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].stock</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 재고</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].thumbnail</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 대표 이미지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].sellerId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">셀러 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>result.data[].deliveryFee</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">상품 배송비</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+=======
 <div class="paragraph">
 <p>Unresolved directive in product-rest-controller-api.adoc - include::./build/generated-snippets/product-rest-controller/find-by-seller-id/curl-request.adoc[]
 Unresolved directive in product-rest-controller-api.adoc - include::./build/generated-snippets/product-rest-controller/find-by-seller-id/http-request.adoc[]
@@ -2060,12 +2201,13 @@ Unresolved directive in product-rest-controller-api.adoc - include::./build/gene
 Unresolved directive in product-rest-controller-api.adoc - include::./build/generated-snippets/product-rest-controller/find-by-seller-id/response-fields.adoc[]</p>
 </div>
 </div>
+>>>>>>> 2f5db0fd03480802151a5630d0851565a80039d2
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2022-11-10 15:57:58 +0900
+Last updated 2022-11-10 15:59:25 +0900
 </div>
 </div>
 </body>

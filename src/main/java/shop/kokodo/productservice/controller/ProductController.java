@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -220,7 +221,7 @@ public class ProductController {
     /* seller 상품 조회 Feign Client */
     @GetMapping
     public ResponseEntity findByProductNameAndStatusAndDate(@Param String productName, @Param Integer status
-            , @Param String startDate, @Param String endDate, @Param Long sellerId, @Param Integer page){
+            , @Param String startDate, @Param String endDate, @RequestHeader Long sellerId, @Param Integer page){
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -238,19 +239,16 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
     }
 
-    @GetMapping("/seller/{sellerId}")
-    public Response findBySellerId(@PathVariable long sellerId){
-        System.out.println("ProductController.findBySellerId");
+    @GetMapping("/seller")
+    public Response findBySellerId(@RequestHeader long sellerId ){
 
         List<ProductDto> productList = productService.findBySellerId(sellerId);
-
-        System.out.println(productList.toString());
 
         return  Response.success(productList);
     }
 
     @GetMapping("/feign/id")
-    public ResponseEntity findProductById(@RequestParam Long productId){
+    public ResponseEntity findProductById(@RequestHeader Long productId){
         boolean flag = productService.findProductOpById(productId).isPresent()? true: false;
 
         return ResponseEntity.status(HttpStatus.OK).body(flag);
