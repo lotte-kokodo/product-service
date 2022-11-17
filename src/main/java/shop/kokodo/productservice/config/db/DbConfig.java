@@ -21,9 +21,9 @@ import javax.sql.DataSource;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-//@Configuration
+@Configuration
 @RequiredArgsConstructor
-//@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
+@EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 public class DbConfig {
 
     private final DbProperty dbProperty;
