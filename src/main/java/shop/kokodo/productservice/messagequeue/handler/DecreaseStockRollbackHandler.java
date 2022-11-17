@@ -14,24 +14,20 @@ import shop.kokodo.productservice.messagequeue.message.KafkaOrderDto;
 import shop.kokodo.productservice.repository.ProductRepository;
 
 /**
- * '주문취소' 시 상품 재고 증가
+ * '프로모션' 에서 쿠폰 상태 변경 실패했을 때 처리
  */
 @Component
 @Slf4j
-public class DecreaseStockHandler implements KafkaMessageHandler {
-
-    private final ObjectMapper objectMapper;
+public class DecreaseStockRollbackHandler implements KafkaMessageHandler {
 
     private final ProductRepository productRepository;
 
     private final KafkaMessageParser parser;
 
     @Autowired
-    public DecreaseStockHandler(
-        ObjectMapper objectMapper,
+    public DecreaseStockRollbackHandler(
         ProductRepository productRepository,
         KafkaMessageParser parser) {
-        this.objectMapper = objectMapper;
         this.productRepository = productRepository;
         this.parser = parser;
     }
@@ -41,12 +37,12 @@ public class DecreaseStockHandler implements KafkaMessageHandler {
         KafkaOrderDto orderDto = parser.readMessageValue(message,
             new TypeReference<KafkaOrderDto>() {});
 
-        Map<Long, Integer> productIdQtyMap = orderDto.getProductStockMap();
-        List<Long> productIds = new ArrayList<>(productIdQtyMap.keySet());
+        Map<Long, Integer> productStockMap = orderDto.getProductStockMap();
+        List<Long> productIds = new ArrayList<>(productStockMap.keySet());
         List<Product> products = productRepository.findByIdIn(productIds);
 
         products.forEach(product -> {
-            product.decreaseStock(productIdQtyMap.get(product.getId())); // get QTY.
+            product.increaseStock(productStockMap.get(product.getId())); // get QTY.
         });
 
         productRepository.saveAll(products);

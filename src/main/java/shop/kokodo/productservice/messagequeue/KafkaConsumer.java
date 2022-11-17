@@ -1,27 +1,34 @@
 package shop.kokodo.productservice.messagequeue;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
-import shop.kokodo.productservice.dto.kafka.ProductAndDetailDto;
 import shop.kokodo.productservice.messagequeue.handler.DecreaseStockHandler;
+import shop.kokodo.productservice.messagequeue.handler.DecreaseStockRollbackHandler;
 import shop.kokodo.productservice.messagequeue.handler.SaveProductHandler;
+import shop.kokodo.productservice.messagequeue.message.KafkaOrderDto;
+import shop.kokodo.productservice.messagequeue.message.KafkaOrderDto.KafkaCouponNameDto;
 
 @Service
 @Slf4j
 public class KafkaConsumer {
 
+    private final KafkaMessageParser parser;
+    private final KafkaProducer kafkaProducer;
     private final DecreaseStockHandler decreaseStockHandler;
-    private final ObjectMapper objectMapper;
+    private final DecreaseStockRollbackHandler decreaseStockRollbackHandler;
     private final SaveProductHandler saveProductHandler;
 
-    public KafkaConsumer(DecreaseStockHandler decreaseStockHandler,ObjectMapper objectMapper, SaveProductHandler saveProductHandler) {
+    public KafkaConsumer(KafkaMessageParser parser,
+        KafkaProducer kafkaProducer,
+        DecreaseStockHandler decreaseStockHandler,
+        DecreaseStockRollbackHandler decreaseStockRollbackHandler,
+        SaveProductHandler saveProductHandler) {
+        this.parser = parser;
+        this.kafkaProducer = kafkaProducer;
         this.decreaseStockHandler = decreaseStockHandler;
-        this.objectMapper = objectMapper;
+        this.decreaseStockRollbackHandler = decreaseStockRollbackHandler;
         this.saveProductHandler = saveProductHandler;
     }
 
@@ -30,7 +37,34 @@ public class KafkaConsumer {
     public void decreaseStock(String message) {
         log.info("[KafkaConsumer] consume message: {}", message);
 
-        decreaseStockHandler.handle(message);
+        try {
+            decreaseStockHandler.handle(message);
+
+            if (didUseCoupon(message)) {
+                kafkaProducer.send("promotion-coupon-status", message);
+            }
+        }
+        catch (Exception exception) {
+            kafkaProducer.send("order-rollback", message);
+        }
+    }
+
+    private Boolean didUseCoupon(String message) {
+        KafkaCouponNameDto couponNameDto = parser.readMessageValue(message, new TypeReference<KafkaOrderDto>(){}).getKafkaCouponNameDto();
+        return couponNameDto != null;
+    }
+
+    @KafkaListener(topics = "product-decrease-stock-rollback")
+    public void decreaseStockRollback(String message) {
+        log.info("[KafkaConsumer] consume message: {}", message);
+
+        try {
+            decreaseStockRollbackHandler.handle(message);
+            kafkaProducer.send("order-rollback", message);
+        }
+        catch (Exception exception) {
+            kafkaProducer.send("order-rollback", message);
+        }
     }
 
     @KafkaListener(topics = "product-save")
