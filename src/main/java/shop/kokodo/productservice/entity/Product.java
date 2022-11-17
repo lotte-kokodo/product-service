@@ -34,16 +34,13 @@ public class Product extends BaseEntity implements Serializable {
     @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     @JsonIgnore
-    @Column(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
-    @Column(name = "product_detail_list")
     private List<ProductDetail> productDetailList = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "template_rec_id")
-    @Column(name = "template_rec")
     private TemplateRec templateRec;
 
     @Column(nullable = false, name = "name")
