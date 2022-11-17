@@ -12,6 +12,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "product_inquire")
 public class ProductInquire extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

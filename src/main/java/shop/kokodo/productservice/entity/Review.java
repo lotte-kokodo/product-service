@@ -11,6 +11,7 @@ import static javax.persistence.FetchType.LAZY;
 @Entity
 @ToString
 @NoArgsConstructor
+@Table(name = "review")
 public class Review extends BaseEntity{
 
     @Id

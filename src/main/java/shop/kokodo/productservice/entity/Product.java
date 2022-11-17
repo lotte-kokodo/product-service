@@ -23,6 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "product")
 public class Product extends BaseEntity implements Serializable {
 
     @Id
