@@ -34,40 +34,45 @@ public class Product extends BaseEntity implements Serializable {
     @ManyToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "category_id")
     @JsonIgnore
+    @Column(name = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
+    @Column(name = "product_detail_list")
     private List<ProductDetail> productDetailList = new ArrayList<>();
 
     @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "template_rec_id")
+    @Column(name = "template_rec")
     private TemplateRec templateRec;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "price")
     private int price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "displayName")
     private String displayName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "stock")
     private int stock;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "dead_line")
     private LocalDateTime deadline;
 
     @Column(nullable = false)
     private String thumbnail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "seller_id")
     private long sellerId;
 
     @ColumnDefault(value = "3000")
+    @Column(name="delivery_fee")
     private int deliveryFee;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "detail_flag")
     private DetailFlag detailFlag;
 
     //== 연관관계 메서드 ==//
