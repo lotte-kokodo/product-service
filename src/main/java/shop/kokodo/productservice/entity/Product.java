@@ -23,6 +23,7 @@ import static javax.persistence.FetchType.LAZY;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
+@Table(name = "product")
 public class Product extends BaseEntity implements Serializable {
 
     @Id
@@ -42,31 +43,33 @@ public class Product extends BaseEntity implements Serializable {
     @JoinColumn(name = "template_rec_id")
     private TemplateRec templateRec;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "name")
     private String name;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "price")
     private int price;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "display_name")
     private String displayName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "stock")
     private int stock;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "deadline")
     private LocalDateTime deadline;
 
     @Column(nullable = false)
     private String thumbnail;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "seller_id")
     private long sellerId;
 
     @ColumnDefault(value = "3000")
+    @Column(name="delivery_fee")
     private int deliveryFee;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "detail_flag")
     private DetailFlag detailFlag;
 
     //== 연관관계 메서드 ==//

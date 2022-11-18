@@ -14,6 +14,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "product_detail")
 public class ProductDetail extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

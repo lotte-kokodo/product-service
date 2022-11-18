@@ -1,9 +1,11 @@
+
 #spring:
 #  profiles:
 #    active: dev
 
 server:
   port: 0
+
 
 eureka:
   instance:

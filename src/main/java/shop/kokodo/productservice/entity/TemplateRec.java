@@ -10,6 +10,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "template_rec")
 public class TemplateRec extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

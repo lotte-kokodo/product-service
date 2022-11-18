@@ -10,6 +10,7 @@ import java.util.List;
 @Getter
 @Entity
 @NoArgsConstructor
+@Table(name = "category")
 public class Category extends BaseEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
