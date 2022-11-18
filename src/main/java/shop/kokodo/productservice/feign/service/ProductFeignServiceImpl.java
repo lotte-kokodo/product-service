@@ -56,7 +56,7 @@ public class ProductFeignServiceImpl implements ProductFeignService{
         return productFeignRepository.findById(productId, ProductStockDto.class);
     }
 
-    @Transactional(readOnly = true)
+
     @Override
     public List<ProductDto> findProductListById(List<Long> productIdList) {
 
@@ -71,6 +71,7 @@ public class ProductFeignServiceImpl implements ProductFeignService{
         return productFeignRepository.countByIdInAndSellerId(productIds, sellerId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList) {
         List<Product> productList = productFeignRepository.findProductListById(productIdList);
