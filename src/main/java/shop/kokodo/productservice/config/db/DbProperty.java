@@ -12,7 +12,7 @@ import java.util.List;
 public class DbProperty {
 
     private String url;
-    private List<Slave> slaveList;
+    private Slave slaveList;
 
     private String driverClassName;
     private String username;
@@ -20,7 +20,7 @@ public class DbProperty {
 
     @Getter @Setter
     public static class Slave {
-        private String name;
-        private String url;
+        private String slave1;
+        private String slave2;
     }
 }
