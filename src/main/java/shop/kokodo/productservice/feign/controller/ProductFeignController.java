@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,7 @@ import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
+@Slf4j
 @RestController
 @RequestMapping("/products/feign")
 public class ProductFeignController {
@@ -71,9 +74,9 @@ public class ProductFeignController {
 
     @GetMapping("/list/map")
     public Map<Long, ProductFeignDto> findProductListByIdMap(@RequestParam List<Long> productIdList) {
-
+        log.info("productIdList : " + productIdList);
         Map<Long, ProductFeignDto> productList = productFeignService.findProductListByIdMap(productIdList);
-
+        log.info("productList : " + productList);
         return productList;
     }
     @GetMapping("/seller/{sellerId}/todayOrderCount")
