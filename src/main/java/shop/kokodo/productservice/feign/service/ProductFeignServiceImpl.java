@@ -73,10 +73,8 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     public Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList) {
         List<Product> productList = productFeignRepository.findProductListById(productIdList);
         log.info("serviceProductList : " + productList);
-        System.out.println(productList.toString());
         Map<Long, ProductFeignDto> productDtoList = returnProductDtoMap(productList);
         log.info("serviceProductDtoList : " + productDtoList);
-        System.out.println(productDtoList.toString());
         return productDtoList;
     }
 
