@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shop.kokodo.productservice.dto.ProductDto;
@@ -19,6 +21,7 @@ import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
 
+@Slf4j
 @Service
 public class ProductFeignServiceImpl implements ProductFeignService{
 
@@ -69,8 +72,10 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     @Override
     public Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList) {
         List<Product> productList = productFeignRepository.findProductListById(productIdList);
+        log.info("serviceProductList : " + productList);
         System.out.println(productList.toString());
         Map<Long, ProductFeignDto> productDtoList = returnProductDtoMap(productList);
+        log.info("serviceProductDtoList : " + productDtoList);
         System.out.println(productDtoList.toString());
         return productDtoList;
     }
@@ -97,9 +102,11 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     }
 
     public Map<Long, ProductFeignDto> returnProductDtoMap (List<Product> productList) {
+
         Map<Long, ProductFeignDto> productDtoMap = new HashMap<>();
 
         for(Product product : productList) {
+            log.info("serviceProduct : " + product);
             ProductFeignDto productDto = ProductFeignDto.builder()
                     .id(product.getId())
                     .name(product.getName())
@@ -109,7 +116,7 @@ public class ProductFeignServiceImpl implements ProductFeignService{
 
             productDtoMap.put(product.getId(), productDto);
         }
-
+        log.info("serviceProductDtoMap : " + productDtoMap);
         return productDtoMap;
     }
 }
