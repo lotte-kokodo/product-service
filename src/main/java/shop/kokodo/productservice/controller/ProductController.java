@@ -214,7 +214,7 @@ public class ProductController {
 
     @GetMapping("/detail/all/{sellerId}")
     public Response productDetailName(@PathVariable Long sellerId) {
-        List<ProductDto> pr = productService.findAllProductDetail(sellerId);
+        List<ProductDto> pr = productService.findBySellerId(sellerId);
         return Response.success(pr);
     }
 
