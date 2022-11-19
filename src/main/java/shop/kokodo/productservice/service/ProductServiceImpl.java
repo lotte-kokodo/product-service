@@ -143,7 +143,7 @@ public class ProductServiceImpl implements ProductService {
     public PagingProductDto findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime,
                                    Long sellerId, int page) {
 
-            return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId, PageRequest.of(page,10));
+        return productCustomRepository.findProduct(name,status,startDateTime,endDateTime,sellerId, PageRequest.of(page,10));
     }
 
     @Override
@@ -212,12 +212,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public List<ProductDetailDto> convertToProductDetailDto(List<ProductDetail> detail){
-            List<ProductDetailDto> detailDtos = new ArrayList<>();
+        List<ProductDetailDto> detailDtos = new ArrayList<>();
         for (ProductDetail productDetail : detail) {
             detailDtos.add(ProductDetailDto.builder()
-                            .id(productDetail.getId())
-                            .image(productDetail.getImage())
-                            .orders(productDetail.getOrders())
+                    .id(productDetail.getId())
+                    .image(productDetail.getImage())
+                    .orders(productDetail.getOrders())
                     .build());
         }
 
@@ -243,7 +243,7 @@ public class ProductServiceImpl implements ProductService {
     public Map<Long, OrderSheetProductDto> getOrderProducts(List<Long> productIds) {
         List<OrderSheetProductDto> orderSheetProducts = productRepository.findByIdIn(productIds, OrderSheetProductDto.class);
         return orderSheetProducts.stream()
-            .collect(Collectors.toMap(OrderSheetProductDto::getId, Function.identity()));
+                .collect(Collectors.toMap(OrderSheetProductDto::getId, Function.identity()));
     }
 
     @Override
@@ -253,8 +253,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = convertToProduct(productAndDetailDto);
         for(int i=1;i<=productAndDetailDto.getDetails().size();++i){
             ProductDetail pd = ProductDetail.builder()
-                            .image(productAndDetailDto.getDetails().get(i-1))
-                            .orders(i)
+                    .image(productAndDetailDto.getDetails().get(i-1))
+                    .orders(i)
                     .build();
 
             pd.changeProduct(product);
@@ -277,9 +277,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findProductDetailByName(Long sellerId, String productName) {
-        List<Product> productList = productRepository.findBySellerIdAndNameContains(sellerId, productName);
-        System.out.println(productList.toString());
+    public List<ProductDto> findProductDetailByName(String productName) {
+        List<Product> productList = productRepository.findByNameContains(productName);
         List<ProductDto> productAndProductDetailDtos = new ArrayList<>();
         for(Product product : productList) {
             productAndProductDetailDtos.add(convertToProductDto(product));
@@ -289,15 +288,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findAllProductDetail(Long sellerId) {
-        List<Product> productList = productRepository.findBySellerId(sellerId);
-        System.out.println(productList.toString());
-        List<ProductDto> productAndProductDetailDtos = new ArrayList<>();
-        for(Product product : productList) {
-            productAndProductDetailDtos.add(convertToProductDto(product));
-        }
-
-        return productAndProductDetailDtos;
+    public long sellerProductCount(long sellerId) {
+        return productRepository.sellerProductCount(sellerId);
     }
 
     private final TemplateRec convertToTemplateRec(TemplateDto templateDto){
