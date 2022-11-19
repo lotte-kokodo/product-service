@@ -43,12 +43,14 @@ spring:
     generate-ddl: true
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        storate_engine: innodb
+#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+#        storate_engine: innodb
         physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        globally_quoted_identifiers: true
-        hbm2ddl:
-          auto: create
+#        globally_quoted_identifiers: true
+#        hbm2ddl:
+#          auto: create
+    hibernate:
+      ddl-auto: create
 
 
 logging:
