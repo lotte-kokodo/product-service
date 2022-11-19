@@ -15,6 +15,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.OrderSheetProductDto;
 import shop.kokodo.productservice.dto.PagingProductDto;
 import shop.kokodo.productservice.dto.ProductAndProductDetailDto;
@@ -118,7 +124,7 @@ public class ProductController {
     // sale 상품 정렬 및 상품 전체
     @GetMapping("/main/sale/all/{sortingId}/{currentpage}")
     public Response productBySaleSorting(@PathVariable("sortingId") long sortingId
-                                        ,@PathVariable("currentpage") int page){
+            ,@PathVariable("currentpage") int page){
         Page<Product> pageProduct = productService.findProductBySale(page-1);
         return Response.success(sortingDto(pageProduct,sortingId));
     }
@@ -126,7 +132,7 @@ public class ProductController {
     // MD추천 상품 정렬 및 상품전체
     @GetMapping("/main/seller/all/{sortingId}/{currentpage}")
     public Response productBySellerSorting(@PathVariable("sortingId") long sortingId
-                                            ,@PathVariable("currentpage") int page){
+            ,@PathVariable("currentpage") int page){
         Page<Product> pageProduct = productService.findProductBySeller(page-1);
         return Response.success(sortingDto(pageProduct,sortingId));
     }
@@ -134,8 +140,8 @@ public class ProductController {
     // 전체검색
     @GetMapping("/totalSearch/{totalSearch}/{sortingId}/{currentpage}")
     public Response productByTotalSearch(@PathVariable("totalSearch") String totalSearch
-                                         ,@PathVariable("sortingId") long sortingId
-                                         ,@PathVariable("currentpage") int page){
+            ,@PathVariable("sortingId") long sortingId
+            ,@PathVariable("currentpage") int page){
         Page<Product> pageProduct = productService.findProductByTotalSearch(totalSearch,page-1);
         return Response.success(sortingDto(pageProduct,sortingId));
     }
@@ -197,19 +203,12 @@ public class ProductController {
     @GetMapping("/detail/{productId}")
     public Response productDetail(@PathVariable long productId){
         ProductAndProductDetailDto pr = productService.findProductDetail(productId);
-        System.out.println(pr.toString());
         return Response.success(pr);
     }
 
     @GetMapping("/detail/name")
-    public Response productDetailName(@RequestParam Long sellerId, @RequestParam("productName") String productName) {
-        List<ProductDto> pr = productService.findProductDetailByName(sellerId, productName);
-        return Response.success(pr);
-    }
-
-    @GetMapping("/detail/all")
-    public Response productDetailName(@RequestParam Long sellerId) {
-        List<ProductDto> pr = productService.findAllProductDetail(sellerId);
+    public Response productDetailName(@RequestParam String productName) {
+        List<ProductDto> pr = productService.findProductDetailByName(productName);
         return Response.success(pr);
     }
 
@@ -233,7 +232,6 @@ public class ProductController {
 
     @GetMapping("/productSellerId")
     public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
-        System.out.println("productId = " + productId);
         List<Long> productSellerId = productService.getProductSellerId(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
@@ -260,5 +258,10 @@ public class ProductController {
 
         Map<Long, OrderSheetProductDto> orderProductMap = productService.getOrderProducts(productIds);
         return Response.success(orderProductMap);
+    }
+
+    @GetMapping("/seller/productCount/{sellerId}")
+    public ResponseEntity sellerProductCount(@PathVariable long sellerId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.sellerProductCount(sellerId));
     }
 }

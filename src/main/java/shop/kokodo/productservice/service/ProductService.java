@@ -44,7 +44,7 @@ public interface ProductService {
     public ProductAndProductDetailDto findProductDetail(long productId);
 
     PagingProductDto findBy(String name, Integer status, LocalDateTime startDateTime, LocalDateTime endDateTime
-    , Long sellerId, int page);
+            , Long sellerId, int page);
 
     PagingProductDto findByProductStockLack(long sellerId, int page);
 
@@ -58,8 +58,8 @@ public interface ProductService {
     public void saveProductDetail(ProductAndDetailDto productAndDetailDto);
     public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto);
 
-    public List<ProductDto> findProductDetailByName(Long sellerId, String productName);
+    public List<ProductDto> findProductDetailByName(String productName);
 
-    public List<ProductDto> findAllProductDetail(Long sellerId);
+    public long sellerProductCount(long sellerId);
 
 }
