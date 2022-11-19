@@ -45,6 +45,7 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 
 
