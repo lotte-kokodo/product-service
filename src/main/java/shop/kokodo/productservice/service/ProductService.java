@@ -60,4 +60,6 @@ public interface ProductService {
 
     public List<ProductDto> findProductDetailByName(String productName);
 
+    public long sellerProductCount(long sellerId);
+
 }
