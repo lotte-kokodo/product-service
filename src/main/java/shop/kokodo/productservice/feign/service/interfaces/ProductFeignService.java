@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.ProductFeignDto;
+import shop.kokodo.productservice.feign.request.OrderCountRequestDto;
+import shop.kokodo.productservice.feign.response.ProductIdResponseDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
@@ -21,7 +23,7 @@ public interface ProductFeignService {
 
     Map<Long, ProductFeignDto> findProductListByIdMap(List<Long> productIdList);
 
-    Long getSellerOrderProductCount(Long sellerId, List<Long> productIds);
+    ProductIdResponseDto getSellerOrderProductCount(OrderCountRequestDto orderCountRequestDto);
 
     List<Long> getSellerProductIds(Long sellerId);
 
