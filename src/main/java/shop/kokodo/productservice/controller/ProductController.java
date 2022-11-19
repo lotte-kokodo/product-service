@@ -203,7 +203,6 @@ public class ProductController {
     @GetMapping("/detail/{productId}")
     public Response productDetail(@PathVariable long productId){
         ProductAndProductDetailDto pr = productService.findProductDetail(productId);
-        System.out.println(pr.toString());
         return Response.success(pr);
     }
 
@@ -233,7 +232,6 @@ public class ProductController {
 
     @GetMapping("/productSellerId")
     public ResponseEntity getProductSellerId(@RequestParam List<Long> productId){
-        System.out.println("productId = " + productId);
         List<Long> productSellerId = productService.getProductSellerId(productId);
 
         return ResponseEntity.status(HttpStatus.OK).body(productSellerId);
@@ -260,5 +258,10 @@ public class ProductController {
 
         Map<Long, OrderSheetProductDto> orderProductMap = productService.getOrderProducts(productIds);
         return Response.success(orderProductMap);
+    }
+
+    @GetMapping("/seller/productCount/{sellerId}")
+    public ResponseEntity sellerProductCount(@PathVariable long sellerId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.sellerProductCount(sellerId));
     }
 }
