@@ -207,8 +207,8 @@ public class ProductController {
         return Response.success(pr);
     }
 
-    @GetMapping("/detail/all")
-    public Response productDetailName(@RequestParam Long sellerId) {
+    @GetMapping("/detail/all/{sellerId}")
+    public Response productDetailName(@PathVariable Long sellerId) {
         List<ProductDto> pr = productService.findAllProductDetail(sellerId);
         return Response.success(pr);
     }
