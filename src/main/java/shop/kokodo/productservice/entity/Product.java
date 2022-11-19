@@ -38,8 +38,7 @@ public class Product extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private List<ProductDetail> productDetailList = new ArrayList<>();
 
-    @OneToOne(fetch = LAZY, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "template_rec_id")
+    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.PERSIST)
     private TemplateRec templateRec;
 
     @Column(nullable = false)
