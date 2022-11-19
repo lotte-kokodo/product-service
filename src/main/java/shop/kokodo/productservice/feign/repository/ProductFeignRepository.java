@@ -2,6 +2,7 @@ package shop.kokodo.productservice.feign.repository;
 
 import java.util.List;
 
+import java.util.Map;
 import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,7 +20,11 @@ public interface ProductFeignRepository extends CrudRepository<Product, Long> {
         "where p.id in :productIdList ")
     List<Product> findProductListById(@Param("productIdList") List<Long> productIdList);
 
-    Long countByIdInAndSellerId(List<Long> productIds, Long sellerId);
+    @Query("SELECT p.id "
+        + "FROM Product p "
+        + "WHERE p.sellerId = :sellerId "
+        + "AND p.id IN :productIds")
+    List<Long> countByIdInAndSellerId(List<Long> productIds, Long sellerId);
 
     List<Product> findAllBySellerId(Long sellerId);
 }
