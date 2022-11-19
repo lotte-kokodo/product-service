@@ -10,11 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.ProductFeignDto;
+import shop.kokodo.productservice.feign.request.OrderCountRequestDto;
+import shop.kokodo.productservice.feign.response.ProductIdResponseDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
@@ -79,10 +83,10 @@ public class ProductFeignController {
         log.info("productList : " + productList);
         return productList;
     }
-    @GetMapping("/seller/{sellerId}/todayOrderCount")
-    public ResponseEntity<Long> getSellerOrderProductCount(@PathVariable Long sellerId, @RequestParam List<Long> productIds) {
-        Long todayOrderCount = productFeignService.getSellerOrderProductCount(sellerId, productIds);
-        return ResponseEntity.ok(todayOrderCount);
+    @PostMapping("/seller/orderCount")
+    public ResponseEntity<ProductIdResponseDto> getSellerOrderProductCount(@RequestBody OrderCountRequestDto req) {
+        ProductIdResponseDto orderCount = productFeignService.getSellerOrderProductCount(req);
+        return ResponseEntity.ok(orderCount);
     }
 
     @GetMapping("/seller/{sellerId}/productId")

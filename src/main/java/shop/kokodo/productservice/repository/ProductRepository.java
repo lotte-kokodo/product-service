@@ -51,6 +51,9 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
     @Query("select p from Product p where p.stock < 10 and p.sellerId = :sellerId")
     Page<Product> findByProductStockLack(@Param("sellerId") long sellerId, Pageable pageable);
 
+    @Query("select count(p) from Product p where p.sellerId = :sellerId")
+    long sellerProductCount(@Param("sellerId") long sellerId);
+
     List<Product> findBySellerId(Long sellerId);
 
     /**
@@ -61,6 +64,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     List<Product> findByIdIn(List<Long> productIds);
 
-    List<Product> findBySellerIdAndNameContains(Long sellerId, String productName);
+    List<Product> findByNameContains(String productName);
+
 
 }

@@ -17,10 +17,11 @@ public class TemplateRec extends BaseEntity{
     @Column(name = "template_rec_id")
     private long id;
 
-    @OneToOne
+    @OneToOne(fetch = LAZY)
     @JoinColumn(name = "product_id")
     @JsonIgnore
     private Product product;
+
     @Column( nullable = false )
     private String imageOne;
     @Column( nullable = false )
@@ -31,7 +32,6 @@ public class TemplateRec extends BaseEntity{
     private String imageFour;
     @Column( nullable = false )
     private String imageFive;
-
     @Column( nullable = false )
     private String writingTitle;
     @Column( nullable = false )

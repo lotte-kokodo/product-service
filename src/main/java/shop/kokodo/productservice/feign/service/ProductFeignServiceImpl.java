@@ -15,10 +15,11 @@ import shop.kokodo.productservice.dto.ProductDto;
 import shop.kokodo.productservice.dto.ProductFeignDto;
 import shop.kokodo.productservice.entity.Product;
 import shop.kokodo.productservice.feign.repository.ProductFeignRepository;
+import shop.kokodo.productservice.feign.request.OrderCountRequestDto;
+import shop.kokodo.productservice.feign.response.ProductIdResponseDto;
 import shop.kokodo.productservice.feign.response.OrderProductDto;
 import shop.kokodo.productservice.feign.response.CartProductDto;
 import shop.kokodo.productservice.feign.response.ProductStockDto;
-import shop.kokodo.productservice.feign.response.ProductThumbnailDto;
 import shop.kokodo.productservice.feign.service.interfaces.ProductFeignService;
 
 
@@ -67,8 +68,15 @@ public class ProductFeignServiceImpl implements ProductFeignService{
     }
 
     @Override
-    public Long getSellerOrderProductCount(Long sellerId, List<Long> productIds) {
-        return productFeignRepository.countByIdInAndSellerId(productIds, sellerId);
+    public ProductIdResponseDto getSellerOrderProductCount(OrderCountRequestDto orderCountRequestDto) {
+
+        Long sellerId = orderCountRequestDto.getSellerId();
+        List<Long> todayProductIds = productFeignRepository.countByIdInAndSellerId(
+            orderCountRequestDto.getTodayProductIds(), sellerId);
+        List<Long> yesterdayProductIds = productFeignRepository.countByIdInAndSellerId(
+            orderCountRequestDto.getYesterdayProductIds(), sellerId);
+
+        return new ProductIdResponseDto(todayProductIds, yesterdayProductIds);
     }
 
     @Transactional(readOnly = true)
