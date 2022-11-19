@@ -39,7 +39,7 @@ public class Product extends BaseEntity implements Serializable {
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private List<ProductDetail> productDetailList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "product", fetch = LAZY, cascade = CascadeType.PERSIST)
+    @OneToOne(mappedBy = "product",fetch = LAZY, cascade = CascadeType.PERSIST)
     private TemplateRec templateRec;
 
     @Column(nullable = false, name = "name")

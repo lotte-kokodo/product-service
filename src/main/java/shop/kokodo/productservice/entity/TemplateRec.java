@@ -32,7 +32,6 @@ public class TemplateRec extends BaseEntity{
     private String imageFour;
     @Column( nullable = false )
     private String imageFive;
-
     @Column( nullable = false )
     private String writingTitle;
     @Column( nullable = false )

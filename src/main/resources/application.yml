@@ -50,7 +50,6 @@ spring:
         hbm2ddl:
           auto: create
 
-
 logging:
   level:
     org.hibernate.SQL: debug
