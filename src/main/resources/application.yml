@@ -43,7 +43,7 @@ spring:
         physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
         globally_quoted_identifiers: true
         hbm2ddl:
-          auto: create
+          auto: update
 
 logging:
   level:
