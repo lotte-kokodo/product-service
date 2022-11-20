@@ -68,5 +68,6 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
     @Query(value = "SELECT p FROM Product p WHERE p.sellerId = :sellerId AND p.name like %:productName%")
     List<Product> findBySellerIdAndName(Long sellerId, String productName);
+
 }
 
