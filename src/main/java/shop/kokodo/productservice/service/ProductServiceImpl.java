@@ -277,8 +277,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<ProductDto> findProductDetailByName(String productName) {
-        List<Product> productList = productRepository.findByNameContains(productName);
+    public List<ProductDto> findProductDetailByName(String productName, Long sellerId) {
+        List<Product> productList = productRepository.findBySellerIdAndName(sellerId, productName);
         List<ProductDto> productAndProductDetailDtos = new ArrayList<>();
         for(Product product : productList) {
             productAndProductDetailDtos.add(convertToProductDto(product));
