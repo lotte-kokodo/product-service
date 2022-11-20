@@ -58,7 +58,7 @@ public interface ProductService {
     public void saveProductDetail(ProductAndDetailDto productAndDetailDto);
     public void saveProductTemplate(ProductDetailTemplateDto productDetailTemplateDto);
 
-    public List<ProductDto> findProductDetailByName(String productName);
+    public List<ProductDto> findProductDetailByName(String productName, Long sellerId);
 
     public long sellerProductCount(long sellerId);
 

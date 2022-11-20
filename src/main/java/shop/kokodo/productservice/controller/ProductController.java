@@ -207,8 +207,8 @@ public class ProductController {
     }
 
     @GetMapping("/detail/name")
-    public Response productDetailName(@RequestParam String productName) {
-        List<ProductDto> pr = productService.findProductDetailByName(productName);
+    public Response productDetailName(@RequestParam String productName, @RequestParam Long sellerId) {
+        List<ProductDto> pr = productService.findProductDetailByName(productName, sellerId);
         return Response.success(pr);
     }
 
